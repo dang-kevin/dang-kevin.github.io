@@ -10,24 +10,17 @@ navbar:
     - text: Course Work
       icon: fa-book
       menu:
-      - text: STA410 - Computational Statistics - Assignment 1
+      - text: STA303 - Methods of Data Analysis
         icon: fa-code
-        href: STA410_A1.html
-      
-      - text: STA490 - Stats Consulting and Collaboration
-        icon: fa-code
-        href: STA_490_ReactionTimes_Project.html
+        href: STA303.html
     
     - text: Personal Projects
       icon: fa-pencil
       menu:
-      - text: ASNA2019 Case Competition
+      - text: Job Applications
         icon: fa-code
-        href: ASNA2019CC_datacreation.html
-        
-      - text: Kaggle Competitions
-        icon: fa-code
-        href: Kaggle.html
+        href: Job_Applications.html
+
         
   right:
     - text: About me
