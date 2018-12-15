@@ -1,0 +1,24 @@
+
+name: KevinDangWebsite
+navbar:
+  title: Kevin Dang
+  left:
+    - text: Home
+      icon: fa-home
+      href: index.html     
+        
+    - text: Course Work
+      icon: fa-book
+      menu:
+      - text: STA303 Assignment 1
+        icon: fa-code
+        href: STA303_A1.html
+        
+  right:
+    - text: About me
+      icon: fa-info
+      href: about.html
+      
+    - text: Resume
+      icon: fa-file-pdf-o
+      href: resume.pdf
