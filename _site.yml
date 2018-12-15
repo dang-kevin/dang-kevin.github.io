@@ -5,14 +5,40 @@ navbar:
   left:
     - text: Home
       icon: fa-home
-      href: index.html     
+      href: index.html
+      
+    - text: Teaching
+      icon: fa-university
+      menu:
+      - text: STA303 - Methods of Data Analysis II
+        icon: fa-book
+        href: STA303.html
+        
+      - text: STA314 - Machine Learning I
+        icon: fa-book
+        href: STA314.html
         
     - text: Course Work
       icon: fa-book
       menu:
-      - text: STA303 Assignment 1
+      - text: STA410 - Computational Statistics - Assignment 1
         icon: fa-code
-        href: STA303_A1.html
+        href: STA410_A1.html
+      
+      - text: STA490 - Stats Consulting and Collaboration
+        icon: fa-code
+        href: STA_490_ReactionTimes_Project.html
+    
+    - text: Personal Projects
+      icon: fa-pencil
+      menu:
+      - text: ASNA2019 Case Competition
+        icon: fa-code
+        href: ASNA2019CC_datacreation.html
+        
+      - text: Kaggle Competitions
+        icon: fa-code
+        href: Kaggle.html
         
   right:
     - text: About me
