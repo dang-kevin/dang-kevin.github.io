@@ -6,18 +6,7 @@ navbar:
     - text: Home
       icon: fa-home
       href: index.html
-      
-    - text: Teaching
-      icon: fa-university
-      menu:
-      - text: STA303 - Methods of Data Analysis II
-        icon: fa-book
-        href: STA303.html
-        
-      - text: STA314 - Machine Learning I
-        icon: fa-book
-        href: STA314.html
-        
+     
     - text: Course Work
       icon: fa-book
       menu:
