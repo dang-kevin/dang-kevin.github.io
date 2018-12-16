@@ -8,14 +8,14 @@ navbar:
       href: index.html
      
     - text: Course Work
-      icon: fa-book
+      icon: fa-pencil-square-o
       menu:
-      - text: STA303 - Methods of Data Analysis
-        icon: fa-code
+      - text: STA303
+        icon: fa-book
         href: STA303.html
     
-    - text: Personal Projects
-      icon: fa-pencil
+    - text: Projects
+      icon: fa-folder
       menu:
       - text: Job Applications
         icon: fa-code
