@@ -10,11 +10,14 @@ navbar:
     - text: Projects
       icon: fa-folder
       menu:
-      - text: Job Applications
+      - text: Calibrating a Snow Gauge
         icon: fa-code
-        href: Job_Applications.html
+        href: Snow-Gauge.html
 
-        
+      - text: Dungeness Crab Growth
+        icon: fa-code
+        href: Crab-Growth.html
+
   right:
     - text: About me
       icon: fa-info
