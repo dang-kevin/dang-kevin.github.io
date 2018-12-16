@@ -6,13 +6,6 @@ navbar:
     - text: Home
       icon: fa-home
       href: index.html
-     
-    - text: Course Work
-      icon: fa-pencil-square-o
-      menu:
-      - text: STA303
-        icon: fa-book
-        href: STA303.html
     
     - text: Projects
       icon: fa-folder
