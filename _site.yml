@@ -10,6 +10,10 @@ navbar:
     - text: Projects
       icon: fa-folder
       menu:
+      - text: Overview
+        icon: fa-code
+        href: Projects.html
+
       - text: Calibrating a Snow Gauge
         icon: fa-code
         href: Snow-Gauge.html
