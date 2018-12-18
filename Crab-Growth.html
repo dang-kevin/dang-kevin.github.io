@@ -128,9 +128,6 @@ $(document).ready(function () {
 
 
 <p>As Dungeness crabs grow, they need to replace their carapace; a process referred to as molting. My analysis involves grouping the adult female Dungeness crabs by whether they recently molted or not, estimating the mean carapace size of both groups, then determining whether there is a significant difference between the groups. First, a <em>boxplot</em><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> of the shell size (<code>size</code>) by the shell type (<code>shell</code>) was created. Shell type 0 represents a fouled carapace which can be interpreted as an old shell, while shell type 1 represents a clean carapace – a recently molted shell. The boxplot shows that older shells contain some outliers, while recent shells have no outliers. From the <em>summary statistics</em><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, type 0 shells are larger than type 1 shells by 7mm on average. A <em>two sample t-test</em><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> yielded a statistically significant p-value; this indicates that the means of the 2 groups are not equivalent. The two sample groups are independent,since the traps that were used were designed to catch adult female Dungeness crabs of all sizes, meaning that this sample is representative of the population. An <em>F-test to compare two variances</em><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> shows that the two sample group variances are similar – the constant variance condition is met. Both the <em>Normal QQ Plot</em><a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> and <em>Histogram of Shell Size</em><a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> show skew in the data, which may be a problem. Fortunately, the sample size of 362 (161 type 0, 201 type 1) is sufficiently large. By the Central Limit Theorem, means of samples from a population approach a normal distribution as sample size increases – regardless of the population distribution. Thus, the normality condition for the t-test is met. Given the strong supporting evidence, adult female Dungeness crabs with older carapaces (shell type 0) on average have larger shells than those with recently molted carapaces (shell type 1).</p>
-
-<div id="appendix-b" class="section level1">
-<h1>Appendix B</h1>
 <div id="crab-growth-data" class="section level2">
 <h2>Crab Growth Data</h2>
 <pre class="r"><code>library(tidyverse)
@@ -226,16 +223,15 @@ f_test</code></pre>
 ##          0.9777051</code></pre>
 </div>
 </div>
-</div>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Appendix B, Boxplot of shell size by type (Crab data)<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Appendix B, Summary Statistics<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Appendix B, Two Sample t-test<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Appendix B, F test to compare two variances<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>Appendix B, Normal QQ plot (Crab data)<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>Appendix B, Histogram of Shell Size (Crab data)<a href="#fnref6">↩</a></p></li>
+<li id="fn1"><p>Boxplot of shell size by type<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Summary Statistics<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Two Sample t-test<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>F test to compare two variances<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Normal QQ plot<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>Histogram of Shell Size<a href="#fnref6">↩</a></p></li>
 </ol>
 </div>
 
