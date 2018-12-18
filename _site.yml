@@ -18,6 +18,14 @@ navbar:
         icon: fa-code
         href: Crab-Growth.html
 
+      - text: Nodal Involvement in Prostate Cancer
+        icon: fa-code
+        href: Nodal-Involvement.html
+
+      - text: Smoking, Age and Death
+        icon: fa-code
+        href: Smoking-Age-Death.html
+
   right:
     - text: About me
       icon: fa-info
