@@ -8,27 +8,11 @@ navbar:
       href: index.html
     
     - text: Projects
-      icon: fa-folder
+      icon: fa-folder-open
       menu:
-      - text: Overview
+      - text: R Markdown
         icon: fa-code
-        href: Projects.html
-
-      - text: Calibrating a Snow Gauge
-        icon: fa-code
-        href: Snow-Gauge.html
-
-      - text: Dungeness Crab Growth
-        icon: fa-code
-        href: Crab-Growth.html
-
-      - text: Nodal Involvement in Prostate Cancer
-        icon: fa-code
-        href: Nodal-Involvement.html
-
-      - text: Smoking, Age and Death
-        icon: fa-code
-        href: Smoking-Age-Death.html
+        href: rmarkdown.html
 
   right:
     - text: About me
