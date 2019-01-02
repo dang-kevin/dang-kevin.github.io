@@ -13,6 +13,9 @@ navbar:
       - text: R Markdown
         icon: fa-code
         href: rmarkdown.html
+      - text: Python
+        icon: fa-code
+        href: python.html
 
   right:
     - text: About me
