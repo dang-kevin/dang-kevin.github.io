@@ -304,7 +304,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="resume.pdf">
+  <a href="files/resume.pdf">
     <span class="fa fa-file-pdf-o"></span>
      
     Resume
@@ -351,7 +351,7 @@ gauge %&gt;%
        subtitle=&quot;Gauge data&quot;,
        x=&quot;Gain&quot;,
        y=&quot;Density&quot;~(g/cm^{3}))</code></pre>
-<p><img src="Pictures/gauge1.png" width="672" /></p>
+<p><img src="pictures/gauge1.png" width="672" /></p>
 <pre class="r"><code># Residuals
 gauge_lm1 &lt;- lm(density~gain, data=gauge)
 data_frame(resid = residuals(gauge_lm1),
@@ -367,13 +367,13 @@ data_frame(resid = residuals(gauge_lm1),
        subtitle = &quot;Normal linear model for Gauge data&quot;,
        x = &quot;Fitted Values&quot;,
        y = &quot;Residuals&quot;)</code></pre>
-<p><img src="Pictures/gauge2.png" width="672" /></p>
+<p><img src="pictures/gauge2.png" width="672" /></p>
 <p>From the <em>Density vs Gain</em> plot, it appears as though there is an inverse exponential relationship between the variables. A linear model was initially created, however the <em>standardized residuals</em> appear to follow a distinct pattern, so a standard linear model cannot directly be fit to the data. We need to transform the data.</p>
 <pre class="r"><code>#Box-Cox transformation
 library(MASS)
 
 gain_boxcox &lt;- boxcox(gain ~ 1,data=gauge)</code></pre>
-<p><img src="Pictures/gauge3.png" width="672" /></p>
+<p><img src="pictures/gauge3.png" width="672" /></p>
 <pre class="r"><code>gain_boxcox$x[which(gain_boxcox$y == max(gain_boxcox$y))]</code></pre>
 <pre><code>## [1] 0.02020202</code></pre>
 <pre class="r"><code>#Log transformation
@@ -390,7 +390,7 @@ gauge_transform %&gt;%
        subtitle=&quot;Transformed log model for Gauge data&quot;,
        x=&quot;log(Gain)&quot;,
        y=&quot;Density&quot;~(g/cm^{3}))</code></pre>
-<p><img src="Pictures/gauge4.png" width="672" /></p>
+<p><img src="pictures/gauge4.png" width="672" /></p>
 <pre class="r"><code># Residuals
 gauge_lm2 &lt;- lm(density ~ log_gain, data=gauge_transform)
 data_frame(resid = residuals(gauge_lm2),
@@ -406,7 +406,7 @@ data_frame(resid = residuals(gauge_lm2),
        subtitle = &quot;Transformed log model for Gauge data&quot;,
        x = &quot;Fitted Values&quot;,
        y = &quot;Residuals&quot;)</code></pre>
-<p><img src="Pictures/gauge5.png" width="672" /></p>
+<p><img src="pictures/gauge5.png" width="672" /></p>
 <pre class="r"><code># Normal Q-Q
 gauge_transform %&gt;%
   mutate_at(&quot;log_gain&quot;, funs((. - mean(.)) / sd(.))) %&gt;%
@@ -420,7 +420,7 @@ gauge_transform %&gt;%
        subtitle=&quot;Transformed log model for Gauge data&quot;,
        x = &quot;Theoretical Quantiles&quot;,
        y = &quot;Sample Quantiles&quot;)</code></pre>
-<p><img src="Pictures/gauge6.png" width="672" /></p>
+<p><img src="pictures/gauge6.png" width="672" /></p>
 <p>After completing a log transformation on the <code>gain</code> variable, a valid linear model for <em>Density vs log(Gain)</em> was produced since the new <em>Residuals vs Fitted Values</em> plot does not show a distinct pattern. Also, the <em>Normal QQ plot</em> on the transformed data does not show evidence of skew – the normality condition is met.</p>
 <pre class="r"><code>#Regression Output
 summary(gauge_lm2)</code></pre>
@@ -473,7 +473,7 @@ crab %&gt;%
        subtitle = &quot;Crab Data&quot;,
        x = &quot;Shell Type&quot;,
        y = &quot;Shell Size&quot;~(mm))</code></pre>
-<p><img src="Pictures/crab1.png" width="672" /></p>
+<p><img src="pictures/crab1.png" width="672" /></p>
 <p>The boxplot shows that older shells contain some outliers, while recent shells have no outliers. Now take a look at the summary statistics:</p>
 <pre class="r"><code>group_means &lt;- crab %&gt;%
   group_by(shell) %&gt;%
@@ -530,7 +530,7 @@ crab %&gt;%
        subtitle = &quot;Crab Data&quot;,
        x = &quot;Theoretical Quantiles&quot;,
        y = &quot;Sample Quantiles&quot;)</code></pre>
-<p><img src="Pictures/crab2.png" width="672" /></p>
+<p><img src="pictures/crab2.png" width="672" /></p>
 <pre class="r"><code># Histogram
 crab %&gt;%
   ggplot(aes(x = size)) +
@@ -541,7 +541,7 @@ crab %&gt;%
        subtitle = &quot;Crab Data&quot;,
        x = &quot;Shell Size (mm)&quot;,
        y = &quot;Density&quot;)</code></pre>
-<p><img src="Pictures/crab3.png" width="672" /></p>
+<p><img src="pictures/crab3.png" width="672" /></p>
 <p>Both the <em>Normal QQ Plot</em> and <em>Histogram of Shell Size</em> show skew in the data, which may be a problem. Fortunately, the sample size of 362 (161 type 0, 201 type 1) is sufficiently large. By the Central Limit Theorem, means of samples from a population approach a normal distribution as sample size increases – regardless of the population distribution. Thus, the normality condition for the t-test is met.</p>
 <p>Given the strong supporting evidence, adult female Dungeness crabs with older carapaces (shell type 0) on average have larger shells than those with recently molted carapaces (shell type 1).</p>
 
@@ -584,7 +584,7 @@ nodal_tbl %&gt;%
        subtitle = &quot;Nodal Data&quot;,
        x = &quot;Predictor Value&quot;,
        y = &quot;Nodal Involvement?&quot;)</code></pre>
-<p><img src="Pictures/nodal1.png" width="672" /></p>
+<p><img src="pictures/nodal1.png" width="672" /></p>
 <p>Upon closer inspection, it appears as though <code>stage</code>, <code>acid</code> and <code>xray</code> have more true positive and true negative data points than false positive and false negative data points, which means that they may have a higher success rate when predicting nodal involvement.</p>
 <p>Let’s try fitting a model:</p>
 <pre class="r"><code># Fit an initial binary logistic regression model
@@ -671,7 +671,7 @@ round(cor(nodal_transform %&gt;% dplyr::select(-c(m,r))),2)</code></pre>
 ## acid  -0.20  0.13  0.01  0.16  1.00</code></pre>
 <pre class="r"><code># We can visualize this better using corrplot
 corrplot::corrplot(cor(nodal_transform %&gt;% dplyr::select(-c(m,r))),order=&quot;AOE&quot;)</code></pre>
-<p><img src="Pictures/nodal2.png" width="672" /></p>
+<p><img src="pictures/nodal2.png" width="672" /></p>
 <p>In regards to the model assumptions, the values are discrete (0 or 1) and there are also no outliers in the data since the z-value for each predictor is under 3. Also, there is low intercorrelation among the predictors, as shown in the <em>correlation matrix</em>.</p>
 <p>To clarify what each predictor represents, <code>stage</code> is a measure of the size and position of the tumour, <code>xray</code> indicates how serious the cancer is from an X-ray reading, and <code>acid</code> represents the level of acid phosphatase in the blood serum. These three variables may be helpful indicators of nodal involvement in prostate cancer, from evidence provided by the model. However, physicians should proceed with caution as there are some observations which incorrectly predict nodal involvement.</p>
 
