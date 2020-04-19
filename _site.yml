@@ -18,10 +18,6 @@ navbar:
         href: python.html
 
   right:
-    - text: About me
-      icon: fa-info
-      href: about.html
-      
     - text: Resume
       icon: fa-file-pdf-o
       href: resume.pdf
