@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Kevin Dang</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+  // mark it active
+  menuAnchor.parent().addClass('active');
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+       <span class="fa fa-university"></span>
+         
+      Teaching
+         
+       <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+       <li>
+        <a href="sta237.html">
+           <span class="fa fa-book"></span>
+             
+           STA237 - Fall 2021
+        </a>
+       </li>
+    </ul>
+   </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="rmarkdown.html">
+        <span class="fa fa-code"></span>
+         
+        R Markdown
+      </a>
+    </li>
+    <li>
+      <a href="python.html">
+        <span class="fa fa-code"></span>
+         
+        Python
+      </a>
+    </li>
+  </ul>
+</li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+    <li>
+        <a href="about.html">About Me</a>
+      </li>
+    <li>
+      <a href="files/Resume_Kevin_Dang.pdf">
+        <span class="fa fa-file-pdf-o"></span>
+     
+        Resume
+      </a>
+    </li>
+  </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+  <h1 class="title toc-ignore">Biography</h1>
+  
+  </div>
+  
+  
+  <style>
+  body {
+  text-align: justify}
+  </style>
+  <div style="float:left;position: relative; top: 7px; padding-right: 30px;">
+  <div class="figure">
+  
+  </div>
+  </div>
+
+  <h3>Introduction</h3>
+  <p>
+    I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics. I also hold a Bachelor's degree from 
+    the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for undergraduate statistics courses, 
+    and I continue to work part-time at Export Development Canada.
+  </p>
+
+  <h3>Export Development Canada</h3>
+  <p>
+    Since June 2020, I have been working at Export Development Canada (EDC) as a Business Intelligence Analyst. My responsibilities include creating dashboards in PowerBI and Excel 
+    to provide succinct summaries of targets and results for key metrics such as retention rates for SVPs, VPs, and other leaders at EDC. I also produce weekly reports which involve 
+    querying data and running SAS EG projects and process flows. More recently, I have been working in R (tidyverse, caret) to predict customer retention and 
+    conversion of EDC insurance products using logistic regression and random forest classifiers.
+  </p>
+
+  <h3>GlobalData</h3>
+  <p>
+    I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office from September 2020 to September 2021. Majority of my time was spent working on a pricing 
+    tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent 
+    grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables). In addition to my projects, I am also required 
+    to write press releases, which are linked below.
+  </p>
+
+  <h4>GlobalData Press Releases</h4>
+  <ul>
+    <li>
+        <a href="https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/">
+            Wearable technology is a key driver in the growth of mobile health, says GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/">
+            ENT devices market to reach US$2.3bn in 2030, forecasts GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/">
+            Global cloud services in medical devices expected to generate revenues of $4.4bn in 2024, says GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/dental-devices-market-rebound-2021-acquisitions-rise/">
+            Dental devices market to rebound in 2021 as acquisitions rise
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/anesthesia-respiratory-devices-market-reach-20bn-2025-driven-recent-surge-510k-clearances-says-globaldata/">
+            Anesthesia and respiratory devices market to reach $20bn in 2025 driven by recent surge in 510(k) clearances, says GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/ai-market-set-reach-52bn-2024-medical-device-companies-invest-ai-technologies-says-globaldata/">
+            AI market is set to reach $52bn in 2024 as medical device companies invest in AI technologies, says GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/impressive-performance-cardiac-assist-devices-will-help-cardiovascular-devices-market-surpass-62bn-2025-forecasts-globaldata/">
+            Impressive performance of cardiac assist devices will help cardiovascular devices market surpass $62bn by 2025, forecasts GlobalData
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/orthopedics-market-set-reach-64bn-2025-acquisitions-surge/">
+            Orthopedics market set to reach $64bn by 2025 as acquisitions surge
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/remote-patient-monitoring-market-set-surpass-645m-2025-covid-19-pandemic-drives-growth/">
+            Remote patient monitoring market set to surpass $645m by 2025 as COVID-19 pandemic drives growth
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/elective-procedures-spark-massive-surge-demand-robotic-systems-medtech-industry/">
+            Elective procedures spark massive surge in demand for robotic systems in medtech industry
+        </a>
+    </li>
+    <li>
+        <a href="https://www.globaldata.com/democratic-victory-will-improve-access-telemedicine-rural-areas/">
+            A Democratic victory will improve access to telemedicine in rural areas
+        </a>
+    </li>
+  </ul>
+
+  <h3>University of Toronto</h3>
+  <p>
+    Prior to my industry positions, I worked as a Data Analyst at the University of Toronto Centre for Industrial Relations and Human Resources. The project I worked on involved 
+    analyzing data on wages in the agriculture and farming industry, led by <a href="http://www.gregdistelhorst.com/">Dr. Greg Distelhorst</a>. I also provided Statistical Consulting 
+    services for a management consulting firm to answer some questions they had regarding user data which they collected from their health improvement platform. Both positions
+    required the use of R (dplry, tidyr, ggplot2) in RStudio
+  </p>
+  
+  <h3>Rotman School of Management</h3>
+    I worked as a Research Assistant at the Rotman School of Management under the supervision of <a href="https://business.uoregon.edu/faculty/chris-liu">Dr. Chris Liu</a> 
+    on projects about scientific publications and careers. I used Stata and Python (pandas, pybliometrics) for these projects.
+</div>
+
+<script>
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

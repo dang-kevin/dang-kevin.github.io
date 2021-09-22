@@ -6,7 +6,12 @@ navbar:
     - text: Home
       icon: fa-home
       href: index.html
-    
+    - text: "Teaching"
+      icon: fa-university
+      menu: 
+        - text: "STA237 - Fall 2021"
+          icon: fa-book
+          href: sta237.html
     - text: Projects
       icon: fa-folder-open
       menu:
@@ -18,6 +23,8 @@ navbar:
         href: python.html
 
   right:
+    - text: "About Me"
+      href: about.html
     - text: Resume
       icon: fa-file-pdf-o
       href: resume.pdf
