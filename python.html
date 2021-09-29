@@ -339,7 +339,7 @@ div.tocify {
 
 
 <div id="datacamp" class="section level1">
-<h1>DataCamp Projects</h1>
+<h2>DataCamp Projects</h2>
 
 <p>Below are <a href='https://www.datacamp.com/'>DataCamp</a> projects that I have worked on in Python, R and SQL using Jupyter Notebook. </p>
 <ul>
@@ -356,16 +356,16 @@ div.tocify {
 
 
 <div id="radius-of-earth" class="section level1">
-<h1>Radius of the Earth</h1>
+<h2>Radius of the Earth</h2>
 
-<h2>Introduction</h2>
+<h3>Introduction</h3>
 <p>The objective of this experiment was to deduce the radius of the Earth. This was achieved by measuring the variation of gravity using a Sodin gravimeter on different floors of the Burton tower. The height of each floor was also taken into account. In the results section we worked with the full dataset containing all floors, and only floors 3 to 13 as the results for these floors were expected to produce better results, which is explained in the results section. The estimated values for the radius of the Earth were in an acceptable range of error.</p>
 <p>Some equations relevant to this experiment include:</p>
 <p>Variation of g on Earth: <span class="math inline">\( \frac{\Delta g}{g} = -2\frac{\Delta R}{R}\Rightarrow R = -2g\frac{\Delta R}{\Delta g} \)</span></p>
 <p>Gravitational attraction of the floor: <span class="math inline">\( g' = G\cdot\frac{m_{floor}}{R^2_{to floor}} \)</span></p>
 <p>Error propagation for division (and multiplication): <span class="math inline">\( \sigma_z = z\sqrt{(\frac{\sigma_x}{x})^2 + (\frac{\sigma_y}{y})^2} \)</span></p>
 
-<h2>Experimental Procedure</h2>
+<h3>Experimental Procedure</h3>
 <ol>
 <li>Starting from the basement, place the gravimeter near the elevators and adjust the levels properly.</li>
 <li>After making the final fine adjustment by viewing through the eye-piece, record the counter reading.</li>
@@ -373,8 +373,8 @@ div.tocify {
 <li>Estimate the heights of the basement and first floor by counting the number of bricks and measuring each one with a ruler.</li>
 </ol>
 
-<h2>Results</h2>
-<h3>Important Values</h3>
+<h3>Results</h3>
+<h4>Important Values</h4>
 <ul>
 <li>Gravimeter constant for conversion to mgal: <span class="math inline">\(0.1055\)</span></li>
 <li>Basement Height: <span class="math inline">\(5.10m\)</span></li>
@@ -404,7 +404,7 @@ building_heights = np.array([5.1]+[5.44]+[3.95]*13)
 height1 = np.array([sum(building_heights[0:i])-building_heights[0] for i in range(15)])
 </code></pre>
 
-<h3>All floors</h3>
+<h4>All floors</h4>
 <p>First let's work with the entire dataset, and afterward we will try only floors 3 to 13.</p>
 
 
@@ -473,7 +473,7 @@ R = -2g\frac{\Delta R}{\Delta g} = \frac{-2g}{\frac{\Delta g}{\Delta R}} = \frac
 \end{align*}</p>
 <p>The literature value for the radius of the Earth in Toronto is about 6368000m, so our result is smaller by about 32753m or 0.51%, which is well within our uncertainty range. The reduced chi-squared value is a bit low which suggests potential overfitting to the data. This is not surprising considering the fact that there are only 15 data points. The goodness of fit is not great but we obtained acceptable results. In the next section we work with floors 3 to 13 so there will be even fewer data points!</p>
 
-<h3>Floors 3 to 13</h3>
+<h4>Floors 3 to 13</h4>
 
 
 <pre class="python"><code>#Index floors 3 to 13
@@ -533,7 +533,7 @@ R = -2g\frac{\Delta R}{\Delta g} = \frac{-2g}{\frac{\Delta g}{\Delta R}} = \frac
 \end{align*}</p>
 <p>The literature value for the radius of the Earth in Toronto is about 6368000m, so our result is larger by about 30340m or 0.48%, which is well within our uncertainty range. The reduced chi-squared is quite low, which is due to the small number of data points used in the model. Although the goodness of fit is not as good as the previous model containing data points for every floor, the estimated value for the radius of the Earth obtained with this model is more accurate. This is likely due to the fact that the basement (floor 0) is a missing mass, and the heights of the basement and first floor are not standard so we were required to estimate the heights by counting bricks and measuring with a ruler, which is not very accurate. The fourteenth floor was also excluded since it only had the roof above it, and the mass of the roof is smaller than the mass of the floors.</p>
 
-<h2>Conclusion</h2>
+<h3>Conclusion</h3>
 <p>The second model gave an estimate for the radius of the Earth of about 6398km using the gravimeter was within about 30km or 0.48% of the literature value of 6368km. This result was obtained using only floors 3 to 13, which represented our "best" data since there was an issue with different heights and masses at certain floors, which were excluded from the model. The goodness of fit was not great since there were few data points (limited by the number of floors in the Burton Tower), but the result turned out to be acceptable. The first model which included all floors also yielded an acceptable result which had an error 0.51% and a decent goodness of fit compared to our second model since it had more data points, but it was not quite as accurate as our second model due to the reasons mentioned above.</p>
 
 

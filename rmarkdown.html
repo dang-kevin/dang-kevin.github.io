@@ -339,7 +339,7 @@ div.tocify {
 <p>This page will contain projects completed using R Markdown. I highly recommend using it for projects in RStudio, along with the very useful tidyverse package. Here is a useful <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf"> tidyverse cheatsheet</a>.</p>
 
 <div id="snow-gauge" class="section level1">
-<h1>Calibrating a Snow Gauge</h1>
+<h2>Calibrating a Snow Gauge</h2>
 
 <p>Snow gauges are used to indirectly measure the density of snow; a high snow density leads to less absorption of water. Analyzing this information is important because we want to monitor water levels and prevent floods from occurring. My analysis involves specifying the relationship between <code>density</code> of polyethylene blocks (a substitute for snow) and <code>gain</code> – an amplified version of gamma photon count.</p>
 <p>Let's load the tidyverse package and the snow gauge data.</p>
@@ -463,7 +463,7 @@ summary(gauge_lm2)</code></pre>
 
 
 <div id="crab-growth" class="section level1">
-<h1>Dungeness Crab Growth</h1>
+<h2>Dungeness Crab Growth</h2>
 
 <p>As Dungeness crabs grow, they need to replace their carapace; a process referred to as molting. My analysis involves grouping the adult female Dungeness crabs by whether they recently molted or not, estimating the mean carapace size of both groups, then determining whether there is a significant difference between the groups.</p>
 <p>Let’s load the crab growth data.</p>
@@ -563,7 +563,7 @@ crab %&gt;%
 
 
 <div id="nodal-involvement" class="section level1">
-<h1>Nodal Involvement in Prostate Cancer</h1>
+<h2>Nodal Involvement in Prostate Cancer</h2>
 
 <p>When deciding on how to treat prostate cancer, physicians use a cancer staging system which takes into account the presence of cancer in the surrounding lymph nodes, referred to as nodal involvement. My analysis involves determining whether prostate cancer has spread to the lymph nodes based on certain characteristics.</p>
 <p>Let’s load the data from the <code>SMPracticals</code> package:</p>
@@ -693,7 +693,7 @@ corrplot::corrplot(cor(nodal_transform %&gt;% dplyr::select(-c(m,r))),order=&quo
 
 
 <div id="smoking-age-death" class="section level1">
-<h1>Smoking, Age and Death</h1>
+<h2>Smoking, Age and Death</h2>
 
 <p>Smoking is a major health concern among the population, however many individuals of numerous age groups continue to smoke. The goal is to analyze potential relationships between age group, smoking status and mortality rate among women.</p>
 <p>Let’s load and view the data:</p>
