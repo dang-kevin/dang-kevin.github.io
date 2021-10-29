@@ -1,4 +1,5 @@
 name: KevinDangWebsite
+output_dir: "."
 navbar:
   title: Kevin Dang
   left:
