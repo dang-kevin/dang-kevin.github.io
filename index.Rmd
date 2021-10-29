@@ -1,0 +1,15 @@
+---
+title: "Welcome!"
+---
+
+```{r, echo=FALSE, out.width="30%", out.extra='style="float:left; padding-right:30px"'}
+knitr::include_graphics("files/profile_picture.jpg")
+```
+
+My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and I am a MSc Candidate and TA at the University of Toronto. This website is intended to act as a teaching resource, as well as display some of my work.
+
+### Current courses I'm TA-ing:
+<a href="sta237.html">STA237 - Probability, Statistics and Data Analysis I</a> 
+
+### Future courses I will TA:
+STA238 - Probability, Statistics and Data Analysis II 
