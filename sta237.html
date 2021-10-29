@@ -11,7 +11,7 @@
 
 
 
-<title>Welcome!</title>
+<title>STA237: Probability, Statistics and Data Analysis I</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -220,6 +223,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -227,6 +293,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -307,24 +383,65 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Welcome!</h1>
+<h1 class="title toc-ignore">STA237: Probability, Statistics and Data Analysis I</h1>
 
 </div>
 
 
-<p><img src="files/profile_picture.jpg" width="30%" style="float:left; padding-right:30px" /></p>
-<p>My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and I am a MSc Candidate and TA at the University of Toronto. This website is intended to act as a teaching resource, as well as display some of my work.</p>
-<div id="current-courses-im-ta-ing" class="section level3">
-<h3>Current courses I’m TA-ing:</h3>
-<p><a href="sta237.html">STA237 - Probability, Statistics and Data Analysis I</a></p>
+<div id="course-description" class="section level3 unlisted unnumbered">
+<h3 class="unlisted unnumbered">Course Description</h3>
+<p>An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.</p>
 </div>
-<div id="future-courses-i-will-ta" class="section level3">
-<h3>Future courses I will TA:</h3>
-<p>STA238 - Probability, Statistics and Data Analysis II</p>
+<div id="tutorial-1" class="section level3">
+<h3>Tutorial 1</h3>
+<ul>
+<li><a href="sta237/TUT1_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT1_Answers.pdf">Solutions</a></li>
+<li><a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a></li>
+<li><a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a></li>
+</ul>
+</div>
+<div id="tutorial-2" class="section level3">
+<h3>Tutorial 2</h3>
+<ul>
+<li><a href="sta237/TUT2_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT2_Answers.pdf">Solutions</a></li>
+<li><a href="sta237/TUT2_RCodes.R">Questions 2 and 3 Code</a></li>
+</ul>
+</div>
+<div id="tutorial-3" class="section level3">
+<h3>Tutorial 3</h3>
+<ul>
+<li><a href="sta237/TUT3_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT3_Answers.pdf">Solutions</a></li>
+<li><a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a></li>
+<li><a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
+</ul>
+</div>
+<div id="tutorial-4" class="section level3">
+<h3>Tutorial 4</h3>
+<ul>
+<li><a href="sta237/TUT4_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT4_Answers.pdf">Solutions</a></li>
+<li><a href="sta237/StandardNormalTable.pdf">Standard Normal Table</a></li>
+</ul>
+</div>
+<div id="tutorial-5" class="section level3">
+<h3>Tutorial 5</h3>
+<p>Tutorial 5 did not take place due to the midterm.</p>
+</div>
+<div id="tutorial-6" class="section level3">
+<h3>Tutorial 6</h3>
+<ul>
+<li><a href="sta237/TUT6_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT6_Answers.pdf">Solutions</a></li>
+</ul>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -357,6 +474,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
