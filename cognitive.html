@@ -395,7 +395,7 @@ div.tocify {
 </div>
 
 
-<div id="abstract" class="section level2">
+<div id="abstract" class="section level2 unlisted unnumbered">
 <h2>Abstract</h2>
 <p>This study investigated the effect of auditory distraction on cognitive flexibility by analyzing data collected on 72 STA490 students who took the Stroop test while listening to music. The students also took the test without listening to music as a control. Several other variables were recorded as potential confounders which may further explain the relationship between cognitive flexibility and auditory distraction. Two linear mixed models were used in the analysis with a measurement for cognitive flexibility as the response variable and auditory distraction level as the main independent variable of interest. The first model used only auditory distraction as a covariate while the second model added the order of auditory distraction and the device type used for the Stroop test. Both models reached the same conclusion that auditory distraction affects cognitive flexibility. Furthermore, it appears that cognitive flexibility improves when listening to music.</p>
 </div>
@@ -662,6 +662,65 @@ where <span class="math inline">\(b_i\)</span> is the random effect for <code>id
 <p>In both linear mixed models, the p-values for <code>distraction</code> are smaller than than the significance level of 0.05. The second model includes the additional covariates <code>order</code> and <code>device</code> which were potential confounding variables, however we reached the same conclusion. Listening to music with lyrics or classical music has an effect on <code>diff</code> - the difference between <code>ontime</code> and <code>offtime</code>, when compared to taking the test in silence. In order words, auditory distraction improves cognitive flexibility. This holds true even once we account for the order in which the distraction levels were used and the type of device used for the Stroop test.</p>
 <p>The main limitation of this study was the lack of a large sample size. The dataset only contains information for 72 subjects, all of whom are students in STA490 and are in their fourth year of university studying statistics. Since the sample size is rather small and it contains students of a very niche demographic it is difficult to generalize our results to the general population. Another problem was that many students appeared to not follow instructions, by not randomizing the order of auditory distraction level they used for the Stroop test. 56 out of 72 students had <code>control</code> as their first auditory distraction and the data showed us that the <code>control</code> group performed worse than <code>classical</code> and <code>lyrics</code> even when accounting for order. But the number of students who had <code>control</code> as orders 2 and 3 were very small (7 and 9 respectively). This led to the unintuitive conclusion that auditory distraction improves cognitive flexibility. However, if we had equal sized groups or many more data points our conclusion may have been the opposite. Specifically, it may be more sensible that auditory distraction worsens cognitive flexibility despite what this study shows.</p>
 <p>From this study we were able to show that auditory distraction not only affects cognitive flexibility but improves cognitive flexibility for University of Toronto students taking STA490. The results can somewhat be generalized to other students of a similar demographic. For instance, we can recommend that university students should listen to music while working on tasks such as assignments and readings to improve their cognitive flexibility. Unfortunately we can not generalize these results to a broader population, so the results of this study are not particularly useful to other age groups and people in various professions that may want to know whether or not they should listen to music while doing particular work.</p>
+<div id="appendix-code" class="section level2 unlisted unnumbered">
+<h2>Appendix: Code</h2>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(knitr)
+library(nlme)
+
+# Load data and rename variables
+data &lt;- read_csv(&quot;./files/cognitive.csv&quot;)
+
+names(data) &lt;- c(&quot;id&quot;, &quot;cblind&quot;, &quot;english&quot;, &quot;vgames&quot;, &quot;device&quot;, &quot;headphones&quot;, 
+                 &quot;alllevels&quot;, &quot;distraction&quot;, &quot;sleep&quot;, &quot;start&quot;, &quot;offtime&quot;, 
+                 &quot;ontime&quot;, &quot;runsoff&quot;, &quot;runson&quot;, &quot;diff&quot;, &quot;order&quot;)
+
+# Boxplot
+ggplot(data=data,aes(x=factor(order),y=diff, fill=distraction)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title=&quot;Boxplot of Diff vs Order, grouped by distraction&quot;,
+  x=&quot;Order&quot;,
+  y=&quot;Diff (s)&quot;)
+
+# Table 1: Auditory distraction means
+data %&gt;% 
+  group_by(distraction) %&gt;% 
+  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
+  kable(caption = &quot;Auditory distraction means&quot;)
+
+# Linear Mixed Model 1
+simple.model &lt;- lme(diff ~ distraction, random=~1|id, method=&quot;REML&quot;, data=data)
+
+# Table 2: Linear Mixed Model 1
+kable(round(anova(simple.model), 3), caption = &quot;Linear Mixed Model 1&quot;)
+
+# Linear Mixed Model 2
+model_dv &lt;- lme(diff ~ distraction*order + device, random=~1|id, 
+                weights=varIdent(form=~1|order), method=&quot;REML&quot;, data=data)
+
+# Table 3: Order means
+data %&gt;% 
+  group_by(order) %&gt;% 
+  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;%
+  kable(caption = &quot;Order means&quot;)
+
+# Table 4: Distraction by Order means
+data %&gt;% 
+  group_by(distraction, order) %&gt;% 
+  summarize(mean.ontime.minus.offtime = round(mean(diff), 2), count = n()) %&gt;%
+  kable(caption = &quot;Distraction by Order means&quot;)
+
+# Table 5: Device type means
+data %&gt;% 
+  group_by(device) %&gt;% 
+  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
+  kable(caption = &quot;Device type means&quot;)
+
+# Table 6: Linear Mixed Model 2
+kable(round(anova(model_dv), 3), caption = &quot;Linear Mixed Model 2&quot;)</code></pre>
+</div>
 </div>
 
 

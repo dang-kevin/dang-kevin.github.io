@@ -9,7 +9,7 @@ output:
 
 This page will contain projects completed using R Markdown. These are examples of exploratory data analysis as the format is unstructured. I highly recommend using it for projects in RStudio, along with the `tidyverse`, a collection of R packages for data science. Here is a useful <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf"> tidyverse cheatsheet</a>.
 
-## Calibrating a Snow Gauge
+# Calibrating a Snow Gauge
 Snow gauges are used to indirectly measure the density of snow; a high snow density leads to less absorption of water. Analyzing this information is important because we want to monitor water levels and prevent floods from occurring. My analysis involves specifying the relationship between `density` of polyethylene blocks (a substitute for snow) and `gain` -- an amplified version of gamma photon count.
 
 Let's load the tidyverse package and the snow gauge data.
@@ -117,7 +117,7 @@ The *regression output* shows a significant relationship between `log(Gain)` and
 
 The linear model is: mean `density` = 1.298013 g/cm^3^ - (0.216203 g/cm^3^ * `log(gain)`). This model can be used to estimate the mean `density` of snow at a particular value of `gain` since the snow gauge has now been calibrated, but we must proceed with caution because polyethylene blocks were used in place of snow blocks for the model.
 
-## Dungeness Crab Growth
+# Dungeness Crab Growth
 As Dungeness crabs grow, they need to replace their carapace; a process referred to as molting. My analysis involves grouping the adult female Dungeness crabs by whether they recently molted or not, estimating the mean carapace size of both groups, then determining whether there is a significant difference between the groups.
 
 Let's load the crab growth data.
@@ -198,7 +198,7 @@ Both the *Normal QQ Plot* and *Histogram of Shell Size* show skew in the data, w
 
 Given the strong supporting evidence, adult female Dungeness crabs with older carapaces (shell type 0) on average have larger shells than those with recently molted carapaces (shell type 1).
 
-## Nodal Involvement in Prostate Cancer
+# Nodal Involvement in Prostate Cancer
 When deciding on how to treat prostate cancer, physicians use a cancer staging system which takes into account the presence of cancer in the surrounding lymph nodes, referred to as nodal involvement. My analysis involves determining whether prostate cancer has spread to the lymph nodes based on certain characteristics.
 
 Let's load the data from the `SMPracticals` package:
@@ -271,7 +271,7 @@ In regards to the model assumptions, the values are discrete (0 or 1) and there 
 
 To clarify what each predictor represents, `stage` is a measure of the size and position of the tumour, `xray` indicates how serious the cancer is from an X-ray reading, and `acid` represents the level of acid phosphatase in the blood serum. These three variables may be helpful indicators of nodal involvement in prostate cancer, from evidence provided by the model. However, physicians should proceed with caution as there are some observations which incorrectly predict nodal involvement.
 
-## Smoking, Age and Death
+# Smoking, Age and Death
 Smoking is a major health concern among the population, however many individuals of numerous age groups continue to smoke. The goal is to analyze potential relationships between age group, smoking status and mortality rate among women.
 
 Let's load and view the data:
