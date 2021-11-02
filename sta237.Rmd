@@ -12,24 +12,24 @@ output:
 An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.
 
 ### Tutorial 1
-* <a href="sta237/TUT1_Slides.pdf">Slides</a>
+* <a href="sta237/Tutorial1_Slides.pdf">Slides</a>
 * <a href="sta237/TUT1_Answers.pdf">Solutions</a>
 * <a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a>
 * <a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a>
 
 ### Tutorial 2
-* <a href="sta237/TUT2_Slides.pdf">Slides</a>
+* <a href="sta237/Tutorial2_Slides.pdf">Slides</a>
 * <a href="sta237/TUT2_Answers.pdf">Solutions</a>
 * <a href="sta237/TUT2_RCodes.R">Questions 2 and 3 Code</a>
 
 ### Tutorial 3
-* <a href="sta237/TUT3_Slides.pdf">Slides</a>
+* <a href="sta237/Tutorial3_Slides.pdf">Slides</a>
 * <a href="sta237/TUT3_Answers.pdf">Solutions</a>
 * <a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a>
 * <a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a>
 
 ### Tutorial 4
-* <a href="sta237/TUT4_Slides.pdf">Slides</a>
+* <a href="sta237/Tutorial4_Slides.pdf">Slides</a>
 * <a href="sta237/TUT4_Answers.pdf">Solutions</a>
 * <a href="sta237/StandardNormalTable.pdf">Standard Normal Table</a>
 
@@ -37,5 +37,5 @@ An introduction to probability using simulation and mathematical frameworks, wit
 Tutorial 5 did not take place due to the midterm.
 
 ### Tutorial 6
-* <a href="sta237/TUT6_Slides.pdf">Slides</a>
+* <a href="sta237/Tutorial6_Slides.pdf">Slides</a>
 * <a href="sta237/TUT6_Answers.pdf">Solutions</a>
