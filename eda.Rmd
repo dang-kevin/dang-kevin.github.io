@@ -1,5 +1,5 @@
 ---
-title: "R Projects Overview"
+title: "Exploratory Data Analysis Overview"
 output: 
   html_document:
     toc: true
@@ -7,7 +7,7 @@ output:
     toc_collapsed: true
 ---
 
-This page will contain projects completed using R Markdown. I highly recommend using it for projects in RStudio, along with the `tidyverse`, a collection of R packages for data science. Here is a useful <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf"> tidyverse cheatsheet</a>.
+This page will contain projects completed using R Markdown. These are examples of exploratory data analysis as the format is unstructured. I highly recommend using it for projects in RStudio, along with the `tidyverse`, a collection of R packages for data science. Here is a useful <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf"> tidyverse cheatsheet</a>.
 
 ## Calibrating a Snow Gauge
 Snow gauges are used to indirectly measure the density of snow; a high snow density leads to less absorption of water. Analyzing this information is important because we want to monitor water levels and prevent floods from occurring. My analysis involves specifying the relationship between `density` of polyethylene blocks (a substitute for snow) and `gain` -- an amplified version of gamma photon count.
@@ -36,7 +36,7 @@ gauge %>%
        y="Density"~(g/cm^{3}))
 # Residuals
 gauge_lm1 <- lm(density~gain, data=gauge)
-data_frame(resid = residuals(gauge_lm1),
+data.frame(resid = residuals(gauge_lm1),
            fitted = fitted(gauge_lm1)) %>%
   mutate_at("resid",funs( (. - mean(.)) / sd(.))) %>%
   ggplot(aes(x = fitted,y = resid)) +
@@ -78,7 +78,7 @@ gauge_transform %>%
        y="Density"~(g/cm^{3}))
 # Residuals
 gauge_lm2 <- lm(density ~ log_gain, data=gauge_transform)
-data_frame(resid = residuals(gauge_lm2),
+data.frame(resid = residuals(gauge_lm2),
            fitted = fitted(gauge_lm2)) %>%
   mutate_at("resid",funs( (. - mean(.)) / sd(.))) %>%
   ggplot(aes(x = fitted,y = resid)) +
@@ -209,7 +209,7 @@ library(tidyverse)
 # install.packages("SMPracticals")
 library(SMPracticals)
 data(nodal)
-nodal_tbl <- as_data_frame(nodal)
+nodal_tbl <- as.data.frame(nodal)
 dplyr::glimpse(nodal_tbl)
 ```
 
@@ -281,7 +281,7 @@ library(tidyverse)
 #Load data from the library
 library(SMPracticals)
 data(smoking)
-smoking_tbl <- as_data_frame(smoking)
+smoking_tbl <- as.data.frame(smoking)
 dplyr::glimpse(smoking_tbl)
 ```
 

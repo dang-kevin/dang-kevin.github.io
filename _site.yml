@@ -15,9 +15,12 @@ navbar:
     - text: Projects
       icon: fa-folder-open
       menu:
-      - text: R Markdown
+      - text: Cognitive Flexibility
         icon: fa-code
-        href: rmarkdown.html
+        href: cognitive.html
+      - text: Exploratory Data Analysis
+        icon: fa-code
+        href: eda.html
 
   right:
     - text: "About Me"

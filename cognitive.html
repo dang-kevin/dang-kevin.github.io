@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>The effect of auditory distraction on cognitive flexibility</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="sta237.html">
+        <span class="fa fa-book"></span>
+         
+        STA237 - Fall 2021
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="cognitive.html">
+        <span class="fa fa-code"></span>
+         
+        Cognitive Flexibility
+      </a>
+    </li>
+    <li>
+      <a href="eda.html">
+        <span class="fa fa-code"></span>
+         
+        Exploratory Data Analysis
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li>
+  <a href="files/Resume_Kevin_Dang.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">The effect of auditory distraction on cognitive flexibility</h1>
+
+</div>
+
+
+<div id="abstract" class="section level2">
+<h2>Abstract</h2>
+<p>This study investigated the effect of auditory distraction on cognitive flexibility by analyzing data collected on 72 STA490 students who took the Stroop test while listening to music. The students also took the test without listening to music as a control. Several other variables were recorded as potential confounders which may further explain the relationship between cognitive flexibility and auditory distraction. Two linear mixed models were used in the analysis with a measurement for cognitive flexibility as the response variable and auditory distraction level as the main independent variable of interest. The first model used only auditory distraction as a covariate while the second model added the order of auditory distraction and the device type used for the Stroop test. Both models reached the same conclusion that auditory distraction affects cognitive flexibility. Furthermore, it appears that cognitive flexibility improves when listening to music.</p>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Cognitive flexibility is measured by how quickly your brain can switch from thinking about one concept to another. This is a particularly important trait in certain professions that require multi-tasking and it is especially important for university students, as cognitive flexibility could be connected to problem-solving and memory retention. One way to measure cognitive flexibility is by having participants take a test that measures the Stroop Effect, which records the time that it takes to identify colours of the text where the colour and text are not matching. For instance, the display might show a blue colour of the word “green” and the subject must identify the colour as blue to obtain the correct answer. The time taken to complete five correct runs are recorded for text in the form of symbols (i.e. Stroop is off), and for text that represent a non-corresponding colour (i.e. Stroop is on). The response variable that measures cognitive flexibility is the difference between the two time results. A lower time difference means greater cognitive flexibility.</p>
+<p>The goal of this study is to determine whether auditory distraction affects cognitive flexibility. In order to achieve this aim, participants took the Stroop test while listening to two different types of music (classical and lyrical) and without listening to any music as a control. Several other variables mentioned in the Methods section were also recorded as potential confounding variables. The variable which stood out as a potential confounder is the order of auditory distraction used for the Stroop test. After the models were fit, we arrived at a conclusion that cognitive flexibility is improved by auditory distraction. With these results, we may recommend that students can listen to music while studying or working on their assignments.</p>
+<p>In the Methods section, two linear mixed models are discussed. The first model is a very simple model that takes auditory distraction as the only independent variable. The second model builds on the first model by adding two covariates: order of auditory distraction and device used for the Stroop test. In the Results section, summary tables and the two model outputs are provided. The most important values to look at are the p-values for auditory distraction which are significant (i.e. smaller than 0.05) in both models. With significant p-values for <code>distraction</code> we arrived at the conclusion that auditory distraction has a significant effect on the response variable. Finally, the models and results are further interpreted in the Discussion section and we also discuss the study design.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p>The dataset was taken from a survey that was given to 72 students in STA490 to fill out once they completed the Stroop test by EncephalApp on a mobile device during the period from September 12 to September 17 2019. The app measures the time taken to complete the test after five correct trials in two instances: <code>offtime</code> (i.e. Stroop is off) and <code>ontime</code> (i.e. Stroop is on). When Stroop is on, the displayed text will contain words that do not correspond to their correct colour, whereas when Stroop is off the displayed text are coloured symbols such as the number sign (‘#’). The response variable which is used to measure cognitive flexibility is <code>diff</code>, the difference between <code>ontime</code> and <code>offtime</code>. EncephalApp also collected two variables: <code>runsoff</code> and <code>runson</code> which are the number of trials required to get five correct runs in both the “off” and “on” states respectively. The main independent variable that we are investigating is <code>distraction</code>, which represents three different levels of auditory distraction: quiet (control), music with lyrics, classical music. The students were asked to randomize the order in which these three distractions were used for the Stroop test. Unfortunately, some students failed to follow this instruction as Figure <a href="#fig:fig1">1</a> shows that the mean difference (<code>diff</code>) decreases as the order in which the distractions were used increases. As a result <code>order</code> is likely a confounding variable which should be included in at least one of our models. Students were also asked to take the test in a quiet environment so that there would be no external distractions. In addition, other potential confounding variables were collected for the dataset, including colour blindness, years studied at an English institution, video games, device type, type of headphones, hours of sleep the night before, time of day. Finally, each student is distinguished by an identifier, <code>id</code>.</p>
+<div class="figure"><span style="display:block;" id="fig:fig1"></span>
+<img src="cognitive_files/figure-html/fig1-1.png" alt="Boxplot of Difference vs Order, grouped by distraction level" width="672" />
+<p class="caption">
+Figure 1: Boxplot of Difference vs Order, grouped by distraction level
+</p>
+</div>
+<div id="model-1" class="section level2">
+<h2>Model 1</h2>
+<p>The first model used to investigate the research question is a linear mixed model with <code>ontime</code> minus <code>offtime</code> as the response variable (<code>diff</code>), auditory distraction level as a covariate and student <code>id</code> as a random effect:
+<span class="math display">\[
+\text{diff}_{ij} = \beta_0 + \beta_1 \cdot \text{distraction}_{ij} + b_i + e_{ij}
+\]</span>
+where <span class="math inline">\(b_i\)</span> is the random effect for <code>id</code>, and <span class="math inline">\(e_{ij}\)</span> are the error terms.</p>
+<p>The reason this model was chosen is due to the fact that we are particularly interested in how auditory distraction affects cognitive flexibility so including other covariates may not be necessary. This is the simplest model that we can use to answer the research question. In addition, the way in which the data was collected meant that each student had three dependent observations - one for each level of auditory distraction, thus it is necessary to use <code>id</code> as a random effect in the model. The model assumptions of linearity, constant variance and normality of the residuals were checked.</p>
+</div>
+<div id="model-2" class="section level2">
+<h2>Model 2</h2>
+<p>The second model adds two additional covariates to Model 1, the order in which the distractions were used and type of device used for the Stroop test. An interaction term between <code>distraction</code> and <code>order</code> is also included. The response variable and random effects remain the same, and the model can be written as:</p>
+<p><span class="math display">\[
+\text{diff}_{ij} = \beta_0 + \beta_1 \cdot \text{distraction}_{ij} + \beta_2 \cdot \text{order}_{ij} + \beta_3 \cdot \text{distraction}_{ij}:\text{order}_{ij} +  \beta_4 \cdot \text{device} + b_i + e_{ij}
+\]</span></p>
+<p>This model looks at how <code>order</code> and <code>device</code> can affect the response as confounding variables. They may decrease the significance of <code>distraction</code> if they play an important role in affecting cognitive flexibility. The model assumptions of linearity, constant variance and normality of the residuals were checked.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div id="model-1-1" class="section level2">
+<h2>Model 1</h2>
+<p>In Table <a href="#tab:tab1">1</a>, there is a noticeable difference in the means of <code>control</code> and the other two groups. The <code>control</code> category represents students taking the Stroop test in a quiet environment with no music, so we may expect to see that the control group should perform better than the other two groups by obtaining a smaller difference, but that is not the case here. This can possibly be explained by adding a confounding variable to the model such as <code>order</code>, which we will do in Model 2. From the model output in Table <a href="#tab:tab2">2</a>, <code>distraction</code> has a p-value of 0.034 which is smaller than the significance level of 0.05. This indicates that auditory distraction has an affect on cognitive flexibility. More specifically, listening to music with lyrics or classical music actually improves cognitive flexibility based on these results.</p>
+<table>
+<caption><span id="tab:tab1">Table 1: </span>Auditory distraction means</caption>
+<thead>
+<tr class="header">
+<th align="left">distraction</th>
+<th align="right">mean.ontime.minus.offtime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">classical</td>
+<td align="right">6.41</td>
+</tr>
+<tr class="even">
+<td align="left">control</td>
+<td align="right">8.21</td>
+</tr>
+<tr class="odd">
+<td align="left">lyrics</td>
+<td align="right">6.61</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tab2">Table 2: </span>Linear Mixed Model 1</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">1</td>
+<td align="right">142</td>
+<td align="right">156.887</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">distraction</td>
+<td align="right">2</td>
+<td align="right">142</td>
+<td align="right">3.462</td>
+<td align="right">0.034</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-2-1" class="section level2">
+<h2>Model 2</h2>
+<p>Starting with Table <a href="#tab:tab3">3</a>, we can see that on average students perform worse on the first attempt at the Stroop Test. Table <a href="#tab:tab4">4</a> builds on this by showing the breakdown of the mean differences and counts for each auditory distraction by order. Most noticeably, 56 out of 72 students had the quiet condition (<code>control</code>) as their first auditory distraction, which greatly affected the results in Table <a href="#tab:tab1">1</a> and helps explain why the <code>control</code> group performed worse than the <code>classical</code> and <code>lyrics</code> groups. However, <code>control</code> performed worse than <code>classical</code> for orders 2 and 3, and worse than <code>lyrics</code> for orders 1 and 3. Despite accounting for <code>order</code>, the <code>control</code> group did not perform well overall which may be due to the uneven counts across each group. Next, we look at Table <a href="#tab:tab5">5</a> which shows us that android phone users performed worse than iPhone and iPad users so <code>device</code> may be a confounding variable.</p>
+<p>From the model output in Table <a href="#tab:tab6">6</a>, <code>distraction</code> has a p-value of 0.041 which is smaller than the significance level of 0.05. This indicates that auditory distraction has an affect on cognitive flexibility even after we account for <code>order</code> and <code>device</code>. It is interesting to note that <code>order</code> has a p-value of 0.058 which is close to but not below the threshold of 0.05, while <code>device</code> has a p-value of 0.049 which is slightly below the significance level. The interaction term <code>distraction:order</code> is not significant as the p-value is 0.863. This means that the order of distraction used for the Stroop test does not quite have a significant effect while the device used for the Stroop test has a somewhat significant effect on cognitive flexibility. With this model we reach the same conclusion as in Model 1 that auditory distraction affects cognitive flexibility and surprisingly shows an improvement in cognitive flexibility.</p>
+<table>
+<caption><span id="tab:tab3">Table 3: </span>Order means</caption>
+<thead>
+<tr class="header">
+<th align="right">order</th>
+<th align="right">mean.ontime.minus.offtime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">8.42</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">6.64</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">6.16</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tab4">Table 4: </span>Distraction by Order means</caption>
+<thead>
+<tr class="header">
+<th align="left">distraction</th>
+<th align="right">order</th>
+<th align="right">mean.ontime.minus.offtime</th>
+<th align="right">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">classical</td>
+<td align="right">1</td>
+<td align="right">8.74</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">classical</td>
+<td align="right">2</td>
+<td align="right">6.01</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td align="left">classical</td>
+<td align="right">3</td>
+<td align="right">6.33</td>
+<td align="right">38</td>
+</tr>
+<tr class="even">
+<td align="left">control</td>
+<td align="right">1</td>
+<td align="right">8.70</td>
+<td align="right">56</td>
+</tr>
+<tr class="odd">
+<td align="left">control</td>
+<td align="right">2</td>
+<td align="right">6.67</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">control</td>
+<td align="right">3</td>
+<td align="right">6.40</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">lyrics</td>
+<td align="right">1</td>
+<td align="right">6.72</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">lyrics</td>
+<td align="right">2</td>
+<td align="right">7.11</td>
+<td align="right">37</td>
+</tr>
+<tr class="odd">
+<td align="left">lyrics</td>
+<td align="right">3</td>
+<td align="right">5.82</td>
+<td align="right">25</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tab5">Table 5: </span>Device type means</caption>
+<thead>
+<tr class="header">
+<th align="left">device</th>
+<th align="right">mean.ontime.minus.offtime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Android phone</td>
+<td align="right">10.07</td>
+</tr>
+<tr class="even">
+<td align="left">iPad tablet</td>
+<td align="right">6.42</td>
+</tr>
+<tr class="odd">
+<td align="left">iPhone / iPod</td>
+<td align="right">6.50</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tab6">Table 6: </span>Linear Mixed Model 2</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">1</td>
+<td align="right">139</td>
+<td align="right">161.493</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">distraction</td>
+<td align="right">2</td>
+<td align="right">139</td>
+<td align="right">3.266</td>
+<td align="right">0.041</td>
+</tr>
+<tr class="odd">
+<td align="left">order</td>
+<td align="right">1</td>
+<td align="right">139</td>
+<td align="right">3.660</td>
+<td align="right">0.058</td>
+</tr>
+<tr class="even">
+<td align="left">device</td>
+<td align="right">2</td>
+<td align="right">69</td>
+<td align="right">3.153</td>
+<td align="right">0.049</td>
+</tr>
+<tr class="odd">
+<td align="left">distraction:order</td>
+<td align="right">2</td>
+<td align="right">139</td>
+<td align="right">0.148</td>
+<td align="right">0.863</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>In both linear mixed models, the p-values for <code>distraction</code> are smaller than than the significance level of 0.05. The second model includes the additional covariates <code>order</code> and <code>device</code> which were potential confounding variables, however we reached the same conclusion. Listening to music with lyrics or classical music has an effect on <code>diff</code> - the difference between <code>ontime</code> and <code>offtime</code>, when compared to taking the test in silence. In order words, auditory distraction improves cognitive flexibility. This holds true even once we account for the order in which the distraction levels were used and the type of device used for the Stroop test.</p>
+<p>The main limitation of this study was the lack of a large sample size. The dataset only contains information for 72 subjects, all of whom are students in STA490 and are in their fourth year of university studying statistics. Since the sample size is rather small and it contains students of a very niche demographic it is difficult to generalize our results to the general population. Another problem was that many students appeared to not follow instructions, by not randomizing the order of auditory distraction level they used for the Stroop test. 56 out of 72 students had <code>control</code> as their first auditory distraction and the data showed us that the <code>control</code> group performed worse than <code>classical</code> and <code>lyrics</code> even when accounting for order. But the number of students who had <code>control</code> as orders 2 and 3 were very small (7 and 9 respectively). This led to the unintuitive conclusion that auditory distraction improves cognitive flexibility. However, if we had equal sized groups or many more data points our conclusion may have been the opposite. Specifically, it may be more sensible that auditory distraction worsens cognitive flexibility despite what this study shows.</p>
+<p>From this study we were able to show that auditory distraction not only affects cognitive flexibility but improves cognitive flexibility for University of Toronto students taking STA490. The results can somewhat be generalized to other students of a similar demographic. For instance, we can recommend that university students should listen to music while working on tasks such as assignments and readings to improve their cognitive flexibility. Unfortunately we can not generalize these results to a broader population, so the results of this study are not particularly useful to other age groups and people in various professions that may want to know whether or not they should listen to music while doing particular work.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
