@@ -39,3 +39,8 @@ Tutorial 5 did not take place due to the midterm.
 ### Tutorial 6
 * <a href="sta237/Tutorial6_Slides.pdf">Slides</a>
 * <a href="sta237/TUT6_Answers.pdf">Solutions</a>
+
+### Tutorial 7
+* <a href="sta237/Tutorial7_Slides.pdf">Slides</a>
+* <a href="sta237/TUT7_Answers.pdf">Solutions</a>
+
