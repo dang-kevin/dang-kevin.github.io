@@ -14,8 +14,26 @@ An introduction to probability using simulation and mathematical frameworks, wit
 ### Tutorial 1
 * <a href="sta237/Tutorial1_Slides.pdf">Slides</a>
 * <a href="sta237/TUT1_Answers.pdf">Solutions</a>
-* <a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a>
 * <a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a>
+* <a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a>
+
+```{r}
+#### R codes for Q4 in TUT 1 #####
+set.seed(305)
+n = 10000
+ctr = 0
+simlist = numeric(n)
+while (ctr < n) {
+  trial <- sample(1:6, 2, replace = TRUE)
+  if (sum(trial) == 7) {  # Check if sum is 7
+    success <- if (trial[1] == 2) 1 else 0
+    ctr <- ctr + 1
+    simlist[ctr] <- success
+  }
+}
+mean(simlist) #Proportion of the required events
+```
+
 
 ### Tutorial 2
 * <a href="sta237/Tutorial2_Slides.pdf">Slides</a>
@@ -25,8 +43,32 @@ An introduction to probability using simulation and mathematical frameworks, wit
 ### Tutorial 3
 * <a href="sta237/Tutorial3_Slides.pdf">Slides</a>
 * <a href="sta237/TUT3_Answers.pdf">Solutions</a>
-* <a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a>
 * <a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a>
+* <a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a>
+
+```{r}
+## program for TUT3, STA237 ###
+## Q1 ###
+nfact2 <- function(n){
+  # calculate n factorial
+  if (n == 1){
+    cat("called nfact2(1)\n")
+    return(1)
+  } else {
+    cat("called nfact2(", n, ")\n", sep="")
+    return(n*nfact2(n-1))
+  }
+}
+
+nfact2(6)
+
+
+### Q4 ####
+A = matrix(c(3, 4, 2, 4, 9, 3, 6, 7, 2, 1 , 6, 9), nrow = 3, ncol = 4)
+transA = t(A)
+solve(A%*%transA)
+```
+
 
 ### Tutorial 4
 * <a href="sta237/Tutorial4_Slides.pdf">Slides</a>

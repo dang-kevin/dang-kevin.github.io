@@ -38,7 +38,7 @@ gauge %>%
 gauge_lm1 <- lm(density~gain, data=gauge)
 data.frame(resid = residuals(gauge_lm1),
            fitted = fitted(gauge_lm1)) %>%
-  mutate_at("resid",funs( (. - mean(.)) / sd(.))) %>%
+  mutate_at("resid", ~((. - mean(.)) / sd(.))) %>%
   ggplot(aes(x = fitted,y = resid)) +
   theme_classic() +
   geom_point(pch=21) +
@@ -80,7 +80,7 @@ gauge_transform %>%
 gauge_lm2 <- lm(density ~ log_gain, data=gauge_transform)
 data.frame(resid = residuals(gauge_lm2),
            fitted = fitted(gauge_lm2)) %>%
-  mutate_at("resid",funs( (. - mean(.)) / sd(.))) %>%
+  mutate_at("resid", ~((. - mean(.)) / sd(.))) %>%
   ggplot(aes(x = fitted,y = resid)) +
   theme_classic() +
   geom_point(pch=21) +
@@ -93,7 +93,7 @@ data.frame(resid = residuals(gauge_lm2),
        y = "Residuals")
 # Normal Q-Q
 gauge_transform %>%
-  mutate_at("log_gain", funs((. - mean(.)) / sd(.))) %>%
+  mutate_at("log_gain", ~((. - mean(.)) / sd(.))) %>%
   arrange(log_gain) %>%
   mutate(q = qnorm(1:n() / (n() + 1))) %>%
   ggplot(aes(x = q,y = log_gain)) +
@@ -171,7 +171,7 @@ Let's check for normality:
 ```{r, message=FALSE, warning=FALSE}
 #Normal QQ
 crab %>%
-  mutate_at("size",funs( (. - mean(.)) / sd(.))) %>%
+  mutate_at("size",~((. - mean(.)) / sd(.))) %>%
   arrange(size) %>%
   mutate(q = qnorm(1:n() / (n() + 1))) %>%
   ggplot(aes(x = q,y = size)) +

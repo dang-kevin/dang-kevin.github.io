@@ -146,7 +146,9 @@ The main limitation of this study was the lack of a large sample size. The datas
 From this study we were able to show that auditory distraction not only affects cognitive flexibility but improves cognitive flexibility for University of Toronto students taking STA490. The results can somewhat be generalized to other students of a similar demographic. For instance, we can recommend that university students should listen to music while working on tasks such as assignments and readings to improve their cognitive flexibility. Unfortunately we can not generalize these results to a broader population, so the results of this study are not particularly useful to other age groups and people in various professions that may want to know whether or not they should listen to music while doing particular work.
 
 
-## Appendix: Code {.unlisted .unnumbered}
+# Appendix
+
+## Code
 
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```

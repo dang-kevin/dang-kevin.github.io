@@ -404,9 +404,24 @@ div.tocify {
 <ul>
 <li><a href="sta237/Tutorial1_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT1_Answers.pdf">Solutions</a></li>
-<li><a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a></li>
 <li><a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a></li>
+<li><a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a></li>
 </ul>
+<pre class="r"><code>#### R codes for Q4 in TUT 1 #####
+set.seed(305)
+n = 10000
+ctr = 0
+simlist = numeric(n)
+while (ctr &lt; n) {
+  trial &lt;- sample(1:6, 2, replace = TRUE)
+  if (sum(trial) == 7) {  # Check if sum is 7
+    success &lt;- if (trial[1] == 2) 1 else 0
+    ctr &lt;- ctr + 1
+    simlist[ctr] &lt;- success
+  }
+}
+mean(simlist) #Proportion of the required events</code></pre>
+<pre><code>## [1] 0.1629</code></pre>
 </div>
 <div id="tutorial-2" class="section level3">
 <h3>Tutorial 2</h3>
@@ -421,9 +436,38 @@ div.tocify {
 <ul>
 <li><a href="sta237/Tutorial3_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT3_Answers.pdf">Solutions</a></li>
-<li><a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a></li>
 <li><a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
+<li><a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a></li>
 </ul>
+<pre class="r"><code>## program for TUT3, STA237 ###
+## Q1 ###
+nfact2 &lt;- function(n){
+  # calculate n factorial
+  if (n == 1){
+    cat(&quot;called nfact2(1)\n&quot;)
+    return(1)
+  } else {
+    cat(&quot;called nfact2(&quot;, n, &quot;)\n&quot;, sep=&quot;&quot;)
+    return(n*nfact2(n-1))
+  }
+}
+
+nfact2(6)</code></pre>
+<pre><code>## called nfact2(6)
+## called nfact2(5)
+## called nfact2(4)
+## called nfact2(3)
+## called nfact2(2)
+## called nfact2(1)</code></pre>
+<pre><code>## [1] 720</code></pre>
+<pre class="r"><code>### Q4 ####
+A = matrix(c(3, 4, 2, 4, 9, 3, 6, 7, 2, 1 , 6, 9), nrow = 3, ncol = 4)
+transA = t(A)
+solve(A%*%transA)</code></pre>
+<pre><code>##             [,1]        [,2]        [,3]
+## [1,]  0.18366880 -0.13700823  0.07090576
+## [2,] -0.13700823  0.11576192 -0.06714445
+## [3,]  0.07090576 -0.06714445  0.05255667</code></pre>
 </div>
 <div id="tutorial-4" class="section level3">
 <h3>Tutorial 4</h3>
