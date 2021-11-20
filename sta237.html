@@ -395,19 +395,19 @@ div.tocify {
 </div>
 
 
-<div id="course-description" class="section level3 unlisted unnumbered">
-<h3 class="unlisted unnumbered">Course Description</h3>
+<div id="course-description" class="section level2 unlisted unnumbered">
+<h2 class="unlisted unnumbered">Course Description</h2>
 <p>An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.</p>
 </div>
-<div id="tutorial-1" class="section level3">
-<h3>Tutorial 1</h3>
+<div id="tutorial-1" class="section level2">
+<h2>Tutorial 1</h2>
 <ul>
 <li><a href="sta237/Tutorial1_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT1_Answers.pdf">Solutions</a></li>
 <li><a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a></li>
-<li><a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a></li>
+<li><a href="sta237/TUT1_RCodes_Q4.R">Code</a></li>
 </ul>
-<pre class="r"><code>#### R codes for Q4 in TUT 1 #####
+<pre class="r"><code>#### R code for Q4 in TUT 1 #####
 set.seed(305)
 n = 10000
 ctr = 0
@@ -423,21 +423,21 @@ while (ctr &lt; n) {
 mean(simlist) #Proportion of the required events</code></pre>
 <pre><code>## [1] 0.1629</code></pre>
 </div>
-<div id="tutorial-2" class="section level3">
-<h3>Tutorial 2</h3>
+<div id="tutorial-2" class="section level2">
+<h2>Tutorial 2</h2>
 <ul>
 <li><a href="sta237/Tutorial2_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT2_Answers.pdf">Solutions</a></li>
-<li><a href="sta237/TUT2_RCodes.R">Questions 2 and 3 Code</a></li>
+<li><a href="sta237/TUT2_RCodes.R">Code</a></li>
 </ul>
 </div>
-<div id="tutorial-3" class="section level3">
-<h3>Tutorial 3</h3>
+<div id="tutorial-3" class="section level2">
+<h2>Tutorial 3</h2>
 <ul>
 <li><a href="sta237/Tutorial3_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT3_Answers.pdf">Solutions</a></li>
 <li><a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
-<li><a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a></li>
+<li><a href="sta237/TUT3_RCodes.R">Code</a></li>
 </ul>
 <pre class="r"><code>## program for TUT3, STA237 ###
 ## Q1 ###
@@ -469,31 +469,62 @@ solve(A%*%transA)</code></pre>
 ## [2,] -0.13700823  0.11576192 -0.06714445
 ## [3,]  0.07090576 -0.06714445  0.05255667</code></pre>
 </div>
-<div id="tutorial-4" class="section level3">
-<h3>Tutorial 4</h3>
+<div id="tutorial-4" class="section level2">
+<h2>Tutorial 4</h2>
 <ul>
 <li><a href="sta237/Tutorial4_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT4_Answers.pdf">Solutions</a></li>
 <li><a href="sta237/StandardNormalTable.pdf">Standard Normal Table</a></li>
 </ul>
 </div>
-<div id="tutorial-5" class="section level3">
-<h3>Tutorial 5</h3>
-<p>Tutorial 5 did not take place due to the midterm.</p>
+<div id="tutorial-5" class="section level2">
+<h2>Tutorial 5</h2>
+<ul>
+<li>Tutorial 5 did not take place due to the midterm.</li>
+</ul>
 </div>
-<div id="tutorial-6" class="section level3">
-<h3>Tutorial 6</h3>
+<div id="tutorial-6" class="section level2">
+<h2>Tutorial 6</h2>
 <ul>
 <li><a href="sta237/Tutorial6_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT6_Answers.pdf">Solutions</a></li>
 </ul>
 </div>
-<div id="tutorial-7" class="section level3">
-<h3>Tutorial 7</h3>
+<div id="tutorial-7" class="section level2">
+<h2>Tutorial 7</h2>
 <ul>
 <li><a href="sta237/Tutorial7_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT7_Answers.pdf">Solutions</a></li>
 </ul>
+</div>
+<div id="tutorial-8" class="section level2">
+<h2>Tutorial 8</h2>
+<ul>
+<li><a href="sta237/Tutorial8_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT8_RCodes.R">Code</a></li>
+</ul>
+<pre class="r"><code>#install.packages(&quot;ggplot2&quot;)
+library(ggplot2)
+## TUT 8 #####
+
+### Binomial Distribution ####
+s &lt;- 12 #The number of trials
+p &lt;- 0.5
+n &lt;- 10000
+result &lt;- numeric(n)
+sn &lt;- 0
+for (i in 1:n){
+  sn &lt;- sn + rbinom(1, s, p)
+  result[i] &lt;- sn/i
+}
+
+ind &lt;- 1:n
+data = data.frame(Index = ind, result = result)
+ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
+  ylab(&quot;Sn/n&quot;) + xlab(&quot;n&quot;) +
+  labs(title = &quot;SLLN for Binomial distribution&quot;, subtitle = &quot;The number of trials = 12 and p=0.5&quot;) +
+  geom_line()</code></pre>
+<p><img src="sta237_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 
 

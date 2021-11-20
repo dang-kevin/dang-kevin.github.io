@@ -7,18 +7,19 @@ output:
     toc_collapsed: true
 ---
 
-### Course Description {.unlisted .unnumbered}
+
+## Course Description {.unlisted .unnumbered}
 
 An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.
 
-### Tutorial 1
-* <a href="sta237/Tutorial1_Slides.pdf">Slides</a>
-* <a href="sta237/TUT1_Answers.pdf">Solutions</a>
-* <a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a>
-* <a href="sta237/TUT1_RCodes_Q4.R">Question 4 Code</a>
+## Tutorial 1
+- <a href="sta237/Tutorial1_Slides.pdf">Slides</a>
+- <a href="sta237/TUT1_Answers.pdf">Solutions</a>
+- <a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a>
+- <a href="sta237/TUT1_RCodes_Q4.R">Code</a>
 
 ```{r}
-#### R codes for Q4 in TUT 1 #####
+#### R code for Q4 in TUT 1 #####
 set.seed(305)
 n = 10000
 ctr = 0
@@ -35,16 +36,16 @@ mean(simlist) #Proportion of the required events
 ```
 
 
-### Tutorial 2
-* <a href="sta237/Tutorial2_Slides.pdf">Slides</a>
-* <a href="sta237/TUT2_Answers.pdf">Solutions</a>
-* <a href="sta237/TUT2_RCodes.R">Questions 2 and 3 Code</a>
+## Tutorial 2
+- <a href="sta237/Tutorial2_Slides.pdf">Slides</a>
+- <a href="sta237/TUT2_Answers.pdf">Solutions</a>
+- <a href="sta237/TUT2_RCodes.R">Code</a>
 
-### Tutorial 3
-* <a href="sta237/Tutorial3_Slides.pdf">Slides</a>
-* <a href="sta237/TUT3_Answers.pdf">Solutions</a>
-* <a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a>
-* <a href="sta237/TUT3_RCodes.R">Questions 1 and 4 Code</a>
+## Tutorial 3
+- <a href="sta237/Tutorial3_Slides.pdf">Slides</a>
+- <a href="sta237/TUT3_Answers.pdf">Solutions</a>
+- <a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a>
+- <a href="sta237/TUT3_RCodes.R">Code</a>
 
 ```{r}
 ## program for TUT3, STA237 ###
@@ -70,19 +71,48 @@ solve(A%*%transA)
 ```
 
 
-### Tutorial 4
-* <a href="sta237/Tutorial4_Slides.pdf">Slides</a>
-* <a href="sta237/TUT4_Answers.pdf">Solutions</a>
-* <a href="sta237/StandardNormalTable.pdf">Standard Normal Table</a>
+## Tutorial 4
+- <a href="sta237/Tutorial4_Slides.pdf">Slides</a>
+- <a href="sta237/TUT4_Answers.pdf">Solutions</a>
+- <a href="sta237/StandardNormalTable.pdf">Standard Normal Table</a>
 
-### Tutorial 5
-Tutorial 5 did not take place due to the midterm.
+## Tutorial 5
+- Tutorial 5 did not take place due to the midterm.
 
-### Tutorial 6
-* <a href="sta237/Tutorial6_Slides.pdf">Slides</a>
-* <a href="sta237/TUT6_Answers.pdf">Solutions</a>
+## Tutorial 6
+- <a href="sta237/Tutorial6_Slides.pdf">Slides</a>
+- <a href="sta237/TUT6_Answers.pdf">Solutions</a>
 
-### Tutorial 7
-* <a href="sta237/Tutorial7_Slides.pdf">Slides</a>
-* <a href="sta237/TUT7_Answers.pdf">Solutions</a>
+## Tutorial 7
+- <a href="sta237/Tutorial7_Slides.pdf">Slides</a>
+- <a href="sta237/TUT7_Answers.pdf">Solutions</a>
+
+## Tutorial 8
+- <a href="sta237/Tutorial8_Slides.pdf">Slides</a>
+- <a href="sta237/TUT8_RCodes.R">Code</a>
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+## TUT 8 #####
+
+### Binomial Distribution ####
+s <- 12 #The number of trials
+p <- 0.5
+n <- 10000
+result <- numeric(n)
+sn <- 0
+for (i in 1:n){
+  sn <- sn + rbinom(1, s, p)
+  result[i] <- sn/i
+}
+
+ind <- 1:n
+data = data.frame(Index = ind, result = result)
+ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
+  ylab("Sn/n") + xlab("n") +
+  labs(title = "SLLN for Binomial distribution", subtitle = "The number of trials = 12 and p=0.5") +
+  geom_line()
+```
+
 
