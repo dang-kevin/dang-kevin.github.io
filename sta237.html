@@ -526,6 +526,31 @@ ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
   geom_line()</code></pre>
 <p><img src="sta237_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
+<div id="tutorial-9" class="section level2">
+<h2>Tutorial 9</h2>
+<ul>
+<li><a href="sta237/Tutorial9_Slides.pdf">Slides</a></li>
+<li><a href="sta237/TUT9_RCodes.R">Code</a></li>
+</ul>
+<pre class="r"><code>## TUT 9 #####
+
+### Binomial Distribution ####
+set.seed(503)
+s &lt;- 50000 #The number of simulations
+p &lt;- 0.15 #The probability of success
+t &lt;- 5 #The number of trials
+n &lt;- 40 #The sample size
+SampleMeans &lt;- numeric(s)
+SimValues &lt;- matrix(0, n, s)
+
+for (i in 1:s){
+  SimValues[,i] &lt;- rbinom(n, t, p)
+  SampleMeans[i] &lt;- mean(SimValues[,i])
+}
+
+hist(SampleMeans)</code></pre>
+<p><img src="sta237_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
 
 
 

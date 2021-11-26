@@ -2,19 +2,19 @@
 title: "About Me"
 ---
 
-### Introduction
+## Introduction
 I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for undergraduate statistics courses, and I continue to work part-time at Export Development Canada. Recently, I started a biostatistics practicum at St. Michael's Hospital. 
 
-### St. Michael's Hospital
-In the Applied Health Research Centre at St. Michael’s Hospital, I am working closely with <a href="http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/">Dr. Charles Keown-Stoneman</a>, an Investigator/Biostatistician within the <a href="https://www.targetkids.ca/about">TARGetKids!</a> research group. I am classified as a Research Visitor, and my unofficial title is Junior Biostatistician. 
+## St. Michael's Hospital
+In the Applied Health Research Centre at St. Michael’s Hospital, I am working closely with <a href="http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/">Dr. Charles Keown-Stoneman</a>, an Investigator/Biostatistician within the <a href="https://www.targetkids.ca/about">TARGetKids!</a> research group. I am classified as a Research Visitor, and my unofficial title is Junior Biostatistician. My work is on the TARGetKids! COVID-19 Study, specifically studying COVID-19 public health measure adherence amongst parents & children in Ontario. Methods include linear mixed effects regression with LASSO regularization, piecewise linear regression, cross-validation, bootstrapping.
 
-### Export Development Canada
+## Export Development Canada
 Since June 2020, I have been working at Export Development Canada (EDC) as a Business Intelligence Analyst. My responsibilities include creating dashboards in PowerBI and Excel to provide succinct summaries of targets and results for key metrics such as retention rates for SVPs, VPs, and other leaders at EDC. I also produce weekly reports which involve querying data and running SAS EG projects and process flows. More recently, I have been working in R (tidyverse, caret) to predict customer retention and conversion of EDC insurance products using logistic regression and random forest classifiers.
 
-### GlobalData
+## GlobalData
 I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office from September 2020 to September 2021. Majority of my time was spent working on a pricing tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables). In addition to my projects, I am also required to write press releases, which are linked below.
 
-#### GlobalData Press Releases
+### GlobalData Press Releases
 * <a href="https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/">
     Wearable technology is a key driver in the growth of mobile health, says GlobalData
   </a>
@@ -49,8 +49,8 @@ I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office fro
     A Democratic victory will improve access to telemedicine in rural areas
   </a>
 
-### University of Toronto
+## University of Toronto
 Prior to my industry positions, I worked as a Data Analyst at the University of Toronto Centre for Industrial Relations and Human Resources. The project I worked on involved analyzing data on wages in the agriculture and farming industry, led by <a href="http://www.gregdistelhorst.com/">Dr. Greg Distelhorst</a>. I also provided Statistical Consulting services for a management consulting firm to answer some questions they had regarding user data which they collected from their health improvement platform. Both positions required the use of R (dplry, tidyr, ggplot2) in RStudio.
 
-### Rotman School of Management
+## Rotman School of Management
 I worked as a Research Assistant at the Rotman School of Management under the supervision of <a href="https://business.uoregon.edu/faculty/chris-liu">Dr. Chris Liu</a> on projects about scientific publications and careers. I used Stata and Python (pandas, pybliometrics) for these projects.
