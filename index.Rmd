@@ -2,14 +2,22 @@
 title: "Welcome!"
 ---
 
-```{r, echo=FALSE, out.width="30%", out.extra='style="float:left; padding-right:30px"'}
+```{r, echo=FALSE, out.width="25%", out.extra='style="float:left; padding-right:30px"'}
 knitr::include_graphics("files/profile_picture.jpg")
 ```
 
-My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and I am a MSc Candidate and TA at the University of Toronto. This website is intended to act as a teaching resource, as well as display some of my work.
+## Introduction
+My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health,  Department of Computer Science and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
 
-### Current courses I'm TA-ing:
-<a href="sta237.html">STA237</a>  - Probability, Statistics and Data Analysis I
+<br>
 
-### Future courses I will TA:
-STA238 - Probability, Statistics and Data Analysis II 
+## TA Courses: 
+### Winter 2022
+- CHL5202: Biostatistics II (graduate level course)
+- EEB125H1: Introductory Computation and Data Science for the Life and Physical Sciences
+- STA238: Probability, Statistics and Data Analysis II
+
+### Fall 2021
+- <a href="sta237.html">STA237:</a> Probability, Statistics and Data Analysis I
+
+
