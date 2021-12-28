@@ -11,7 +11,7 @@ My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and 
 
 <br>
 
-## TA Courses: 
+## Teaching Assistantships 
 ### Winter 2022
 - CHL5202: Biostatistics II (graduate level course)
 - EEB125H1: Introductory Computation and Data Science for the Life and Physical Sciences
