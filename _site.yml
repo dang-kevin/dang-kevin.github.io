@@ -21,6 +21,9 @@ navbar:
       - text: Exploratory Data Analysis
         icon: fa-code
         href: eda.html
+      - text: Heart Disease Classifier
+        icon: fa-code
+        href: heartdisease.html
 
   right:
     - text: "About Me"

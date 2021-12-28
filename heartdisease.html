@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Heart Disease Classifier</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="sta237.html">
+        <span class="fa fa-book"></span>
+         
+        STA237 - Fall 2021
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="cognitive.html">
+        <span class="fa fa-code"></span>
+         
+        Cognitive Flexibility
+      </a>
+    </li>
+    <li>
+      <a href="eda.html">
+        <span class="fa fa-code"></span>
+         
+        Exploratory Data Analysis
+      </a>
+    </li>
+    <li>
+      <a href="heartdisease.html">
+        <span class="fa fa-code"></span>
+         
+        Heart Disease Classifier
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li>
+  <a href="files/Resume_Kevin_Dang.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Heart Disease Classifier</h1>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The heart disease data set (or Cleveland database) is part of a larger collection of databases on heart disease diagnosis. The heart disease data set was downloaded from the UCI Machine Learning Repository and used in the following analysis to classify whether or not an individual has heart disease, which could have important implications for classification and predictive modelling in the field of medicine.</p>
+<p>The main objective of this analysis is to assess the performance of three different classification methods: logistic regression with regularization, k-nearest neighbours and classification trees. The secondary objective of this analysis is to train a model that can be used for classification of future observations, using the best of the three methods.</p>
+<p>In the Methods section, three classification methods are discussed. Each classifier uses the diagnosis of heart disease as the response variable, with the remaining thirteen variables as the predictors. In the results section, the performance of the three methods are compared and a final classification model is trained for future predictions. Finally, the methods and results are further interpreted in the Discussion section and dealing with heart disease misdiagnosis is discussed.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p>The heart disease data set contains 303 observations with some missing values, so complete case analysis was used to reduce the number of observations to 297. Table <a href="#tab:tabdata">1</a> contains a written description of the fourteen variables and Table <a href="#tab:tabdata2">2</a> contains a detailed summary of the data set. The response variable is <code>num</code> - the diagnosis of heart disease (yes/no), while the remaining thirteen variables are the predictors. The response variable along with the thirteen predictors are used in each of the classification methods.</p>
+<p>To compare the classifiers while accounting for randomness, the data was randomly split into training and test sets five times, and the accuracy rates were recorded for each run. 80% of the data was used to train the models, and the remaining 20% was used to evaluate their performance. Accuracy is the chosen criterion for assessing the performance of the classifiers since it is straightforward and easy to understand for non-technical readers.</p>
+<div id="logistic-regression-with-regularization" class="section level2">
+<h2>Logistic Regression with regularization</h2>
+<p>The first classification model is logistic regression with regularization. In the logistic regression model, the probability of heart disease given the predictors <span class="math inline">\(X_i\)</span> is calculated as follows:
+<span class="math display">\[
+P(Y=1|X_i) = \frac{\exp(\beta_0 + \beta_1 X_{i1} + \cdots + \beta_k X_{ik})}{1 + \exp(\beta_0 + \beta_1 X_{i1} + \cdots + \beta_k X_{ik})}
+\]</span>
+There are several regularization methods for regression, including ridge regression and LASSO. For this analysis we used LASSO (least absolute shrinkage and selection operator), as this form of regularization shrinks predictors to zero and is consequently a feature selection method. This makes the penalized model much more simpler as it will contain fewer predictors. The LASSO coefficients minimize the negative log likelihood subject to <span class="math inline">\(\sum_{j=1}^k |\beta_j| \leq \lambda\)</span>, where <span class="math inline">\(\lambda\)</span> is the penalty term or tuning parameter. Ten-fold cross-validation was used to find the minimum <span class="math inline">\(\lambda\)</span> (Appendix: Table <a href="#tab:tablambda">4</a> &amp; Figure <a href="#fig:figlambda">2</a>).</p>
+</div>
+<div id="k-nearest-neighbours" class="section level2">
+<h2>K-Nearest Neighbours</h2>
+<p>The second classifier is k-nearest neighbours (KNN). This method takes the k nearest points to the new point, then classifies the point by a majority vote of its <span class="math inline">\(k\)</span> neighbours. In simpler terms, this algorithm takes unlabeled points and assigns them to the class that contains similar labeled examples. K-nearest neighbours uses a Euclidean distance by default, with classification decided by majority vote and ties broken at random. Due to the nature of KNN as a distance based algorithm, is it important to scale the continuous variables so that the distance is not biased towards the variables with larger values. There are a few types of scaling methods including normalization which was used in this analysis. The algorithm also requires that we specify <span class="math inline">\(k\)</span>, the number of neighbours considered. One method to find the optimal <span class="math inline">\(k\)</span> is leave-one-out cross-validation (Appendix: Table <a href="#tab:tabk">5</a> &amp; Figure <a href="#fig:figk">3</a>).</p>
+</div>
+<div id="classification-tree" class="section level2">
+<h2>Classification Tree</h2>
+<p>The third method for classification is a classification tree (also known as a decision tree). Classification trees use binary recursive partitioning, where the data is partitioned in an iterative manner at each node. A node is where the branch of a tree splits into two parts, and the terminal nodes are called leaves. These leaves are assigned class membership probabilities which can be used to classify new data. After the classification tree was trained, a technique called pruning was used to remove the least important branches as the model can be quite complex which leads to overfitting. When pruning the tree, a parameter called <code>best</code> (size or number of terminal nodes of a subtree to be returned) was passed into the function in order to specify the size of pruned tree. The best size was determined via ten-fold cross-validation (Appendix: Table <a href="#tab:tabsize">6</a> &amp; Figure <a href="#fig:figsize">4</a>).</p>
+<table>
+<caption><span id="tab:tabdata">Table 1: </span>Heart Disease Data Set</caption>
+<colgroup>
+<col width="10%" />
+<col width="89%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">age</td>
+<td align="left">age in years</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="left">sex (1 = male; 0 = female)</td>
+</tr>
+<tr class="odd">
+<td align="left">cp</td>
+<td align="left">chest pain type (1 = typical angina; 2 = atypical angina; 3 = non-anginal pain; 4 = asymptomatic)</td>
+</tr>
+<tr class="even">
+<td align="left">trestbps</td>
+<td align="left">resting blood pressure (in mm Hg on admission to the hospital)</td>
+</tr>
+<tr class="odd">
+<td align="left">chol</td>
+<td align="left">serum cholestoral in mg/dl</td>
+</tr>
+<tr class="even">
+<td align="left">fbs</td>
+<td align="left">fasting blood sugar &gt; 120 mg/dl (1 = true; 0 = false)</td>
+</tr>
+<tr class="odd">
+<td align="left">restecg</td>
+<td align="left">resting electrocardiographic results (0 = normal; 1 = having ST-T wave abnormality; 2 = showing probable or definite left ventricular hypertrophy)</td>
+</tr>
+<tr class="even">
+<td align="left">thalach</td>
+<td align="left">maximum heart rate achieved</td>
+</tr>
+<tr class="odd">
+<td align="left">exang</td>
+<td align="left">exercise induced angina (1 = yes; 0 = no)</td>
+</tr>
+<tr class="even">
+<td align="left">oldpeak</td>
+<td align="left">ST depression induced by exercise relative to rest</td>
+</tr>
+<tr class="odd">
+<td align="left">slope</td>
+<td align="left">the slope of the peak exercise ST segment (1 = upsloping; 2 = flat; 3 = downsloping)</td>
+</tr>
+<tr class="even">
+<td align="left">ca</td>
+<td align="left">number of major vessels (0-3) colored by flourosopy</td>
+</tr>
+<tr class="odd">
+<td align="left">thal</td>
+<td align="left">thalassemia (3 = normal; 6 = fixed defect; 7 = reversable defect)</td>
+</tr>
+<tr class="even">
+<td align="left">num</td>
+<td align="left">diagnosis of heart disease (1 = yes; 0 = no)</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:tabdata2">Table 2: </span>Detailed Summary of the Heart Disease Data Set</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Total (N=297)</th>
+<th align="left">No Heart Disease</th>
+<th align="left">Has Heart Disease</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Age</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Median (IQR)</td>
+<td align="left">56 (48, 61)</td>
+<td align="left">52 (45, 59)</td>
+<td align="left">58 (53, 62)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Sex</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Male</td>
+<td align="left">201 (68%)</td>
+<td align="left">89 (56%)</td>
+<td align="left">112 (82%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   Female</td>
+<td align="left">96 (32%)</td>
+<td align="left">71 (44%)</td>
+<td align="left">25 (18%)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Chest pain type</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   Typical Angina</td>
+<td align="left">23 (8%)</td>
+<td align="left">16 (10%)</td>
+<td align="left">7 (5%)</td>
+</tr>
+<tr class="even">
+<td align="left">   Atypical angina</td>
+<td align="left">49 (16%)</td>
+<td align="left">40 (25%)</td>
+<td align="left">9 (7%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   Non-anginal pain</td>
+<td align="left">83 (28%)</td>
+<td align="left">65 (41%)</td>
+<td align="left">18 (13%)</td>
+</tr>
+<tr class="even">
+<td align="left">   Asymptomatic</td>
+<td align="left">142 (48%)</td>
+<td align="left">39 (24%)</td>
+<td align="left">103 (75%)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Resting blood pressure (mm Hg)</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Median (IQR)</td>
+<td align="left">130 (120, 140)</td>
+<td align="left">130 (120, 140)</td>
+<td align="left">130 (120, 145)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Serum cholestoral (mg/dl)</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Median (IQR)</td>
+<td align="left">243 (211, 276)</td>
+<td align="left">236 (209, 268)</td>
+<td align="left">253 (218, 284)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Fasting blood sugar (mg/dl)</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   &gt;120 mg/dl</td>
+<td align="left">43 (14%)</td>
+<td align="left">23 (14%)</td>
+<td align="left">20 (15%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   &lt;= 120 mg/dl</td>
+<td align="left">254 (86%)</td>
+<td align="left">137 (86%)</td>
+<td align="left">117 (85%)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Resting electrocardiographic results</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   Normal</td>
+<td align="left">147 (49%)</td>
+<td align="left">92 (58%)</td>
+<td align="left">55 (40%)</td>
+</tr>
+<tr class="even">
+<td align="left">   ST-T wave abnormality</td>
+<td align="left">4 (1%)</td>
+<td align="left">1 (1%)</td>
+<td align="left">3 (2%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   Left ventricular hypertrophy</td>
+<td align="left">146 (49%)</td>
+<td align="left">67 (42%)</td>
+<td align="left">79 (58%)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Maximum heart rate achieved</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   Median (IQR)</td>
+<td align="left">153 (133, 166)</td>
+<td align="left">161 (149, 172)</td>
+<td align="left">142 (125, 157)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Exercise induced angina</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   Yes</td>
+<td align="left">97 (33%)</td>
+<td align="left">23 (14%)</td>
+<td align="left">74 (54%)</td>
+</tr>
+<tr class="even">
+<td align="left">   No</td>
+<td align="left">200 (67%)</td>
+<td align="left">137 (86%)</td>
+<td align="left">63 (46%)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>ST depression induced by exercise</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Median (IQR)</td>
+<td align="left">0.8 (0.0, 1.6)</td>
+<td align="left">0.2 (0.0, 1.1)</td>
+<td align="left">1.4 (0.6, 2.5)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Slope of the peak exercise ST segment</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   Normal</td>
+<td align="left">139 (47%)</td>
+<td align="left">103 (64%)</td>
+<td align="left">36 (26%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   ST-T wave abnormality</td>
+<td align="left">137 (46%)</td>
+<td align="left">48 (30%)</td>
+<td align="left">89 (65%)</td>
+</tr>
+<tr class="even">
+<td align="left">   Left ventricular hypertrophy</td>
+<td align="left">21 (7%)</td>
+<td align="left">9 (6%)</td>
+<td align="left">12 (9%)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong># of major vessels colored by flourosopy</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="even">
+<td align="left">   0</td>
+<td align="left">174 (59%)</td>
+<td align="left">129 (81%)</td>
+<td align="left">45 (33%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   1</td>
+<td align="left">65 (22%)</td>
+<td align="left">21 (13%)</td>
+<td align="left">44 (32%)</td>
+</tr>
+<tr class="even">
+<td align="left">   2</td>
+<td align="left">38 (13%)</td>
+<td align="left">7 (4%)</td>
+<td align="left">31 (23%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   3</td>
+<td align="left">20 (7%)</td>
+<td align="left">3 (2%)</td>
+<td align="left">17 (12%)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Thalassemia</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   Normal</td>
+<td align="left">164 (55%)</td>
+<td align="left">127 (79%)</td>
+<td align="left">37 (27%)</td>
+</tr>
+<tr class="even">
+<td align="left">   Fixed Defect</td>
+<td align="left">18 (6%)</td>
+<td align="left">6 (4%)</td>
+<td align="left">12 (9%)</td>
+</tr>
+<tr class="odd">
+<td align="left">   Reversable Defect</td>
+<td align="left">115 (39%)</td>
+<td align="left">27 (17%)</td>
+<td align="left">88 (64%)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Diagnosis of Heart Disease</strong></td>
+<td align="left">  </td>
+<td align="left">  </td>
+<td align="left">  </td>
+</tr>
+<tr class="odd">
+<td align="left">   No</td>
+<td align="left">160 (54%)</td>
+<td align="left">160 (100%)</td>
+<td align="left">0 (0%)</td>
+</tr>
+<tr class="even">
+<td align="left">   Yes</td>
+<td align="left">137 (46%)</td>
+<td align="left">0 (0%)</td>
+<td align="left">137 (100%)</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>In Figure <a href="#fig:figacc">1</a>, the accuracy rates of the three classification methods for the five independent runs are shown. In four out of five runs, LASSO-penalized logistic regression had the highest accuracy rate, making it the preferred classifier among the three options. The k-nearest neighbour classifier had the joint highest accuracy in Run 3 and had the second highest accuracy in three of five runs. The classification tree scored the highest in Run 1 but had the lowest accuracy in the remaining four runs. In the Appendix, Table <a href="#tab:tabacc">7</a> contains the accuracy rates for each run and Table <a href="#tab:tabacc2">8</a> summarizes the overall results by taking the average accuracy rates of the three methods. Logistic regression with LASSO regularization is the clear winner, followed by k-nearest neighbour and finally classification tree in last place.</p>
+<div class="figure"><span style="display:block;" id="fig:figacc"></span>
+<img src="heartdisease_files/figure-html/figacc-1.png" alt="Accuracy rates for the three classification methods" width="768" />
+<p class="caption">
+Figure 1: Accuracy rates for the three classification methods
+</p>
+</div>
+<p>Based on the assessment of the performance of the three classification methods, a LASSO-penalized logistic regression model was then trained to be used for classification of future observations. Previously, the data was split into training and test sets, however this model was trained on the entire data set because it will be used to predict on future observations which can be treated as our test set, as the model has not seen this new data. The coefficients of the predictors are shown in Table <a href="#tab:tablasso">3</a> below. It is interesting to note that the coefficients of the predictors <code>age</code>, <code>cp3</code>, <code>slope3</code> and <code>thal6</code> have been shrunk to zero. There are also several coefficients that are close to zero, most notably <code>trestbps</code>, <code>chol</code>, <code>restecg1</code>, <code>thalach</code>. The descriptions for these variables can be found in Table <a href="#tab:tabdata">1</a>.</p>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:tablasso">Table 3: </span>LASSO-penalized logistic regression model to predict future observations</caption>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">Coefficient</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-4.624</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">sex1</td>
+<td align="right">1.132</td>
+</tr>
+<tr class="even">
+<td align="left">cp2</td>
+<td align="right">0.480</td>
+</tr>
+<tr class="odd">
+<td align="left">cp3</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">cp4</td>
+<td align="right">1.656</td>
+</tr>
+<tr class="odd">
+<td align="left">trestbps</td>
+<td align="right">0.016</td>
+</tr>
+<tr class="even">
+<td align="left">chol</td>
+<td align="right">0.002</td>
+</tr>
+<tr class="odd">
+<td align="left">fbs1</td>
+<td align="right">-0.173</td>
+</tr>
+<tr class="even">
+<td align="left">restecg1</td>
+<td align="right">0.007</td>
+</tr>
+<tr class="odd">
+<td align="left">restecg2</td>
+<td align="right">0.307</td>
+</tr>
+<tr class="even">
+<td align="left">thalach</td>
+<td align="right">-0.014</td>
+</tr>
+<tr class="odd">
+<td align="left">exang1</td>
+<td align="right">0.526</td>
+</tr>
+<tr class="even">
+<td align="left">oldpeak</td>
+<td align="right">0.384</td>
+</tr>
+<tr class="odd">
+<td align="left">slope2</td>
+<td align="right">0.823</td>
+</tr>
+<tr class="even">
+<td align="left">slope3</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">ca1</td>
+<td align="right">1.629</td>
+</tr>
+<tr class="even">
+<td align="left">ca2</td>
+<td align="right">2.184</td>
+</tr>
+<tr class="odd">
+<td align="left">ca3</td>
+<td align="right">1.511</td>
+</tr>
+<tr class="even">
+<td align="left">thal6</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left">thal7</td>
+<td align="right">1.262</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>Using the heart disease data set, the five repeated runs for our specific analysis came to a consensus that the LASSO-penalized logistic regression classifier was the best performer, followed by k-nearest neighbour and lastly classification tree. Due to the randomness of the splits of the training and test data as well as cross-validation to tune the parameters, a seed was set to ensure reproducibility. Without setting a seed, the results would vary each time the algorithms are trained and used for prediction - the performance of the three classifiers would change. This means that we cannot necessarily conclude that one classifier is better than the others in general based on these results. However, it is comforting knowing that the results achieved in this analysis are quite promising and that these are just three of the numerous possible classification methods that can be used for heart disease diagnosis.</p>
+<p>In the field of medicine, there are important considerations that may affect how we approach a classification problem. For instance, if a false negative (i.e. individuals with heart disease incorrectly identified as healthy) is more costly than a false positive (i.e. healthy individuals incorrectly identified as having heart disease), then the classifier must be adjusted appropriately. One strategy is to set the predicted probability threshold lower, so that more individuals will be classified as having heart disease. This will increase the false positive rate and decrease the false negative rate. As an example, one can first obtain the predicted probabilities from the <code>predict()</code> function, then instead of assigning the predictions to class 0 or class 1 based on the threshold of 0.5 we can set the threshold to a smaller value such as 0.4. That means that if the predicted probability is greater than 0.4, the individual would be assigned to class 1 (having heart disease). A lower predicted probability threshold such as 0.4 ensures more individuals are classified as having heart disease compared to a threshold of 0.5.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<table>
+<caption><span id="tab:tablambda">Table 4: </span>Minimum values of <span class="math inline">\(\lambda\)</span> across 5 runs</caption>
+<thead>
+<tr class="header">
+<th align="center">Run</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">lambda</td>
+<td align="center">0.009</td>
+<td align="center">0.015</td>
+<td align="center">0.013</td>
+<td align="center">0.012</td>
+<td align="center">0.018</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tabk">Table 5: </span>Optimal values of k across 5 runs</caption>
+<thead>
+<tr class="header">
+<th align="center">Run</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">k</td>
+<td align="center">3</td>
+<td align="center">9</td>
+<td align="center">12</td>
+<td align="center">5</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tabsize">Table 6: </span>Best tree size across 5 runs</caption>
+<thead>
+<tr class="header">
+<th align="center">Run</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">size</td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">2</td>
+<td align="center">9</td>
+<td align="center">9</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tabacc">Table 7: </span>Accuracy rates for the three classification methods</caption>
+<thead>
+<tr class="header">
+<th align="center">Run</th>
+<th align="center">Logistic Regression</th>
+<th align="center">K-Nearest Neighbour</th>
+<th align="center">Classification Tree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">0.831</td>
+<td align="center">0.831</td>
+<td align="center">0.847</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">0.864</td>
+<td align="center">0.814</td>
+<td align="center">0.729</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">0.864</td>
+<td align="center">0.864</td>
+<td align="center">0.695</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">0.881</td>
+<td align="center">0.814</td>
+<td align="center">0.746</td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">0.915</td>
+<td align="center">0.881</td>
+<td align="center">0.814</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:tabacc2">Table 8: </span>Average accuracy rates for the three classification methods</caption>
+<thead>
+<tr class="header">
+<th align="center">Logistic Regression</th>
+<th align="center">K-Nearest Neighbour</th>
+<th align="center">Classification Tree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0.871</td>
+<td align="center">0.841</td>
+<td align="center">0.766</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="figures" class="section level2">
+<h2>Figures</h2>
+<div class="figure"><span style="display:block;" id="fig:figlambda"></span>
+<img src="heartdisease_files/figure-html/figlambda-1.png" alt="Finding the minimum $\lambda$ with ten-fold cross-validation (Run 5)" width="768" />
+<p class="caption">
+Figure 2: Finding the minimum <span class="math inline">\(\lambda\)</span> with ten-fold cross-validation (Run 5)
+</p>
+</div>
+<div class="figure"><span style="display:block;" id="fig:figk"></span>
+<img src="heartdisease_files/figure-html/figk-1.png" alt="Finding the optimal k with leave-one-out cross-validation (Run 5)" width="768" />
+<p class="caption">
+Figure 3: Finding the optimal k with leave-one-out cross-validation (Run 5)
+</p>
+</div>
+<div class="figure"><span style="display:block;" id="fig:figsize"></span>
+<img src="heartdisease_files/figure-html/figsize-1.png" alt="Finding the best size with ten-fold cross-validation (Run 5)" width="768" />
+<p class="caption">
+Figure 4: Finding the best size with ten-fold cross-validation (Run 5)
+</p>
+</div>
+</div>
+<div id="code" class="section level2">
+<h2>Code</h2>
+<pre class="r"><code>library(tidyverse)
+library(caret)
+library(glmnet)
+library(class)
+library(tree)
+library(knitr)
+library(qwraps2)
+library(latex2exp)
+library(reshape2)
+
+theme_set(theme_bw())
+
+cleveland &lt;- read.csv(&quot;./files/cleveland.txt&quot;, header = F, na.strings = &quot;?&quot;)
+
+data &lt;- cleveland %&gt;%
+  summarize(age = V1, sex = as.factor(V2), cp = as.factor(V3), trestbps = V4, 
+            chol = V5, fbs = as.factor(V6), restecg = as.factor(V7), 
+            thalach = V8, exang = as.factor(V9), oldpeak =  V10, 
+            slope = as.factor(V11), ca = as.factor(V12), thal = as.factor(V13),
+            num=as.factor(case_when(V14 %in% c(1,2,3,4) ~ 1,
+                                    TRUE ~ 0))) %&gt;%
+  na.omit()
+
+variables &lt;- colnames(data)
+
+description &lt;- c(&quot;age in years&quot;, 
+                  &quot;sex (1 = male; 0 = female)&quot;, 
+                  &quot;chest pain type (1 = typical angina;  2 = atypical angina; 3 = non-anginal pain; 4 = asymptomatic)&quot;,
+                  &quot;resting blood pressure (in mm Hg on admission to the hospital)&quot;,
+                  &quot;serum cholestoral in mg/dl&quot;, 
+                  &quot;fasting blood sugar &gt; 120 mg/dl (1 = true; 0 = false)&quot;,
+                  &quot;resting electrocardiographic results (0 = normal; 1 = having ST-T wave abnormality; 2 = showing probable or definite left ventricular hypertrophy)&quot;, 
+                  &quot;maximum heart rate achieved&quot;, 
+                  &quot;exercise induced angina (1 = yes; 0 = no)&quot;,
+                  &quot;ST depression induced by exercise relative to rest&quot;,
+                  &quot;the slope of the peak exercise ST segment (1 = upsloping; 2 = flat; 3 = downsloping)&quot;,
+                  &quot;number of major vessels (0-3) colored by flourosopy&quot;,
+                  &quot;thalassemia (3 = normal; 6 = fixed defect; 7 = reversable defect)&quot;,
+                  &quot;diagnosis of heart disease (1 = yes; 0 = no)&quot;)
+
+cbind(variables,description) %&gt;%
+  kable(caption = &quot;Heart Disease Data Set&quot;,
+        col.names = c(&quot;Variable&quot;, &quot;Description&quot;),
+        padding = 10)
+
+summary &lt;-
+  list(&quot;Age&quot; = 
+         list(&quot;Median (IQR)&quot; = ~ median_iqr(age, digits = 0)
+              ),
+       &quot;Sex&quot; = 
+         list(&quot;Male&quot; = ~ n_perc(sex == 1, digits = 0),
+              &quot;Female&quot; = ~ n_perc(sex == 0, digits = 0)
+              ),
+       &quot;Chest pain type&quot; = 
+         list(&quot;Typical Angina&quot; = ~ n_perc(cp == 1, digits = 0),
+              &quot;Atypical angina&quot; = ~ n_perc(cp == 2, digits = 0),
+              &quot;Non-anginal pain&quot; = ~ n_perc(cp == 3, digits = 0),
+              &quot;Asymptomatic&quot; = ~ n_perc(cp == 4, digits = 0)
+              ),
+       &quot;Resting blood pressure (mm Hg)&quot; = 
+         list(&quot;Median (IQR)&quot; = ~ median_iqr(trestbps, digits = 0)
+              ),
+       &quot;Serum cholestoral (mg/dl)&quot; = 
+         list(&quot;Median (IQR)&quot; = ~ median_iqr(chol, digits = 0)
+              ),
+       &quot;Fasting blood sugar (mg/dl)&quot; = 
+         list(&quot;&gt;120 mg/dl&quot; = ~ n_perc(fbs == 1, digits = 0),
+              &quot;&lt;= 120 mg/dl&quot; = ~ n_perc(fbs == 0, digits = 0)
+              ),
+       &quot;Resting electrocardiographic results&quot; = 
+         list(&quot;Normal&quot; = ~ n_perc(restecg == 0, digits = 0),
+              &quot;ST-T wave abnormality&quot; = ~ n_perc(restecg == 1, digits = 0),
+              &quot;Left ventricular hypertrophy&quot; = ~ n_perc(restecg == 2, digits = 0)
+              ),
+       &quot;Maximum heart rate achieved&quot; = 
+         list(&quot;Median (IQR)&quot; = ~ median_iqr(thalach, digits = 0)
+              ),
+       &quot;Exercise induced angina&quot; = 
+         list(&quot;Yes&quot; = ~ n_perc(exang == 1, digits = 0),
+              &quot;No&quot; = ~ n_perc(exang == 0, digits = 0)
+              ),
+       &quot;ST depression induced by exercise&quot; = 
+         list(&quot;Median (IQR)&quot; = ~ median_iqr(oldpeak, digits = 1)
+              ),
+       &quot;Slope of the peak exercise ST segment&quot; = 
+         list(&quot;Normal&quot; = ~ n_perc(slope == 1, digits = 0),
+              &quot;ST-T wave abnormality&quot; = ~ n_perc(slope == 2, digits = 0),
+              &quot;Left ventricular hypertrophy&quot; = ~ n_perc(slope == 3, digits = 0)
+              ),
+       &quot;# of major vessels colored by flourosopy&quot; =
+         list(&quot;0&quot; = ~ n_perc(ca == 0, digits = 0),
+              &quot;1&quot; = ~ n_perc(ca == 1, digits = 0),
+              &quot;2&quot; = ~ n_perc(ca == 2, digits = 0),
+              &quot;3&quot; = ~ n_perc(ca == 3, digits = 0)
+              ),
+       &quot;Thalassemia&quot; = 
+         list(&quot;Normal&quot; = ~ n_perc(thal == 3, digits = 0),
+              &quot;Fixed Defect&quot; = ~ n_perc(thal == 6, digits = 0),
+              &quot;Reversable Defect&quot; = ~ n_perc(thal == 7, digits = 0)
+              ),
+       &quot;Diagnosis of Heart Disease&quot; =
+         list(&quot;No&quot; = ~ n_perc(num == 0, digits = 0),
+              &quot;Yes&quot; = ~ n_perc(num == 1, digits = 0))
+       )
+
+whole &lt;- summary_table(data, summary)
+
+by_num &lt;- summary_table(data, summary, by = &quot;num&quot;)
+
+cbind(whole,by_num) %&gt;%
+  print(caption = &quot;Detailed Summary of the Heart Disease Data Set&quot;,
+        cname = c(&quot;Total (N=297)&quot;, &quot;No Heart Disease&quot;, &quot;Has Heart Disease&quot;),
+        markup = &quot;markdown&quot;)
+
+set.seed(8)
+
+# Scale data for KNN
+data.scale &lt;- data %&gt;%
+  mutate_at(c(&quot;age&quot;, &quot;trestbps&quot;, &quot;chol&quot;, &quot;thalach&quot;, &quot;oldpeak&quot;), scale)
+
+# For storing hyperparameters
+lasso.lambda &lt;- rep(NA,5)
+knn.k &lt;- rep(NA,5)
+tree.size &lt;- rep(NA,5)
+
+# For storing accuracy rates
+lr.acc &lt;- rep(NA,5)
+knn.acc &lt;- rep(NA,5)
+tree.acc &lt;- rep(NA,5)
+
+# Repeat 5 times with different train/test split sets
+for (i in 1:5){
+  # Split the data into training and test set
+  training.samples &lt;- data$num %&gt;% 
+    createDataPartition(p = 0.8, list = FALSE)
+  train.data  &lt;- data[training.samples, ]
+  test.data &lt;- data[-training.samples, ]
+  
+  x.train &lt;- model.matrix(num ~ ., train.data)[,-1]
+  y.train &lt;- train.data$num
+  x.test &lt;- model.matrix(num ~., test.data)[,-1]
+  y.test &lt;- test.data$num
+  
+  # Scaling for KNN
+  train.data.scale &lt;- data.scale[training.samples, ]
+  test.data.scale &lt;- data.scale[-training.samples, ]
+  x.train.scale &lt;- model.matrix(num ~ ., train.data.scale)[,-1]
+  
+  
+  ### Logistic Regression with LASSO
+  
+  # Find the best lambda using 10-fold cross-validation
+  # cv.glmnet also fits a model on the training data
+  lr.lasso.cv &lt;- cv.glmnet(x.train, y.train, alpha = 1, family = &quot;binomial&quot;)
+  lambda.min &lt;- lr.lasso.cv$lambda.min
+  lasso.lambda[i] &lt;- lambda.min
+  
+  # Can also use glmnet with the lambda.min parameter obtained from cv.glmnet
+  #lr.mod &lt;- glmnet(x.train, y.train, alpha = 1, family = &quot;binomial&quot;,
+  #                lambda = lambda.min)
+  
+  # Predict on test data
+  lr.pred &lt;- predict(lr.lasso.cv, newx = x.test, s = lambda.min, type = &quot;class&quot;)
+  
+  # Alternate method for predictions
+  # preds.lr &lt;- predict(lr.mod, newx = x.test, type = &quot;response&quot;)
+  # lr.pred &lt;- ifelse(preds.lr &gt; 0.5, 1, 0)
+  
+  # Confusion matrix and accuracy
+  lr.t &lt;- table(lr.pred, y.test)
+  lr.acc[i] &lt;- sum(diag(lr.t)) / sum(lr.t)
+  
+  
+  ### Repeat for KNN
+  
+  # LOO cross validation to choose optimal k
+  k &lt;- 30 
+  accuracy &lt;- rep(NA, k)
+  for (j in 1:k){
+    preds &lt;- knn.cv(x.train.scale, y.train, k = j)
+    t &lt;- table(preds, y.train)
+    accuracy[j] &lt;- sum(diag(t)) / sum(t)
+  }
+
+  k.best &lt;- which.max(accuracy)
+  knn.k[i] &lt;- k.best
+  
+  # Predict on test data
+  knn.pred &lt;- knn(train.data.scale, test.data.scale, y.train, k = k.best)
+  
+  # Confusion matrix and accuracy
+  knn.t &lt;- table(knn.pred, y.test)
+  knn.acc[i] &lt;- sum(diag(knn.t)) / sum(knn.t)
+  
+  
+  ### Repeat for Classification Tree
+  
+  # # Fit the model to the training data
+  tree.mod &lt;- tree(num ~ ., data = train.data)
+   
+  # 10-fold cross-validation to choose best size
+  tree.cv &lt;- cv.tree(tree.mod, FUN = prune.tree, method = &quot;misclass&quot;)
+
+  # Choose value for &quot;best&quot; based on the results of cv.tree
+  best.size &lt;- tree.cv$size[which.min(tree.cv$dev)]
+  tree.size[i] &lt;- best.size
+
+  # Prune the tree and predict on test data
+  tree.pruned &lt;- prune.misclass(tree.mod, best = best.size)
+  tree.pred &lt;- predict(tree.pruned, test.data, type = &quot;class&quot;)
+  
+  # Alternate prediction method
+  #preds.tree &lt;- predict(tree.pruned, newdata = test.data, type = &quot;vector&quot;)[,2]
+  #tree.pred &lt;- ifelse(preds.tree &gt; 0.5, 1, 0)
+  
+  # Confusion matrix and accuracy
+  tree.t &lt;- table(tree.pred, y.test)
+  tree.acc[i] &lt;- sum(diag(tree.t)) / sum(tree.t)
+  
+}
+
+# include run number in table
+run &lt;- c(1:5)
+
+# Accuracy table
+accuracy.df &lt;- data.frame(run, lr.acc, knn.acc, tree.acc)
+
+accuracy.df %&gt;%
+  rename(Logistic = lr.acc, KNN = knn.acc, Tree = tree.acc) %&gt;%
+  melt(id.vars = c(&quot;run&quot;), variable.name = c(&quot;classifier&quot;), value.name = &quot;accuracy&quot;) %&gt;%
+  ggplot(aes(x = run, y = accuracy, color = classifier)) +
+  geom_point() +
+  geom_line() +
+  labs(title = &quot;Accuracy rates for the three classification methods&quot;,
+       x = &quot;Run&quot;,
+       y = &quot;Accuracy&quot;,
+       color = &quot;Classifier&quot;)
+
+# Training a lasso-penalized logistic regression model for classification of future observations 
+# We do not have the future observations yet, which means our training data is the entire data set.
+
+set.seed(8)
+
+x &lt;- model.matrix(num ~ ., data)[,-1]
+y &lt;- data$num
+
+# Fit the final LASSO-penalized logistic regression model
+lr.final &lt;- cv.glmnet(x, y, alpha = 1, family = &quot;binomial&quot;)
+
+# Can also use glmnet with the lambda.min parameter obtained from cv.glmnet
+# lr.mod.final &lt;- glmnet(x, y, alpha = 1, family = &quot;binomial&quot;,
+#                   lambda = lasso.cv.final$lambda.min)
+
+coef(lr.final, s = &quot;lambda.min&quot;) %&gt;%
+  round(3) %&gt;%
+  as.matrix() %&gt;%
+  as.data.frame() %&gt;%
+  rownames_to_column(&quot;Predictor&quot;) %&gt;%
+  rename(Coefficient = s1) %&gt;%
+  kable(caption = &quot;LASSO-penalized logistic regression model to predict future observations&quot;)
+
+data.frame(&quot;lambda&quot; = round(lasso.lambda, 3)) %&gt;%
+  rownames_to_column() %&gt;%
+  pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
+  pivot_wider(names_from = rowname) %&gt;%
+  kable(caption = &quot;Minimum values of $\\lambda$ across 5 runs&quot;,
+        align = &quot;c&quot;) 
+
+data.frame(k = knn.k) %&gt;%
+  rownames_to_column() %&gt;%
+  pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
+  pivot_wider(names_from = rowname) %&gt;%
+  kable(caption = &quot;Optimal values of k across 5 runs&quot;,
+        align = &quot;c&quot;) 
+
+data.frame(size = tree.size) %&gt;%
+  rownames_to_column() %&gt;%
+  pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
+  pivot_wider(names_from = rowname) %&gt;%
+  kable(caption = &quot;Best tree size across 5 runs&quot;,
+        align = &quot;c&quot;) 
+
+accuracy.df %&gt;%
+  round(3) %&gt;%
+  kable(caption = &quot;Accuracy rates for the three classification methods&quot;,
+        col.names = c(&quot;Run&quot;,&quot;Logistic Regression&quot;,&quot;K-Nearest Neighbour&quot;,&quot;Classification Tree&quot;),
+        align = &quot;c&quot;)
+
+accuracy.df %&gt;% 
+  dplyr::select(-run) %&gt;%
+  summarize_all(mean) %&gt;%
+  round(3) %&gt;%
+  kable(caption = &quot;Average accuracy rates for the three classification methods&quot;,
+        col.names = c(&quot;Logistic Regression&quot;,&quot;K-Nearest Neighbour&quot;,&quot;Classification Tree&quot;),
+        align = &quot;c&quot;)
+
+lasso.df &lt;- with(lr.lasso.cv, data.frame(lambda = lambda, MSE = cvm, 
+                                      MSEhi = cvup, MSElow = cvlo))
+
+lasso.df %&gt;% 
+  ggplot(aes(x = lambda, y = MSE)) +
+  geom_point(col = &quot;red&quot;) +
+  scale_x_log10() +
+  geom_errorbar(aes(ymin = MSElow, ymax = MSEhi), col = &quot;grey&quot;) +
+  geom_vline(xintercept = lr.lasso.cv$lambda.min, 
+             linetype = &quot;dashed&quot;) +
+  labs(title = TeX(&quot;Finding the minimum $\\lambda$ with ten-fold cross-validation&quot;),
+       subtitle = &quot;LASSO-penalized Logistic Regression: Run 5&quot;,
+       x = TeX(&quot;$\\lambda$&quot;),
+       y = &quot;Binomial Deviance&quot;)
+
+data.frame(k = 1:30,accuracy) %&gt;%
+  ggplot(aes(x = k, y = accuracy)) +
+  geom_point(color = &quot;darkgreen&quot;) +
+  geom_line(color = &quot;green&quot;) +
+  geom_vline(xintercept = k.best, linetype = &quot;dashed&quot;) +
+  labs(title = &quot;Finding the optimal k with leave-one-out cross-validation&quot;, 
+       subtitle = &quot;K-Nearest Neighbour: Run 5&quot;,
+       y = &quot;Accuracy&quot;)
+
+data.frame(Size = tree.cv$size, Deviance = tree.cv$dev) %&gt;%
+  ggplot(aes(x = Size, y = Deviance)) +
+  geom_point(color = &quot;blue&quot;) +
+  geom_line(color = &quot;skyblue&quot;) +
+  geom_vline(xintercept = best.size, linetype = &quot;dashed&quot;) +
+  labs(title = &quot;Finding the best size with ten-fold cross-validation&quot;, 
+       subtitle = &quot;Classification Tree: Run 5&quot;)</code></pre>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). An introduction to statistical learning (Vol. 112, p. 18). New York: Springer.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
