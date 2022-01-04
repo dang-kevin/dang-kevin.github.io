@@ -23,7 +23,7 @@ navbar:
         href: eda.html
       - text: Heart Disease Classifier
         icon: fa-code
-        href: heartdisease.html
+        href: heart.html
 
   right:
     - text: "About Me"
