@@ -783,10 +783,10 @@ There are several regularization methods for regression, including ridge regress
 <h1>Results</h1>
 <p>In Figure <a href="#fig:figacc">1</a>, the accuracy rates of the three classification methods for the five independent runs are shown. In four out of five runs, LASSO-penalized logistic regression had the highest accuracy rate, making it the preferred classifier among the three options. The k-nearest neighbour classifier had the joint highest accuracy in Run 3 and had the second highest accuracy in three of five runs. The classification tree scored the highest in Run 1 but had the lowest accuracy in the remaining four runs. In the Appendix, Table <a href="#tab:tabacc">7</a> contains the accuracy rates for each run and Table <a href="#tab:tabacc2">8</a> summarizes the overall results by taking the average accuracy rates of the three methods. Logistic regression with LASSO regularization is the clear winner, followed by k-nearest neighbour and finally classification tree in last place.</p>
 <div class="figure"><span style="display:block;" id="fig:figacc"></span>
-<img src="heart_files/figure-html/figacc-1.png" alt="Accuracy rates for the three classification methods" width="768" />
 <p class="caption">
 Figure 1: Accuracy rates for the three classification methods
 </p>
+<img src="heart_files/figure-html/figacc-1.png" alt="Accuracy rates for the three classification methods" width="768" />
 </div>
 <p>Based on the assessment of the performance of the three classification methods, a LASSO-penalized logistic regression model was then trained to be used for classification of future observations. Previously, the data was split into training and test sets, however this model was trained on the entire data set because it will be used to predict on future observations which can be treated as our test set, as the model has not seen this new data. The coefficients of the predictors are shown in Table <a href="#tab:tablasso">3</a> below. It is interesting to note that the coefficients of the predictors <code>age</code>, <code>cp3</code>, <code>slope3</code> and <code>thal6</code> have been shrunk to zero. There are also several coefficients that are close to zero, most notably <code>trestbps</code>, <code>chol</code>, <code>restecg1</code>, <code>thalach</code>. The descriptions for these variables can be found in Table <a href="#tab:tabdata">1</a>.</p>
 <div style="page-break-after: always;"></div>
@@ -1029,27 +1029,32 @@ Figure 1: Accuracy rates for the three classification methods
 <div id="figures" class="section level2">
 <h2>Figures</h2>
 <div class="figure"><span style="display:block;" id="fig:figlambda"></span>
-<img src="heart_files/figure-html/figlambda-1.png" alt="Finding the minimum $\lambda$ with ten-fold cross-validation (Run 5)" width="768" />
 <p class="caption">
 Figure 2: Finding the minimum <span class="math inline">\(\lambda\)</span> with ten-fold cross-validation (Run 5)
 </p>
+<img src="heart_files/figure-html/figlambda-1.png" alt="Finding the minimum $\lambda$ with ten-fold cross-validation (Run 5)" width="768" />
 </div>
 <div class="figure"><span style="display:block;" id="fig:figk"></span>
-<img src="heart_files/figure-html/figk-1.png" alt="Finding the optimal k with leave-one-out cross-validation (Run 5)" width="768" />
 <p class="caption">
 Figure 3: Finding the optimal k with leave-one-out cross-validation (Run 5)
 </p>
+<img src="heart_files/figure-html/figk-1.png" alt="Finding the optimal k with leave-one-out cross-validation (Run 5)" width="768" />
 </div>
 <div class="figure"><span style="display:block;" id="fig:figsize"></span>
-<img src="heart_files/figure-html/figsize-1.png" alt="Finding the best size with ten-fold cross-validation (Run 5)" width="768" />
 <p class="caption">
 Figure 4: Finding the best size with ten-fold cross-validation (Run 5)
 </p>
+<img src="heart_files/figure-html/figsize-1.png" alt="Finding the best size with ten-fold cross-validation (Run 5)" width="768" />
 </div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). An introduction to statistical learning.</p>
 </div>
 <div id="code" class="section level2">
 <h2>Code</h2>
-<pre class="r"><code>library(tidyverse)
+<pre class="r"><code># Load packages and set theme
+library(tidyverse)
 library(caret)
 library(glmnet)
 library(class)
@@ -1061,6 +1066,7 @@ library(reshape2)
 
 theme_set(theme_bw())
 
+# Load data, rename variables and use complete cases
 cleveland &lt;- read.csv(&quot;./files/cleveland.txt&quot;, header = F, na.strings = &quot;?&quot;)
 
 data &lt;- cleveland %&gt;%
@@ -1072,6 +1078,7 @@ data &lt;- cleveland %&gt;%
                                     TRUE ~ 0))) %&gt;%
   na.omit()
 
+# Variable description
 variables &lt;- colnames(data)
 
 description &lt;- c(&quot;age in years&quot;, 
@@ -1094,6 +1101,7 @@ cbind(variables,description) %&gt;%
         col.names = c(&quot;Variable&quot;, &quot;Description&quot;),
         padding = 10)
 
+# Detailed summary of data
 summary &lt;-
   list(&quot;Age&quot; = 
          list(&quot;Median (IQR)&quot; = ~ median_iqr(age, digits = 0)
@@ -1163,6 +1171,9 @@ cbind(whole,by_num) %&gt;%
         cname = c(&quot;Total (N=297)&quot;, &quot;No Heart Disease&quot;, &quot;Has Heart Disease&quot;),
         markup = &quot;markdown&quot;)
 
+### Analysis ###
+
+# Set seed for reproducibility 
 set.seed(8)
 
 # Scale data for KNN
@@ -1181,6 +1192,7 @@ tree.acc &lt;- rep(NA,5)
 
 # Repeat 5 times with different train/test split sets
 for (i in 1:5){
+  
   # Split the data into training and test set
   training.samples &lt;- data$num %&gt;% 
     createDataPartition(p = 0.8, list = FALSE)
@@ -1302,6 +1314,7 @@ lr.final &lt;- cv.glmnet(x, y, alpha = 1, family = &quot;binomial&quot;)
 # lr.mod.final &lt;- glmnet(x, y, alpha = 1, family = &quot;binomial&quot;,
 #                   lambda = lasso.cv.final$lambda.min)
 
+# Table of coefficients
 coef(lr.final, s = &quot;lambda.min&quot;) %&gt;%
   round(3) %&gt;%
   as.matrix() %&gt;%
@@ -1310,6 +1323,7 @@ coef(lr.final, s = &quot;lambda.min&quot;) %&gt;%
   rename(Coefficient = s1) %&gt;%
   kable(caption = &quot;LASSO-penalized logistic regression model to predict future observations&quot;)
 
+# Minimum lambdas
 data.frame(&quot;lambda&quot; = round(lasso.lambda, 3)) %&gt;%
   rownames_to_column() %&gt;%
   pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
@@ -1317,6 +1331,7 @@ data.frame(&quot;lambda&quot; = round(lasso.lambda, 3)) %&gt;%
   kable(caption = &quot;Minimum values of $\\lambda$ across 5 runs&quot;,
         align = &quot;c&quot;) 
 
+# Optimal k&#39;s
 data.frame(k = knn.k) %&gt;%
   rownames_to_column() %&gt;%
   pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
@@ -1324,6 +1339,7 @@ data.frame(k = knn.k) %&gt;%
   kable(caption = &quot;Optimal values of k across 5 runs&quot;,
         align = &quot;c&quot;) 
 
+# Best tree sizes
 data.frame(size = tree.size) %&gt;%
   rownames_to_column() %&gt;%
   pivot_longer(-rowname, names_to = &quot;Run&quot;) %&gt;%
@@ -1331,12 +1347,14 @@ data.frame(size = tree.size) %&gt;%
   kable(caption = &quot;Best tree size across 5 runs&quot;,
         align = &quot;c&quot;) 
 
+# Accuracy rates
 accuracy.df %&gt;%
   round(3) %&gt;%
   kable(caption = &quot;Accuracy rates for the three classification methods&quot;,
         col.names = c(&quot;Run&quot;,&quot;Logistic Regression&quot;,&quot;K-Nearest Neighbour&quot;,&quot;Classification Tree&quot;),
         align = &quot;c&quot;)
 
+# Average accuracy rates
 accuracy.df %&gt;% 
   dplyr::select(-run) %&gt;%
   summarize_all(mean) %&gt;%
@@ -1345,6 +1363,7 @@ accuracy.df %&gt;%
         col.names = c(&quot;Logistic Regression&quot;,&quot;K-Nearest Neighbour&quot;,&quot;Classification Tree&quot;),
         align = &quot;c&quot;)
 
+# Minimum lambda - cross validation
 lasso.df &lt;- with(lr.lasso.cv, data.frame(lambda = lambda, MSE = cvm, 
                                       MSEhi = cvup, MSElow = cvlo))
 
@@ -1360,6 +1379,7 @@ lasso.df %&gt;%
        x = TeX(&quot;$\\lambda$&quot;),
        y = &quot;Binomial Deviance&quot;)
 
+# Optimal k - cross validation
 data.frame(k = 1:30,accuracy) %&gt;%
   ggplot(aes(x = k, y = accuracy)) +
   geom_point(color = &quot;darkgreen&quot;) +
@@ -1369,6 +1389,7 @@ data.frame(k = 1:30,accuracy) %&gt;%
        subtitle = &quot;K-Nearest Neighbour: Run 5&quot;,
        y = &quot;Accuracy&quot;)
 
+# Best size - cross validation
 data.frame(Size = tree.cv$size, Deviance = tree.cv$dev) %&gt;%
   ggplot(aes(x = Size, y = Deviance)) +
   geom_point(color = &quot;blue&quot;) +
@@ -1376,10 +1397,6 @@ data.frame(Size = tree.cv$size, Deviance = tree.cv$dev) %&gt;%
   geom_vline(xintercept = best.size, linetype = &quot;dashed&quot;) +
   labs(title = &quot;Finding the best size with ten-fold cross-validation&quot;, 
        subtitle = &quot;Classification Tree: Run 5&quot;)</code></pre>
-</div>
-<div id="references" class="section level2">
-<h2>References</h2>
-<p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). An introduction to statistical learning.</p>
 </div>
 </div>
 
