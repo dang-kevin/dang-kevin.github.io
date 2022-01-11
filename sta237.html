@@ -374,6 +374,13 @@ div.tocify {
         Heart Disease Classifier
       </a>
     </li>
+    <li>
+      <a href="expression.html">
+        <span class="fa fa-code"></span>
+         
+        Unsupervised Learning Protein Expression
+      </a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -405,7 +412,7 @@ div.tocify {
 <div id="course-description" class="section level2 unlisted unnumbered">
 <h2 class="unlisted unnumbered">Course Description</h2>
 <p>An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.</p>
-<p>Solutions provided by Professor Selvakkadunko Selvaratnam.</p>
+<p>Solutions and code provided by Professor Selvakkadunko Selvaratnam.</p>
 </div>
 <div id="tutorial-1" class="section level2">
 <h2>Tutorial 1</h2>
@@ -413,9 +420,9 @@ div.tocify {
 <li><a href="sta237/Tutorial1_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT1_Answers.pdf">Solutions</a></li>
 <li><a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a></li>
-<li><a href="sta237/TUT1_RCodes_Q4.R">Code</a></li>
 </ul>
-<pre class="r"><code>#### R code for Q4 in TUT 1 #####
+<pre class="r"><code>### R code for Q4 in TUT 1 ###
+
 set.seed(305)
 n = 10000
 ctr = 0
@@ -428,7 +435,7 @@ while (ctr &lt; n) {
     simlist[ctr] &lt;- success
   }
 }
-mean(simlist) #Proportion of the required events</code></pre>
+mean(simlist) # Proportion of the required events</code></pre>
 <pre><code>## [1] 0.1629</code></pre>
 </div>
 <div id="tutorial-2" class="section level2">
@@ -436,8 +443,45 @@ mean(simlist) #Proportion of the required events</code></pre>
 <ul>
 <li><a href="sta237/Tutorial2_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT2_Answers.pdf">Solutions</a></li>
-<li><a href="sta237/TUT2_RCodes.R">Code</a></li>
 </ul>
+<pre class="r"><code>### Program for TUT2 ###
+
+## Q2 ##
+# display powers 1 to n of x
+
+# input
+x &lt;- 7
+n &lt;- 5
+
+result &lt;- 1
+for (i in 1:n){
+  result &lt;- result * x
+  cat(format(i, width = 6), format(result, width = 10), &quot;\n&quot;, sep =&quot;&quot;)
+}</code></pre>
+<pre><code>##      1         7
+##      2        49
+##      3       343
+##      4      2401
+##      5     16807</code></pre>
+<pre class="r"><code>## Q3 (i)
+funsum &lt;- function(x, y){
+  z &lt;- x + y
+  return(z)
+}
+
+# Try with different inputs
+funsum(2, 40)</code></pre>
+<pre><code>## [1] 42</code></pre>
+<pre class="r"><code>## Q3 (ii)
+n_factorial &lt;- function(n){
+  # Calculate n factorial
+  n_fact &lt;- prod(1:n)
+  return(n_fact)
+}
+
+# Try with different inputs
+n_factorial(5)</code></pre>
+<pre><code>## [1] 120</code></pre>
 </div>
 <div id="tutorial-3" class="section level2">
 <h2>Tutorial 3</h2>
@@ -445,10 +489,10 @@ mean(simlist) #Proportion of the required events</code></pre>
 <li><a href="sta237/Tutorial3_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT3_Answers.pdf">Solutions</a></li>
 <li><a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
-<li><a href="sta237/TUT3_RCodes.R">Code</a></li>
 </ul>
-<pre class="r"><code>## program for TUT3, STA237 ###
-## Q1 ###
+<pre class="r"><code>### TUT3 ###
+
+## Q1 ##
 nfact2 &lt;- function(n){
   # calculate n factorial
   if (n == 1){
@@ -468,7 +512,7 @@ nfact2(6)</code></pre>
 ## called nfact2(2)
 ## called nfact2(1)</code></pre>
 <pre><code>## [1] 720</code></pre>
-<pre class="r"><code>### Q4 ####
+<pre class="r"><code>## Q4 ##
 A = matrix(c(3, 4, 2, 4, 9, 3, 6, 7, 2, 1 , 6, 9), nrow = 3, ncol = 4)
 transA = t(A)
 solve(A%*%transA)</code></pre>
@@ -509,14 +553,13 @@ solve(A%*%transA)</code></pre>
 <h2>Tutorial 8</h2>
 <ul>
 <li><a href="sta237/Tutorial8_Slides.pdf">Slides</a></li>
-<li><a href="sta237/TUT8_RCodes.R">Code</a></li>
 </ul>
-<pre class="r"><code>#install.packages(&quot;ggplot2&quot;)
-library(ggplot2)
-## TUT 8 #####
+<pre class="r"><code>### TUT 8 ###
 
-### Binomial Distribution ####
-s &lt;- 12 #The number of trials
+library(ggplot2)
+
+## Binomial Distribution ##
+s &lt;- 12 # number of trials
 p &lt;- 0.5
 n &lt;- 10000
 result &lt;- numeric(n)
@@ -532,22 +575,21 @@ ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
   ylab(&quot;Sn/n&quot;) + xlab(&quot;n&quot;) +
   labs(title = &quot;SLLN for Binomial distribution&quot;, subtitle = &quot;The number of trials = 12 and p=0.5&quot;) +
   geom_line()</code></pre>
-<p><img src="sta237_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="sta237_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="tutorial-9" class="section level2">
 <h2>Tutorial 9</h2>
 <ul>
 <li><a href="sta237/Tutorial9_Slides.pdf">Slides</a></li>
-<li><a href="sta237/TUT9_RCodes.R">Code</a></li>
 </ul>
-<pre class="r"><code>## TUT 9 #####
+<pre class="r"><code>### TUT 9 ###
 
-### Binomial Distribution ####
+## Binomial Distribution ##
 set.seed(503)
-s &lt;- 50000 #The number of simulations
-p &lt;- 0.15 #The probability of success
-t &lt;- 5 #The number of trials
-n &lt;- 40 #The sample size
+s &lt;- 50000 # number of simulations
+p &lt;- 0.15 # probability of success
+t &lt;- 5 # number of trials
+n &lt;- 40 # sample size
 SampleMeans &lt;- numeric(s)
 SimValues &lt;- matrix(0, n, s)
 
@@ -557,7 +599,7 @@ for (i in 1:s){
 }
 
 hist(SampleMeans)</code></pre>
-<p><img src="sta237_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="sta237_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 
 

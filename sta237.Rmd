@@ -12,16 +12,16 @@ output:
 
 An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.
 
-Solutions provided by Professor Selvakkadunko Selvaratnam.
+Solutions and code provided by Professor Selvakkadunko Selvaratnam.
 
 ## Tutorial 1
 - <a href="sta237/Tutorial1_Slides.pdf">Slides</a>
 - <a href="sta237/TUT1_Answers.pdf">Solutions</a>
 - <a href="sta237/Intro_to_R.ipynb">Intro to R Notebook</a>
-- <a href="sta237/TUT1_RCodes_Q4.R">Code</a>
 
 ```{r}
-#### R code for Q4 in TUT 1 #####
+### R code for Q4 in TUT 1 ###
+
 set.seed(305)
 n = 10000
 ctr = 0
@@ -34,24 +34,60 @@ while (ctr < n) {
     simlist[ctr] <- success
   }
 }
-mean(simlist) #Proportion of the required events
+mean(simlist) # Proportion of the required events
 ```
 
 
 ## Tutorial 2
 - <a href="sta237/Tutorial2_Slides.pdf">Slides</a>
 - <a href="sta237/TUT2_Answers.pdf">Solutions</a>
-- <a href="sta237/TUT2_RCodes.R">Code</a>
+
+```{r}
+### Program for TUT2 ###
+
+## Q2 ##
+# display powers 1 to n of x
+
+# input
+x <- 7
+n <- 5
+
+result <- 1
+for (i in 1:n){
+  result <- result * x
+  cat(format(i, width = 6), format(result, width = 10), "\n", sep ="")
+}
+
+## Q3 (i)
+funsum <- function(x, y){
+  z <- x + y
+  return(z)
+}
+
+# Try with different inputs
+funsum(2, 40)
+
+## Q3 (ii)
+n_factorial <- function(n){
+  # Calculate n factorial
+  n_fact <- prod(1:n)
+  return(n_fact)
+}
+
+# Try with different inputs
+n_factorial(5)
+```
+
 
 ## Tutorial 3
 - <a href="sta237/Tutorial3_Slides.pdf">Slides</a>
 - <a href="sta237/TUT3_Answers.pdf">Solutions</a>
 - <a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a>
-- <a href="sta237/TUT3_RCodes.R">Code</a>
 
 ```{r}
-## program for TUT3, STA237 ###
-## Q1 ###
+### TUT3 ###
+
+## Q1 ##
 nfact2 <- function(n){
   # calculate n factorial
   if (n == 1){
@@ -66,7 +102,7 @@ nfact2 <- function(n){
 nfact2(6)
 
 
-### Q4 ####
+## Q4 ##
 A = matrix(c(3, 4, 2, 4, 9, 3, 6, 7, 2, 1 , 6, 9), nrow = 3, ncol = 4)
 transA = t(A)
 solve(A%*%transA)
@@ -91,15 +127,14 @@ solve(A%*%transA)
 
 ## Tutorial 8
 - <a href="sta237/Tutorial8_Slides.pdf">Slides</a>
-- <a href="sta237/TUT8_RCodes.R">Code</a>
 
 ```{r}
-#install.packages("ggplot2")
-library(ggplot2)
-## TUT 8 #####
+### TUT 8 ###
 
-### Binomial Distribution ####
-s <- 12 #The number of trials
+library(ggplot2)
+
+## Binomial Distribution ##
+s <- 12 # number of trials
 p <- 0.5
 n <- 10000
 result <- numeric(n)
@@ -120,17 +155,16 @@ ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
 
 ## Tutorial 9
 - <a href="sta237/Tutorial9_Slides.pdf">Slides</a>
-- <a href="sta237/TUT9_RCodes.R">Code</a>
 
 ```{r}
-## TUT 9 #####
+### TUT 9 ###
 
-### Binomial Distribution ####
+## Binomial Distribution ##
 set.seed(503)
-s <- 50000 #The number of simulations
-p <- 0.15 #The probability of success
-t <- 5 #The number of trials
-n <- 40 #The sample size
+s <- 50000 # number of simulations
+p <- 0.15 # probability of success
+t <- 5 # number of trials
+n <- 40 # sample size
 SampleMeans <- numeric(s)
 SimValues <- matrix(0, n, s)
 

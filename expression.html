@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Unsupervised Learning Methods for Mice Protein Expression Data</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="sta237.html">
+        <span class="fa fa-book"></span>
+         
+        STA237 - Fall 2021
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="cognitive.html">
+        <span class="fa fa-code"></span>
+         
+        Cognitive Flexibility
+      </a>
+    </li>
+    <li>
+      <a href="eda.html">
+        <span class="fa fa-code"></span>
+         
+        Exploratory Data Analysis
+      </a>
+    </li>
+    <li>
+      <a href="heart.html">
+        <span class="fa fa-code"></span>
+         
+        Heart Disease Classifier
+      </a>
+    </li>
+    <li>
+      <a href="expression.html">
+        <span class="fa fa-code"></span>
+         
+        Unsupervised Learning Protein Expression
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li>
+  <a href="files/Resume_Kevin_Dang.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Unsupervised Learning Methods for Mice Protein Expression Data</h1>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The mice protein expression data set was obtained from the UCI Machine Learning Repository and used in the following analysis to identify potential clusters and patterns in the data. This may provide some insights in using unsupervised learning methods on high dimensional data.</p>
+<p>The main objective of this analysis is to use unsupervised learning methods to create distinct clusters, determine whether any clusters are associated with a particular genotype, behaviour and/or treatment, and to identify potential protein expression patterns in the clusters. The clustering methods used in the analysis include hierarchical clustering, k-means clustering, and partitioning around medoids. A dimension reduction method called principal component analysis is also used in an attempt to identify patterns in the data.</p>
+<p>In the Methods section, the unsupervised learning methods are discussed. In the results section, we look at the clusters formed by each method, as well as the protein expression patterns in these clusters. The methods and results are further interpreted in the Discussion section, along with how to deal with correlated data.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p>The data set contains 1080 measurements per protein for 77 proteins, which were recorded from a sample of 72 mice. This works out to 15 measurements of each protein per mouse. There are additional variables such as the <code>Genotype</code>, <code>Treatment</code>, <code>Behavior</code> and <code>class</code>, where <code>class</code> combines the other three variables into one. In Appendix Table <a href="#tab:tabmice">6</a> there is a description of the 8 mice classes and how they relate to the other three variables.</p>
+<p>There was a considerable amount of missing values in 5 proteins, ranging between 17% to 25% missing values so these 5 proteins were removed from the data. The remaining 72 proteins each had less than 2% missing values so these values were imputed with mean imputation.</p>
+<p>The average silhouette width was used for selecting the optimal number of clusters for hierarchical clustering, k-means clustering, and partitioning around medoids. Silhouette width is simply a measure of average dissimilarity, which allows us to identify how different the clusters are from one another. The values range from -1 to 1, where a higher width indicates better clustering results. Principal component analysis is a different type of unsupervised learning method that does not involve clustering so there are no parameters (e.g. number of clusters) that require optimization. The four methods are explained in the following sections.</p>
+<div id="hierarchical-clustering" class="section level2">
+<h2>Hierarchical Clustering</h2>
+<p>The most common form of hierarchical clustering is known as agglomerative hierarchical clustering. The data points start off in their own cluster, and the points with the lowest dissimilarity are fused to form a new cluster. This process continues until all clusters are merged into one. The dissimilarity between clusters is defined by the linkage type. For a balanced dendrogram, we chose complete linkage which uses the maximal inter-cluster dissimilarity. Hierarchical clustering can be represented by a dendrogram, which is a binary tree-like structure in which the leaves represent the data points. The data points are formed into larger clusters as we hierarchically move up the tree. The advantage of this method is that the number of clusters can be chosen after the results are produced. One can simply cut the tree at a certain level to select the number of clusters. In addition, if the features have large variability then scaling is required for optimal results.</p>
+</div>
+<div id="k-means-clustering" class="section level2">
+<h2>K-Means Clustering</h2>
+<p>The goal of k-means clustering is to find a set of <span class="math inline">\(k\)</span> groups for which the data points within each cluster are as close to one another as possible, with closeness referring to the Euclidean distance. The k-means algorithm starts off by randomly assigning the data points into <span class="math inline">\(k\)</span> clusters, and determining the centroid (or mean) of each cluster. Next, the clusters are updated as the points are assigned to the cluster with the closest centroid. This process continues until there are no more changes. Unlike hierarchical clustering, k-means clustering requires <span class="math inline">\(k\)</span> to be specified beforehand.</p>
+</div>
+<div id="partitioning-around-medoids" class="section level2">
+<h2>Partitioning Around Medoids</h2>
+<p>Partitioning around medoids (PAM) is similar to k-means clustering with some subtle differences. PAM uses medoids instead of centroids. Medoids can be thought of as the median of the cluster which is an actual data point, whereas centroids do not need to be a point. In addition, PAM uses dissimilarity for clustering whereas k-means requires a distance measure. The number of clusters is specified prior to clustering.</p>
+</div>
+<div id="principal-component-analysis" class="section level2">
+<h2>Principal Component Analysis</h2>
+<p>Principal component analysis (PCA) is a dimension reduction and data compression method which projects higher dimensional data into a lower dimensional space. This method allows us to identify trends in the data that were not visible previously. Principal components are essentially a linear combinations of the features, where each component can be used to explain the variance in the data. The first principal component is the linear combination with the largest variance, the second principal component is the combination with the second highest variance, and so on. Each principal component is perpendicular to one another, which means that it can become difficult to visualize beyond two or three components. Due to the way that the principal components are calculated, it is important to scale the data beforehand.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div id="hierarchical-clustering-1" class="section level2">
+<h2>Hierarchical Clustering</h2>
+<p>According to Appendix Figure <a href="#fig:figHCsil">5</a> the optimal number of clusters is 3. In Table <a href="#tab:tabHC">1</a>, cluster 3 contains one distinct class <code>c-CS-s</code>. This class represents control mice that were stimulated to learn and injected with saline.</p>
+<p>In Figure <a href="#fig:figHCheat">1</a>, we see that the pPKCG protein has relatively high expression levels in clusters 1 and 2, and a low expression level in cluster 3. Conversely, the Bcatenin, ERK, and NR2A proteins have high expression levels in cluster 3 and lower expression levels in 1 and 2. These four proteins along with several others may have played a key role in creating the distinct cluster.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabHC">Table 1: </span>Hierarchical Clustering with Complete Linkage, Breakdown by Class
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="8">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Class
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Cluster
+</th>
+<th style="text-align:right;">
+c-CS-m
+</th>
+<th style="text-align:right;">
+c-CS-s
+</th>
+<th style="text-align:right;">
+c-SC-m
+</th>
+<th style="text-align:right;">
+c-SC-s
+</th>
+<th style="text-align:right;">
+t-CS-m
+</th>
+<th style="text-align:right;">
+t-CS-s
+</th>
+<th style="text-align:right;">
+t-SC-m
+</th>
+<th style="text-align:right;">
+t-SC-s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+63
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+103
+</td>
+<td style="text-align:right;">
+90
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+87
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+102
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+45
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<div class="figure"><span style="display:block;" id="fig:figHCheat"></span>
+<p class="caption">
+Figure 1: Heatmap of Protein Expression Levels by Cluster, Hierarchical Clustering
+</p>
+<img src="expression_files/figure-html/figHCheat-1.png" alt="\label{fig:figHCheat}Heatmap of Protein Expression Levels by Cluster, Hierarchical Clustering" width="768" />
+</div>
+</div>
+<div id="k-means-clustering-1" class="section level2">
+<h2>K-Means Clustering</h2>
+<p>The optimal number of clusters for k-means is also 3 (by Appendix Figure <a href="#fig:figKMsil">6</a>). The results are in Table <a href="#tab:tabKM">2</a>, and we can see that there are no clusters that are associated with one particular class like in hierarchical clustering. However, Table <a href="#tab:tabKMbehav">3</a> shows that in cluster 1 there are a total of 61 observations for mice that were stimulated to learn (<code>C/S</code>) versus 271 observations that were not stimulated to learn (<code>S/C</code>). Consequently, cluster 3 has an imbalance in the opposite direction, with 221 <code>C/S</code> observations, and 61 <code>S/C</code> observations.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabKM">Table 2: </span>K-Means Clustering, Breakdown by Class
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="8">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Class
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Cluster
+</th>
+<th style="text-align:right;">
+c-CS-m
+</th>
+<th style="text-align:right;">
+c-CS-s
+</th>
+<th style="text-align:right;">
+c-SC-m
+</th>
+<th style="text-align:right;">
+c-SC-s
+</th>
+<th style="text-align:right;">
+t-CS-m
+</th>
+<th style="text-align:right;">
+t-CS-s
+</th>
+<th style="text-align:right;">
+t-SC-m
+</th>
+<th style="text-align:right;">
+t-SC-s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+101
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+64
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+67
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabKMbehav">Table 3: </span>K-Means Clustering, Breakdown by Behaviour
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Behaviour
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Cluster
+</th>
+<th style="text-align:right;">
+C/S
+</th>
+<th style="text-align:right;">
+S/C
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+271
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+243
+</td>
+<td style="text-align:right;">
+223
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+221
+</td>
+<td style="text-align:right;">
+61
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="partitioning-around-medoids-1" class="section level2">
+<h2>Partitioning Around Medoids</h2>
+<p>Similar to k-means clustering, the optimal number of clusters for PAM is also 3 (by Appendix Figure <a href="#fig:figPAMsil">7</a>). Interestingly, Table <a href="#tab:tabPAM">4</a> shows an imbalance between the two behaviours (<code>C/S</code>: stimulated to learn, <code>S/C</code>: not stimulated to learn) in clusters 1 and 3. Table <a href="#tab:tabPAMbehav">5</a> provides the numbers: in cluster 1, there are 265 observations belonging to <code>C/S</code>, and just 45 for the <code>S/C</code> behaviour. Cluster 3 shows the opposite imbalance, with 85 in <code>C/S</code> and 329 in <code>S/C</code>. The clusters formed by PAM are quite similar to the k-means clusters. Additionally, their heatmaps for protein expression levels by clusters in Figure <a href="#fig:figKMPAM">2</a> are almost identical with some very minor differences. One concerning detail is that there are no visible differences between clusters 1 and 3 for both methods, so it is possible that the imbalance between the two mice behaviours in these clusters may have been due to random chance.</p>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabPAM">Table 4: </span>Partitioning Around Medoids, Breakdown by Class
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="8">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Class
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Cluster
+</th>
+<th style="text-align:right;">
+c-CS-m
+</th>
+<th style="text-align:right;">
+c-CS-s
+</th>
+<th style="text-align:right;">
+c-SC-m
+</th>
+<th style="text-align:right;">
+c-SC-s
+</th>
+<th style="text-align:right;">
+t-CS-m
+</th>
+<th style="text-align:right;">
+t-CS-s
+</th>
+<th style="text-align:right;">
+t-SC-m
+</th>
+<th style="text-align:right;">
+t-SC-s
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+49
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+43
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+61
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+116
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+103
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabPAMbehav">Table 5: </span>Partitioning Around Medoids, Breakdown by Behaviour
+</caption>
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Behaviour
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:right;">
+Cluster
+</th>
+<th style="text-align:right;">
+C/S
+</th>
+<th style="text-align:right;">
+S/C
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+265
+</td>
+<td style="text-align:right;">
+45
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+181
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+85
+</td>
+<td style="text-align:right;">
+329
+</td>
+</tr>
+</tbody>
+</table>
+<div class="figure"><span style="display:block;" id="fig:figKMPAM"></span>
+<p class="caption">
+Figure 2: Heatmap of Protein Expression Levels by Cluster, K-Means &amp; PAM
+</p>
+<img src="expression_files/figure-html/figKMPAM-1.png" alt="\label{fig:figKMPAM}Heatmap of Protein Expression Levels by Cluster, K-Means &amp; PAM" width="960" />
+</div>
+</div>
+<div id="principal-component-analysis-1" class="section level2">
+<h2>Principal Component Analysis</h2>
+<p>The cumulative proportion of variance explained is shown in Figure <a href="#fig:figPCAvar">3</a>. While the first two components only explain 43% of the variance, 80% of variance explained is achieved at the ninth principal component. This result is quite good for a data set containing 77 proteins. Figure <a href="#fig:figPCAclass">4</a> visualizes the classes with just the first two principal components which is not ideal, however it is important to note that principal components do not need to be two-dimensional.</p>
+<div class="figure"><span style="display:block;" id="fig:figPCAvar"></span>
+<p class="caption">
+Figure 3: Principal Component Analysis, Cumulative Proportion of Variance Explained
+</p>
+<img src="expression_files/figure-html/figPCAvar-1.png" alt="\label{fig:figPCAvar}Principal Component Analysis, Cumulative Proportion of Variance Explained" width="864" />
+</div>
+<div class="figure"><span style="display:block;" id="fig:figPCAclass"></span>
+<p class="caption">
+Figure 4: Principal Component Analysis, first two components
+</p>
+<img src="expression_files/figure-html/figPCAclass-1.png" alt="\label{fig:figPCAclass}Principal Component Analysis, first two components" width="864" />
+</div>
+</div>
+</div>
+<div id="discussion" class="section level1">
+<h1>Discussion</h1>
+<p>Overall with unsupervised learning it can be really difficult to achieve meaningful results as there is no universal method to approaching the problem. In this analysis we used hierarchical clustering, k-means clustering and partitioning around medoids with 3 clusters each, and we did see some distinct clusters despite the poor silhouette widths. Between the three clustering methods, hierarchical clustering was able to distinguish one unique mice class in its own cluster, which gives this method the edge over k-means clustering and partitioning around medoids. Additionally, there was an attempt to reduce dimensionality via principal component analysis, and the results were satisfactory.</p>
+<p>In the analysis we assumed that the samples were independent, when they are in fact not since multiple measurements are taken from each mouse which is known as repeated measures data. If intra-subject correlation is ignored, the clustering algorithms may weigh the correlated values more heavily which can lead to poor results. A simple method to this problem is to take the average over the repeated measurements, but this is not the best method because we are working with high dimensional data. Another possible method to deal with clustering repeated measures data is to fit a Gaussian Mixture Model (GMM) to each subject, then create a parameter space using the GMM parameters (e.g. mean, variance), and finally perform clustering within the parameter space.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tabmice">Table 6: </span>Mice Classes
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Class
+</th>
+<th style="text-align:left;">
+Genotype
+</th>
+<th style="text-align:left;">
+Behaviour
+</th>
+<th style="text-align:left;">
+Treatment
+</th>
+<th style="text-align:left;">
+Count
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+c-CS-s
+</td>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:left;">
+stimulated to learn
+</td>
+<td style="text-align:left;">
+saline
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+c-CS-m
+</td>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:left;">
+stimulated to learn
+</td>
+<td style="text-align:left;">
+memantine
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+c-SC-s
+</td>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:left;">
+not stimulated to learn
+</td>
+<td style="text-align:left;">
+saline
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+c-SC-m
+</td>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:left;">
+not stimulated to learn
+</td>
+<td style="text-align:left;">
+memantine
+</td>
+<td style="text-align:left;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t-CS-s
+</td>
+<td style="text-align:left;">
+trisomy
+</td>
+<td style="text-align:left;">
+stimulated to learn
+</td>
+<td style="text-align:left;">
+saline
+</td>
+<td style="text-align:left;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t-CS-m
+</td>
+<td style="text-align:left;">
+trisomy
+</td>
+<td style="text-align:left;">
+stimulated to learn
+</td>
+<td style="text-align:left;">
+memantine
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t-SC-s
+</td>
+<td style="text-align:left;">
+trisomy
+</td>
+<td style="text-align:left;">
+not stimulated to learn
+</td>
+<td style="text-align:left;">
+saline
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+t-SC-m
+</td>
+<td style="text-align:left;">
+trisomy
+</td>
+<td style="text-align:left;">
+not stimulated to learn
+</td>
+<td style="text-align:left;">
+memantine
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="figures" class="section level2">
+<h2>Figures</h2>
+<div class="figure"><span style="display:block;" id="fig:figHCsil"></span>
+<p class="caption">
+Figure 5: Silhouette Width, Hierarchical Clustering
+</p>
+<img src="expression_files/figure-html/figHCsil-1.png" alt="\label{fig:figHCsil}Silhouette Width, Hierarchical Clustering" width="768" />
+</div>
+<div class="figure"><span style="display:block;" id="fig:figKMsil"></span>
+<p class="caption">
+Figure 6: Silhouette Width, K-Means Clustering
+</p>
+<img src="expression_files/figure-html/figKMsil-1.png" alt="\label{fig:figKMsil}Silhouette Width, K-Means Clustering" width="768" />
+</div>
+<div class="figure"><span style="display:block;" id="fig:figPAMsil"></span>
+<p class="caption">
+Figure 7: Silhouette Width, Partitioning Around Medoids
+</p>
+<img src="expression_files/figure-html/figPAMsil-1.png" alt="\label{fig:figPAMsil}Silhouette Width, Partitioning Around Medoids" width="768" />
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). An introduction to statistical learning.</p>
+</div>
+<div id="code" class="section level2">
+<h2>Code</h2>
+<pre class="r"><code># Load packages and set theme
+library(tidyverse)
+library(cluster)
+library(tableone)
+library(kableExtra)
+library(reshape2)
+library(cowplot)
+
+theme_set(theme_bw())
+
+# Load data, take a look at its variables and summary
+mouse &lt;- read.csv(&quot;./files/Data_Cortex_Nuclear.csv&quot;)
+
+glimpse(mouse)
+summary(mouse)
+
+# There are 5 variables with &gt; 16% missingness. The rest of the variables have &lt; 2% missingness.
+tab &lt;- CreateTableOne(data = mouse %&gt;% select(-MouseID))
+summary(tab)
+
+# Remove these 5 variables and use mean imputation on remaining vars
+data &lt;- mouse %&gt;% 
+  discard(~sum(is.na(.))/length(.)* 100 &gt;=15)  %&gt;%
+  mutate_all(~ifelse(is.na(.), mean(., na.rm = T), .)) %&gt;%
+  # 1 negative value, replace that with mean imputation.
+  mutate_at(&quot;RRP1_N&quot;, ~ifelse(. &lt; 0 , mean(., na.rm = T), .)) %&gt;%
+  # Convert characters to factors
+  mutate_if(is.character, as.factor)
+  
+summary(data)
+
+# Only use numeric variables for clustering
+x &lt;- data %&gt;% select_if(is.numeric)
+
+### Analysis ###
+
+# Scale data for hierarchical clustering
+x.scale &lt;- scale(x)
+
+# Complete linkage
+hc.complete &lt;- hclust(dist(x.scale), method = &quot;complete&quot;)
+
+# Optimal k is 3 (Appendix)
+cut.tree.com &lt;- cutree(hc.complete, k = 3)
+
+hc.data &lt;- data %&gt;%
+  mutate(Cluster = as.factor(cut.tree.com))
+
+hc.tab &lt;- hc.data %&gt;%
+  select(Cluster,class) %&gt;%
+  table()
+
+# Cluster 3 is able to distinguish one class quite well
+cbind(Cluster = 1:3, hc.tab) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabHC}Hierarchical Clustering with Complete Linkage, Breakdown by Class&quot;) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot;Class&quot; = 8)) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+# Creating the heatmap for hierarchical clustering
+
+# Reshape the data from wide to long
+hc.long &lt;- melt(hc.data, 
+                variable.name = &quot;Protein&quot;, 
+                value.name = &quot;Expression&quot;,
+                id.vars = c(&quot;MouseID&quot;, &quot;Genotype&quot;, &quot;Treatment&quot;, &quot;Behavior&quot;, 
+                            &quot;class&quot;, &quot;Cluster&quot;))
+
+hc.long %&gt;%
+  ggplot(aes(x = Cluster, y = Protein, fill = Expression)) +
+  geom_tile() +
+  scale_fill_gradient2(high = &quot;orange&quot;) +
+  theme_light() +
+  theme(axis.text.y = element_text(size = 7)) +
+  scale_y_discrete(labels=c(&quot;pPKCG_N&quot;=expression(bold(pPKCG_N)),
+                            &quot;Bcatenin_N&quot;=expression(bold(Bcatenin_N)),
+                            &quot;ERK_N&quot;=expression(bold(ERK_N)),
+                            &quot;NR2A_N&quot;=expression(bold(NR2A_N)), 
+                            parse=TRUE)) +
+  labs(title = &quot;Heatmap of Protein Expression Levels by Cluster&quot;,
+       subtitle = &quot;Hierarchical Clustering&quot;)
+
+# Set seed for reproducibility due to randomness of k-means
+set.seed(8)
+
+# Optimal k is 3 (Appendix)
+km.res &lt;- kmeans(x, centers = 3)
+
+km.data &lt;- data %&gt;%
+  mutate(Cluster = as.factor(km.res$cluster))
+
+km.tab &lt;- km.data %&gt;%
+  select(Cluster,class) %&gt;%
+  table()
+
+# No distinct classes, but behaviour looks imbalanced
+cbind(Cluster = 1:3, km.tab) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabKM}K-Means Clustering, Breakdown by Class&quot;) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot;Class&quot; = 8)) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+km.behav &lt;- km.data %&gt;%
+  select(Cluster,Behavior) %&gt;%
+  table()
+
+# Breakdown by behaviour
+cbind(Cluster = 1:3, km.behav) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabKMbehav}K-Means Clustering, Breakdown by Behaviour&quot;) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot;Behaviour&quot; = 2)) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+# Set seed again due to randomness of PAM, and new code chunk
+set.seed(8)
+
+# Optimal k is 3 (Appendix)
+pam.res &lt;- pam(x, k = 3)
+
+pam.data &lt;- data %&gt;%
+  mutate(Cluster = as.factor(pam.res$clustering))
+
+pam.tab &lt;- pam.data %&gt;%
+  select(Cluster,class) %&gt;%
+  table()
+
+# No distinct classes, but behaviour looks imbalanced
+cbind(Cluster = 1:3, pam.tab) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabPAM}Partitioning Around Medoids, Breakdown by Class&quot;) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot;Class&quot; = 8)) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+pam.behav &lt;- pam.data %&gt;%
+  select(Cluster,Behavior) %&gt;%
+  table()
+
+# Breakdown by behaviour
+cbind(Cluster = 1:3, pam.behav) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabPAMbehav}Partitioning Around Medoids, Breakdown by Behaviour&quot;) %&gt;%
+  add_header_above(c(&quot; &quot; = 1, &quot;Behaviour&quot; = 2)) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+# Creating the heatmap for both k-means and PAM
+
+# Reshape the data from wide to long
+km.long &lt;- melt(km.data, variable.name = &quot;Protein&quot;, value.name = &quot;Expression&quot;, 
+                  id.vars = c(&quot;MouseID&quot;, &quot;Genotype&quot;, &quot;Treatment&quot;, 
+                                    &quot;Behavior&quot;, &quot;class&quot;, &quot;Cluster&quot;))
+
+km.plot &lt;- km.long %&gt;%
+  ggplot(aes(x = Cluster, y = Protein, fill = Expression)) +
+  geom_tile() +
+  scale_fill_gradient2(high = &quot;skyblue2&quot;) +
+  theme_light() +
+  theme(axis.text.y = element_text(size = 7)) +
+  labs(subtitle = &quot;K-Means Clustering&quot;)
+
+# Reshape the data from wide to long
+pam.long &lt;- melt(pam.data, variable.name = &quot;Protein&quot;, value.name = &quot;Expression&quot;, 
+                  id.vars = c(&quot;MouseID&quot;, &quot;Genotype&quot;, &quot;Treatment&quot;, 
+                                    &quot;Behavior&quot;, &quot;class&quot;, &quot;Cluster&quot;))
+
+pam.plot &lt;- pam.long %&gt;%
+  ggplot(aes(x = Cluster, y = Protein, fill = Expression)) +
+  geom_tile() +
+  scale_fill_gradient2(high = &quot;green3&quot;) +
+  theme_light() +
+  theme(axis.text.y = element_text(size = 7)) +
+  labs(subtitle = &quot;Partitioning Around Medoids&quot;)
+
+
+title &lt;- ggdraw() + 
+  draw_label(&quot;Heatmap of Protein Expression Levels by Cluster&quot;, 
+             x = 0, 
+             hjust = 0) +
+    theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7))
+
+plot_grid(title, 
+          plot_grid(km.plot, pam.plot), 
+          ncol = 1,
+          rel_heights = c(1, 19))
+
+# Apply PCA to the mouse data
+pr.out &lt;- prcomp(x, scale = T)
+
+# Calculate the variance explained by the PC&#39;s
+pr.var &lt;- pr.out$sdev^2
+pve &lt;- pr.var/sum(pr.var)
+
+# the first 9 PC&#39;s explain about 80% of the data variation
+data.frame(pc = 1:length(pve), cs = cumsum(pve)) %&gt;%
+  ggplot(aes(pc, cs)) +
+  geom_point(col = &quot;red&quot;) +
+  geom_line(col = &quot;grey&quot;) +
+  labs(title = &quot;Cumulative Proportion of Variance Explained&quot;,
+       subtitle = &quot;Principal Component Analysis&quot;,
+       x = &quot;Principal Component&quot;,
+       y = &quot;Cumulative Proportion of Variance Explained&quot;)
+
+# 2D visualization of first 2 PC&#39;s, not that useful in this instance but looks cool
+data.frame(pr.out$x[,1:2], Class = data$class) %&gt;%
+  ggplot(aes(PC1, PC2, color = Class)) +
+  geom_point() +
+  labs(title = &quot;Principal Component Analysis&quot;,
+       subtitle = &quot;First Two Components&quot;,
+       x = &quot;Principal Component 1&quot;,
+       y = &quot;Principal Component 2&quot;)
+
+# Table for mice classes
+Class &lt;- c(&quot;c-CS-s&quot;, &quot;c-CS-m&quot;, &quot;c-SC-s&quot;, &quot;c-SC-m&quot;, 
+           &quot;t-CS-s&quot;, &quot;t-CS-m&quot;, &quot;t-SC-s&quot;, &quot;t-SC-m&quot;)
+
+Genotype &lt;- c(&quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, 
+              &quot;trisomy&quot;, &quot;trisomy&quot;, &quot;trisomy&quot;, &quot;trisomy&quot;)
+
+Behaviour &lt;- c(&quot;stimulated to learn&quot;, &quot;stimulated to learn&quot;, 
+               &quot;not stimulated to learn&quot;, &quot;not stimulated to learn&quot;, 
+               &quot;stimulated to learn&quot;, &quot;stimulated to learn&quot;,
+               &quot;not stimulated to learn&quot;, &quot;not stimulated to learn&quot;)
+
+Treatment &lt;- c(&quot;saline&quot;, &quot;memantine&quot;, &quot;saline&quot;, &quot;memantine&quot;,
+               &quot;saline&quot;, &quot;memantine&quot;, &quot;saline&quot;, &quot;memantine&quot;)
+
+Count &lt;- c(9, 10, 9, 10, 7, 9, 9, 9)
+
+data.frame(Class, Genotype, Behaviour, Treatment, Count) %&gt;%
+  kbl(caption = &quot;\\label{tab:tabmice}Mice Classes&quot;, 
+      align = &quot;l&quot;) %&gt;%
+  kable_styling(latex_options = &quot;hold_position&quot;)
+
+## Hierarchical clustering silhouette width
+
+hc.sil.width &lt;- c()
+for(i in 1:9){
+  cut.tree &lt;- cutree(hc.complete, k = i+1)
+  hc.sil.width[i] &lt;- summary(silhouette(cut.tree, dist(x.scale)))$avg.width 
+}
+
+# Plot silhouette width (higher is better)
+data.frame(k = 2:10, hc.sil.width) %&gt;%
+  ggplot(aes(k, hc.sil.width)) +
+  geom_point(col = &quot;darkorange2&quot;) +
+  geom_line(col = &quot;orange&quot;) +
+  geom_vline(xintercept = which.max(hc.sil.width)+1, linetype = &quot;dashed&quot;) +
+    labs(title = &quot;Silhouette Width&quot;,
+         subtitle = &quot;Hierarchical Clustering&quot;,
+         x = &quot;Number of clusters&quot;,
+         y = &quot;Silhouette Width&quot;)
+
+## K-means Silhouette Width
+
+set.seed(8)
+
+# Find optimal k
+km.sil.width &lt;- numeric(9)
+for(i in 1:9){
+  km.fit &lt;- kmeans(x, centers = i+1)
+  km.sil.width[i] &lt;- summary(silhouette(km.fit$cluster,dist(x)))$avg.width
+}
+
+# Plot silhouette width
+data.frame(k = 2:10, km.sil.width) %&gt;%
+  ggplot(aes(k, km.sil.width)) +
+  geom_point(col = &quot;blue&quot;) +
+  geom_line(col = &quot;skyblue&quot;) +
+  geom_vline(xintercept = which.max(km.sil.width)+1, linetype = &quot;dashed&quot;) +
+    labs(title = &quot;Silhouette Width&quot;,
+         subtitle = &quot;K-Means Clustering&quot;,
+         x = &quot;Number of clusters&quot;,
+         y = &quot;Silhouette Width&quot;)
+
+## PAM Silhouette Width
+
+set.seed(8)
+
+# Find optimal k
+pam.sil.width &lt;- numeric(9)
+for(i in 1:9){
+  pam.fit &lt;- pam(x, k = i+1)
+  pam.sil.width[i] &lt;- pam.fit$silinfo$avg.width
+}
+
+# Plot silhouette width
+data.frame(k = 2:10, pam.sil.width) %&gt;%
+  ggplot(aes(k, pam.sil.width)) +
+  geom_point(col = &quot;darkgreen&quot;) +
+  geom_line(col = &quot;green&quot;) +
+  geom_vline(xintercept = which.max(pam.sil.width)+1, linetype = &quot;dashed&quot;) +
+    labs(title = &quot;Silhouette Width&quot;,
+         subtitle = &quot;Partitioning Around Medoids&quot;,
+         x = &quot;Number of clusters&quot;,
+         y = &quot;Silhouette Width&quot;)</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -400,7 +400,7 @@ accuracy.df %>%
 
 # Average accuracy rates
 accuracy.df %>% 
-  dplyr::select(-run) %>%
+  select(-run) %>%
   summarize_all(mean) %>%
   round(3) %>%
   kable(caption = "Average accuracy rates for the three classification methods",

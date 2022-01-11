@@ -374,6 +374,13 @@ div.tocify {
         Heart Disease Classifier
       </a>
     </li>
+    <li>
+      <a href="expression.html">
+        <span class="fa fa-code"></span>
+         
+        Unsupervised Learning Protein Expression
+      </a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -445,8 +452,7 @@ data.frame(resid = residuals(gauge_lm1),
 <p><img src="eda_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
 <p>From the <em>Density vs Gain</em> plot, it appears as though there is an inverse exponential relationship between the variables. A linear model was initially created, however the <em>standardized residuals</em> appear to follow a distinct pattern, so a standard linear model cannot directly be fit to the data. We need to transform the data.</p>
 <pre class="r"><code>#Box-Cox transformation
-library(MASS)
-gain_boxcox &lt;- boxcox(gain ~ 1,data=gauge)</code></pre>
+gain_boxcox &lt;- MASS::boxcox(gain ~ 1,data=gauge)</code></pre>
 <p><img src="eda_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>gain_boxcox$x[which(gain_boxcox$y == max(gain_boxcox$y))]</code></pre>
 <pre><code>## [1] 0.02020202</code></pre>

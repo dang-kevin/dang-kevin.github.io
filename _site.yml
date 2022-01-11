@@ -24,6 +24,9 @@ navbar:
       - text: Heart Disease Classifier
         icon: fa-code
         href: heart.html
+      - text: Unsupervised Learning Protein Expression
+        icon: fa-code
+        href: expression.html
 
   right:
     - text: "About Me"

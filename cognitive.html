@@ -374,6 +374,13 @@ div.tocify {
         Heart Disease Classifier
       </a>
     </li>
+    <li>
+      <a href="expression.html">
+        <span class="fa fa-code"></span>
+         
+        Unsupervised Learning Protein Expression
+      </a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -445,53 +452,102 @@ where <span class="math inline">\(b_i\)</span> is the random effect for <code>id
 <h2>Model 1</h2>
 <p>In Table <a href="#tab:tab1">1</a>, there is a noticeable difference in the means of <code>control</code> and the other two groups. The <code>control</code> category represents students taking the Stroop test in a quiet environment with no music, so we may expect to see that the control group should perform better than the other two groups by obtaining a smaller difference, but that is not the case here. This can possibly be explained by adding a confounding variable to the model such as <code>order</code>, which we will do in Model 2. From the model output in Table <a href="#tab:tab2">2</a>, <code>distraction</code> has a p-value of 0.034 which is smaller than the significance level of 0.05. This indicates that auditory distraction has an affect on cognitive flexibility. More specifically, listening to music with lyrics or classical music actually improves cognitive flexibility based on these results.</p>
 <table>
-<caption><span id="tab:tab1">Table 1: </span>Auditory distraction means</caption>
+<caption>
+<span id="tab:tab1">Table 1: </span>Auditory distraction means
+</caption>
 <thead>
-<tr class="header">
-<th align="left">distraction</th>
-<th align="right">mean.ontime.minus.offtime</th>
+<tr>
+<th style="text-align:left;">
+distraction
+</th>
+<th style="text-align:right;">
+mean.ontime.minus.offtime
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">classical</td>
-<td align="right">6.41</td>
+<tr>
+<td style="text-align:left;">
+classical
+</td>
+<td style="text-align:right;">
+6.41
+</td>
 </tr>
-<tr class="even">
-<td align="left">control</td>
-<td align="right">8.21</td>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+8.21
+</td>
 </tr>
-<tr class="odd">
-<td align="left">lyrics</td>
-<td align="right">6.61</td>
+<tr>
+<td style="text-align:left;">
+lyrics
+</td>
+<td style="text-align:right;">
+6.61
+</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption><span id="tab:tab2">Table 2: </span>Linear Mixed Model 1</caption>
+<caption>
+<span id="tab:tab2">Table 2: </span>Linear Mixed Model 1
+</caption>
 <thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">numDF</th>
-<th align="right">denDF</th>
-<th align="right">F-value</th>
-<th align="right">p-value</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+numDF
+</th>
+<th style="text-align:right;">
+denDF
+</th>
+<th style="text-align:right;">
+F-value
+</th>
+<th style="text-align:right;">
+p-value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">1</td>
-<td align="right">142</td>
-<td align="right">156.887</td>
-<td align="right">0.000</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:right;">
+156.887
+</td>
+<td style="text-align:right;">
+0.000
+</td>
 </tr>
-<tr class="even">
-<td align="left">distraction</td>
-<td align="right">2</td>
-<td align="right">142</td>
-<td align="right">3.462</td>
-<td align="right">0.034</td>
+<tr>
+<td style="text-align:left;">
+distraction
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:right;">
+3.462
+</td>
+<td style="text-align:right;">
+0.034
+</td>
 </tr>
 </tbody>
 </table>
@@ -501,164 +557,343 @@ where <span class="math inline">\(b_i\)</span> is the random effect for <code>id
 <p>Starting with Table <a href="#tab:tab3">3</a>, we can see that on average students perform worse on the first attempt at the Stroop Test. Table <a href="#tab:tab4">4</a> builds on this by showing the breakdown of the mean differences and counts for each auditory distraction by order. Most noticeably, 56 out of 72 students had the quiet condition (<code>control</code>) as their first auditory distraction, which greatly affected the results in Table <a href="#tab:tab1">1</a> and helps explain why the <code>control</code> group performed worse than the <code>classical</code> and <code>lyrics</code> groups. However, <code>control</code> performed worse than <code>classical</code> for orders 2 and 3, and worse than <code>lyrics</code> for orders 1 and 3. Despite accounting for <code>order</code>, the <code>control</code> group did not perform well overall which may be due to the uneven counts across each group. Next, we look at Table <a href="#tab:tab5">5</a> which shows us that android phone users performed worse than iPhone and iPad users so <code>device</code> may be a confounding variable.</p>
 <p>From the model output in Table <a href="#tab:tab6">6</a>, <code>distraction</code> has a p-value of 0.041 which is smaller than the significance level of 0.05. This indicates that auditory distraction has an affect on cognitive flexibility even after we account for <code>order</code> and <code>device</code>. It is interesting to note that <code>order</code> has a p-value of 0.058 which is close to but not below the threshold of 0.05, while <code>device</code> has a p-value of 0.049 which is slightly below the significance level. The interaction term <code>distraction:order</code> is not significant as the p-value is 0.863. This means that the order of distraction used for the Stroop test does not quite have a significant effect while the device used for the Stroop test has a somewhat significant effect on cognitive flexibility. With this model we reach the same conclusion as in Model 1 that auditory distraction affects cognitive flexibility and surprisingly shows an improvement in cognitive flexibility.</p>
 <table>
-<caption><span id="tab:tab3">Table 3: </span>Order means</caption>
+<caption>
+<span id="tab:tab3">Table 3: </span>Order means
+</caption>
 <thead>
-<tr class="header">
-<th align="right">order</th>
-<th align="right">mean.ontime.minus.offtime</th>
+<tr>
+<th style="text-align:right;">
+order
+</th>
+<th style="text-align:right;">
+mean.ontime.minus.offtime
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">8.42</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8.42
+</td>
 </tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">6.64</td>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+6.64
+</td>
 </tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">6.16</td>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6.16
+</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption><span id="tab:tab4">Table 4: </span>Distraction by Order means</caption>
+<caption>
+<span id="tab:tab4">Table 4: </span>Distraction by Order means
+</caption>
 <thead>
-<tr class="header">
-<th align="left">distraction</th>
-<th align="right">order</th>
-<th align="right">mean.ontime.minus.offtime</th>
-<th align="right">count</th>
+<tr>
+<th style="text-align:left;">
+distraction
+</th>
+<th style="text-align:right;">
+order
+</th>
+<th style="text-align:right;">
+mean.ontime.minus.offtime
+</th>
+<th style="text-align:right;">
+count
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">classical</td>
-<td align="right">1</td>
-<td align="right">8.74</td>
-<td align="right">6</td>
+<tr>
+<td style="text-align:left;">
+classical
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8.74
+</td>
+<td style="text-align:right;">
+6
+</td>
 </tr>
-<tr class="even">
-<td align="left">classical</td>
-<td align="right">2</td>
-<td align="right">6.01</td>
-<td align="right">28</td>
+<tr>
+<td style="text-align:left;">
+classical
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+6.01
+</td>
+<td style="text-align:right;">
+28
+</td>
 </tr>
-<tr class="odd">
-<td align="left">classical</td>
-<td align="right">3</td>
-<td align="right">6.33</td>
-<td align="right">38</td>
+<tr>
+<td style="text-align:left;">
+classical
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6.33
+</td>
+<td style="text-align:right;">
+38
+</td>
 </tr>
-<tr class="even">
-<td align="left">control</td>
-<td align="right">1</td>
-<td align="right">8.70</td>
-<td align="right">56</td>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8.70
+</td>
+<td style="text-align:right;">
+56
+</td>
 </tr>
-<tr class="odd">
-<td align="left">control</td>
-<td align="right">2</td>
-<td align="right">6.67</td>
-<td align="right">7</td>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+6.67
+</td>
+<td style="text-align:right;">
+7
+</td>
 </tr>
-<tr class="even">
-<td align="left">control</td>
-<td align="right">3</td>
-<td align="right">6.40</td>
-<td align="right">9</td>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+6.40
+</td>
+<td style="text-align:right;">
+9
+</td>
 </tr>
-<tr class="odd">
-<td align="left">lyrics</td>
-<td align="right">1</td>
-<td align="right">6.72</td>
-<td align="right">10</td>
+<tr>
+<td style="text-align:left;">
+lyrics
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.72
+</td>
+<td style="text-align:right;">
+10
+</td>
 </tr>
-<tr class="even">
-<td align="left">lyrics</td>
-<td align="right">2</td>
-<td align="right">7.11</td>
-<td align="right">37</td>
+<tr>
+<td style="text-align:left;">
+lyrics
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7.11
+</td>
+<td style="text-align:right;">
+37
+</td>
 </tr>
-<tr class="odd">
-<td align="left">lyrics</td>
-<td align="right">3</td>
-<td align="right">5.82</td>
-<td align="right">25</td>
+<tr>
+<td style="text-align:left;">
+lyrics
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5.82
+</td>
+<td style="text-align:right;">
+25
+</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption><span id="tab:tab5">Table 5: </span>Device type means</caption>
+<caption>
+<span id="tab:tab5">Table 5: </span>Device type means
+</caption>
 <thead>
-<tr class="header">
-<th align="left">device</th>
-<th align="right">mean.ontime.minus.offtime</th>
+<tr>
+<th style="text-align:left;">
+device
+</th>
+<th style="text-align:right;">
+mean.ontime.minus.offtime
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">Android phone</td>
-<td align="right">10.07</td>
+<tr>
+<td style="text-align:left;">
+Android phone
+</td>
+<td style="text-align:right;">
+10.07
+</td>
 </tr>
-<tr class="even">
-<td align="left">iPad tablet</td>
-<td align="right">6.42</td>
+<tr>
+<td style="text-align:left;">
+iPad tablet
+</td>
+<td style="text-align:right;">
+6.42
+</td>
 </tr>
-<tr class="odd">
-<td align="left">iPhone / iPod</td>
-<td align="right">6.50</td>
+<tr>
+<td style="text-align:left;">
+iPhone / iPod
+</td>
+<td style="text-align:right;">
+6.50
+</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption><span id="tab:tab6">Table 6: </span>Linear Mixed Model 2</caption>
+<caption>
+<span id="tab:tab6">Table 6: </span>Linear Mixed Model 2
+</caption>
 <thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">numDF</th>
-<th align="right">denDF</th>
-<th align="right">F-value</th>
-<th align="right">p-value</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+numDF
+</th>
+<th style="text-align:right;">
+denDF
+</th>
+<th style="text-align:right;">
+F-value
+</th>
+<th style="text-align:right;">
+p-value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">1</td>
-<td align="right">139</td>
-<td align="right">161.493</td>
-<td align="right">0.000</td>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+139
+</td>
+<td style="text-align:right;">
+161.493
+</td>
+<td style="text-align:right;">
+0.000
+</td>
 </tr>
-<tr class="even">
-<td align="left">distraction</td>
-<td align="right">2</td>
-<td align="right">139</td>
-<td align="right">3.266</td>
-<td align="right">0.041</td>
+<tr>
+<td style="text-align:left;">
+distraction
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+139
+</td>
+<td style="text-align:right;">
+3.266
+</td>
+<td style="text-align:right;">
+0.041
+</td>
 </tr>
-<tr class="odd">
-<td align="left">order</td>
-<td align="right">1</td>
-<td align="right">139</td>
-<td align="right">3.660</td>
-<td align="right">0.058</td>
+<tr>
+<td style="text-align:left;">
+order
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+139
+</td>
+<td style="text-align:right;">
+3.660
+</td>
+<td style="text-align:right;">
+0.058
+</td>
 </tr>
-<tr class="even">
-<td align="left">device</td>
-<td align="right">2</td>
-<td align="right">69</td>
-<td align="right">3.153</td>
-<td align="right">0.049</td>
+<tr>
+<td style="text-align:left;">
+device
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:right;">
+3.153
+</td>
+<td style="text-align:right;">
+0.049
+</td>
 </tr>
-<tr class="odd">
-<td align="left">distraction:order</td>
-<td align="right">2</td>
-<td align="right">139</td>
-<td align="right">0.148</td>
-<td align="right">0.863</td>
+<tr>
+<td style="text-align:left;">
+distraction:order
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+139
+</td>
+<td style="text-align:right;">
+0.148
+</td>
+<td style="text-align:right;">
+0.863
+</td>
 </tr>
 </tbody>
 </table>
