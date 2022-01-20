@@ -1,0 +1,214 @@
+---
+title: 'CHL5202: Biostatistics II'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+---
+
+
+# Course Description and Objectives {.unlisted .unnumbered}
+* The goal of this course is to continue development and application of skills in statistical analysis required in epidemiologic and health care research.
+* Analysis where outcome is continuous and exposure and covariates are a mix of continuous and categorical variables (multiple linear regression)
+* Relaxing linearity assumptions of continuous exposure variables through the use of regression splines
+* Perform internal validation by means of bootstrapping or cross-validation
+* Extension to binary outcomes (multiple logistic regression)
+* Extension to time to event and censored outcomes (survival analysis)
+* Dealing with missing data
+* Introduce Bayesian methods
+
+Code provided by Professor Kevin Thorpe and modifications were made by myself.
+
+# Tutorial 1
+
+## Question 1
+Load the data frame `tut1` into R from the file `tut1.RData` available on the course page. The data
+frame contains the variables x and y.
+
+Fit a simple regression with y as the response and x as the predictor. Use diagnostic plots to determine if a non-linear relationship should be modeled. If you believe a non-linear relationship is present, model it using a restricted cubic spline. The number of knots is up to you.
+
+```{r, message=F}
+# Load packages and data
+library(rms)
+
+load("./CHL5202/tut1.RData")
+
+dd <- datadist(tut1)
+options(datadist="dd")
+```
+
+* Some notes taken from [here](https://thomaselove.github.io/432-notes/using-ols-from-the-rms-package-to-fit-linear-models.html).
+
+* Comparing `ols()` vs `lm()`: one advantage for ols is that the entire variance-covariance matrix is saved
+
+```{r}
+fit0 <- ols(y~x,data=tut1)
+fit0
+```
+
+* When applying anova to an ols model, it separates out the linear and non-linear components of restricted cubic splines and polynomial terms (and product terms if they are present). 
+* Unlike for `lm()`, using `anova` with `ols()` we have partial F-tests that describe the marginal impact of removing each covariate from the model.
+
+```{r}
+anova(fit0)
+```
+
+* Next, we check the model assumptions using diagnostic plots. 
+* In the Normal Q-Q Plot we are looking for normally distributed error terms, i.e. most of the points lie on the line and do not show a non-linear pattern. 
+
+```{r}
+# for diagnostic plots
+dx0 <- data.frame(tut1, e = resid(fit0), yhat = fitted(fit0)) 
+
+# Normal QQ Plot
+qqnorm(dx0$e)
+qqline(dx0$e)
+```
+
+* `xyplot()`: Common Bivariate Trellis Plots. Produces conditional scatterplots, typically between two continuous variables. Below we have residual plots. 
+* We are looking for the residuals to not show a distinct (non-linear) pattern which would suggest that a transformation is required.
+
+```{r}
+# Residual Plots
+xyplot(e~x, data = dx0, type = c("p","smooth"))
+xyplot(e~yhat, data = dx0, type = c("p","smooth"))
+```
+
+* A non-linear relationship is present, so we will model it using a restricted cubic spline. For this example, we are going to use 4 knots.
+
+```{r}
+fit1 <- ols(y ~ rcs(x, 4), data = tut1)
+
+fit1
+```
+
+* It is difficult to interpret the coefficients above. The `anova()` output below is more useful and shows a significant non-linear component.
+
+```{r}
+anova(fit1)
+```
+
+
+```{r}
+# Plot predicted fit with confidence interval
+ggplot(Predict(fit1))
+```
+
+
+```{r}
+# for diagnostic plots
+dx1 <- data.frame(tut1, e = resid(fit1), yhat = fitted(fit1))
+
+# Normal QQ Plot
+qqnorm(dx1$e)
+qqline(dx1$e)
+```
+
+
+```{r}
+# Residual plots
+xyplot(e ~ x, data = dx1, type = c("p", "smooth"))
+xyplot(e ~ yhat, data = dx1, type = c("p", "smooth"))
+```
+
+* There is no longer a non-linear pattern in the residuals.
+
+
+## Question 2
+
+Load the data frame FEV from the file FEV.RData. For these data, use the variable fev as the response and the rest as the explanatory covariates.
+
+Fit an additive linear model to fev using the other variables as the covariates. Evaluate whether any of the continuous variables should be fit as non-linear terms. 
+
+Fit an another additive model but this time model the continuous covariates with restricted cubic splines with four knots. Describe the results.
+
+```{r}
+load("./CHL5202/FEV.RData")
+
+fev.dd <- datadist(FEV)
+options(datadist = "fev.dd")
+```
+
+
+```{r, message=F}
+# `dplyr()`: package for data wrangling - part of `tidyverse()`
+library(dplyr)
+
+# Useful for quickly viewing the data
+glimpse(FEV)
+
+summary(FEV)
+```
+
+
+```{r}
+# Fit initial additive model
+fev.lin <- ols(fev ~ age + height + sex + smoke, data = FEV)
+fev.lin
+```
+
+```{r}
+anova(fev.lin)
+```
+
+* `age` and `height` are continuous variables, so we can use residual plots.
+* `sex` and `smoke` are categorical variables (in fact, they're binary) so residual plots won't be useful.
+
+```{r}
+dx.fev <- data.frame(FEV, e = resid(fev.lin), yhat = fitted(fev.lin))
+
+xyplot(e ~ age, data = dx.fev, type = c("p", "smooth"))
+xyplot(e ~ height, data = dx.fev, type = c("p", "smooth"))
+```
+
+* The residual plots show that non-linearity needs to be modelled for both variables.
+* Once again, we shall use restricted cubic splines with 4 knots.
+
+```{r}
+fev.full <- ols(fev ~ rcs(age, 4) + rcs(height, 4) + sex + smoke, data = FEV)
+
+fev.full
+```
+
+```{r}
+anova(fev.full)
+```
+
+* The `anova()` output suggests that the non-linear components for age and height are statistically significant.
+
+```{r}
+dx.full <- data.frame(FEV, e = resid(fev.full), yhat = fitted(fev.full))
+
+# Residual plots look good
+xyplot(e ~ age, data = dx.full, type = c("p", "smooth"))
+xyplot(e ~ height, data = dx.full, type = c("p", "smooth"))
+```
+
+* Running `summary()` is the best way to get the effects of the categorical variables.
+* For continuous variables, it is better to plot.
+
+```{r}
+summary(fev.full)
+```
+
+```{r}
+ggplot(Predict(fev.full, age))
+ggplot(Predict(fev.full, height))
+```
+
+
+## Extra
+
+* `%>%`: pipe operator - very useful for performing multiple data wrangling steps
+* `ggplot2()`: plotting package, included in `rms()` and `tidyverse()`
+
+```{r}
+# Boxplot
+FEV %>%
+  ggplot(mapping = aes(x = sex, y = height, fill = sex)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(title = "Boxplot of heights by sex")
+```
+

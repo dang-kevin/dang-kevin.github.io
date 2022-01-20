@@ -9,9 +9,12 @@ navbar:
     - text: "Teaching"
       icon: fa-university
       menu: 
+        - text: "CHL5202 - Winter 2022"
+          icon: fa-book
+          href: CHL5202.html
         - text: "STA237 - Fall 2021"
           icon: fa-book
-          href: sta237.html
+          href: STA237.html
     - text: Projects
       icon: fa-folder-open
       menu:
@@ -20,7 +23,7 @@ navbar:
         href: cognitive.html
       - text: Exploratory Data Analysis
         icon: fa-code
-        href: eda.html
+        href: EDA.html
       - text: Heart Disease Classifier
         icon: fa-code
         href: heart.html

@@ -13,7 +13,7 @@ My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a grad
 
 ## Teaching Assistantships 
 ### Winter 2022
-* CHL5202: Biostatistics II (graduate level course)
+* [CHL5202:](CHL5202.html) Biostatistics II (graduate level course)
   + Instructors: Kevin Thorpe, Charles Keown-Stoneman
 * EEB125: Introductory Computation and Data Science for the Life and Physical Sciences
   + Instructors: Paul Gries, Nathan Taback, Caroline Parins-Fukuchi
@@ -21,7 +21,7 @@ My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a grad
   + Instructor: Karen Huynh Wong
 
 ### Fall 2021
-* [STA237:](sta237.html) Probability, Statistics and Data Analysis I
+* [STA237:](STA237.html) Probability, Statistics and Data Analysis I
   + Instructor: Selvakkadunko Selvaratnam
 
 
