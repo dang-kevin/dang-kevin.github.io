@@ -6,7 +6,7 @@ title: "About Me"
 I am an MSc Candidate at the University of Toronto, and a Teaching Assistant for graduate and undergraduate courses in data science and statistics. My hobbies include soccer, weightlifting, table tennis, piano, and video games. The sections below are a summary of my work history.    
 
 ## St. Michael's Hospital
-In the Applied Health Research Centre at St. Michael’s Hospital, I am working closely with <a href="http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/">Dr. Charles Keown-Stoneman</a>, an Investigator/Biostatistician within the <a href="https://www.targetkids.ca/about">TARGetKids!</a> research group. I am classified as a Research Visitor, and my unofficial title is Junior Biostatistician. My work is on the TARGetKids! COVID-19 Study, specifically studying COVID-19 public health measure adherence amongst parents & children in Ontario. Methods include linear mixed effects regression with LASSO regularization, piecewise linear regression, cross-validation, bootstrapping. These are my <a href="files/TARGetKids_Presentation-Dec-2-2021.pdf">slides</a> for my initial project presentation.
+In the Applied Health Research Centre at St. Michael’s Hospital, I am working closely with [Dr. Charles Keown-Stoneman](http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/), an Investigator/Biostatistician within the [TARGetKids!](https://www.targetkids.ca/about) research group. I am classified as a Research Visitor, and my unofficial title is Junior Biostatistician. My work is on the TARGetKids! COVID-19 Study, specifically studying COVID-19 public health measure adherence amongst parents & children in Ontario. Methods include linear mixed effects regression with LASSO regularization, piecewise linear regression, cross-validation, bootstrapping. These are my [slides](files/TARGetKids_Presentation-Dec-2-2021.pdf) for my initial project presentation.
 
 ## Export Development Canada
 From June 2020 to December 2021, I worked at at Export Development Canada (EDC) as a Business Intelligence Analyst. My responsibilities include working in R (tidyverse, caret) to predict customer retention and conversion of EDC insurance products using logistic regression and random forest classifiers. Additionally, I created dashboards in PowerBI and Excel to provide succinct summaries of targets and results for key metrics such as retention rates for SVPs, VPs, and other leaders at EDC. I also produced weekly reports which involve querying data and running SAS EG projects and process flows. 
@@ -15,42 +15,20 @@ From June 2020 to December 2021, I worked at at Export Development Canada (EDC) 
 I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office from September 2020 to September 2021. Majority of my time was spent working on a pricing tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables). In addition to my projects, I was also required to write press releases, which are linked below.
 
 ### GlobalData Press Releases
-* <a href="https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/">
-    Wearable technology is a key driver in the growth of mobile health, says GlobalData
-  </a>
-* <a href="https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/">
-    ENT devices market to reach US$2.3bn in 2030, forecasts GlobalData
-  </a>
-* <a href="https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/">
-    Global cloud services in medical devices expected to generate revenues of $4.4bn in 2024, says GlobalData
-  </a>
-* <a href="https://www.globaldata.com/dental-devices-market-rebound-2021-acquisitions-rise/">
-    Dental devices market to rebound in 2021 as acquisitions rise
-  </a>
-* <a href="https://www.globaldata.com/anesthesia-respiratory-devices-market-reach-20bn-2025-driven-recent-surge-510k-clearances-says-globaldata/">
-    Anesthesia and respiratory devices market to reach $20bn in 2025 driven by recent surge in 510(k) clearances, says GlobalData
-  </a>
-* <a href="https://www.globaldata.com/ai-market-set-reach-52bn-2024-medical-device-companies-invest-ai-technologies-says-globaldata/">
-  AI market is set to reach $52bn in 2024 as medical device companies invest in AI technologies, says GlobalData
-  </a>
-* <a href="https://www.globaldata.com/impressive-performance-cardiac-assist-devices-will-help-cardiovascular-devices-market-surpass-62bn-2025-forecasts-globaldata/">
-  Impressive performance of cardiac assist devices will help cardiovascular devices market surpass $62bn by 2025, forecasts GlobalData
-  </a>
-* <a href="https://www.globaldata.com/orthopedics-market-set-reach-64bn-2025-acquisitions-surge/">
-    Orthopedics market set to reach $64bn by 2025 as acquisitions surge
-  </a>
-* <a href="https://www.globaldata.com/remote-patient-monitoring-market-set-surpass-645m-2025-covid-19-pandemic-drives-growth/">
-    Remote patient monitoring market set to surpass $645m by 2025 as COVID-19 pandemic drives growth
-  </a>
-* <a href="https://www.globaldata.com/elective-procedures-spark-massive-surge-demand-robotic-systems-medtech-industry/">
-    Elective procedures spark massive surge in demand for robotic systems in medtech industry
-  </a>
-* <a href="https://www.globaldata.com/democratic-victory-will-improve-access-telemedicine-rural-areas/">
-    A Democratic victory will improve access to telemedicine in rural areas
-  </a>
+* [Wearable technology is a key driver in the growth of mobile health, says GlobalData](https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/)
+* [ENT devices market to reach US$2.3bn in 2030, forecasts GlobalData](https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/)
+* [Global cloud services in medical devices expected to generate revenues of $4.4bn in 2024, says GlobalData](https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/)
+* [Dental devices market to rebound in 2021 as acquisitions rise](https://www.globaldata.com/dental-devices-market-rebound-2021-acquisitions-rise/)
+* [Anesthesia and respiratory devices market to reach $20bn in 2025 driven by recent surge in 510(k) clearances, says GlobalData](https://www.globaldata.com/anesthesia-respiratory-devices-market-reach-20bn-2025-driven-recent-surge-510k-clearances-says-globaldata/)
+* [AI market is set to reach $52bn in 2024 as medical device companies invest in AI technologies, says GlobalData](https://www.globaldata.com/ai-market-set-reach-52bn-2024-medical-device-companies-invest-ai-technologies-says-globaldata/)
+* [Impressive performance of cardiac assist devices will help cardiovascular devices market surpass $62bn by 2025, forecasts GlobalData](https://www.globaldata.com/impressive-performance-cardiac-assist-devices-will-help-cardiovascular-devices-market-surpass-62bn-2025-forecasts-globaldata/)
+* [Orthopedics market set to reach $64bn by 2025 as acquisitions surge](https://www.globaldata.com/orthopedics-market-set-reach-64bn-2025-acquisitions-surge/)
+* [Remote patient monitoring market set to surpass $645m by 2025 as COVID-19 pandemic drives growth](https://www.globaldata.com/remote-patient-monitoring-market-set-surpass-645m-2025-covid-19-pandemic-drives-growth/)
+* [Elective procedures spark massive surge in demand for robotic systems in medtech industry](https://www.globaldata.com/elective-procedures-spark-massive-surge-demand-robotic-systems-medtech-industry/)
+* [A Democratic victory will improve access to telemedicine in rural areas](https://www.globaldata.com/democratic-victory-will-improve-access-telemedicine-rural-areas/)
 
 ## University of Toronto
-Prior to my industry positions, I worked as a Data Analyst at the University of Toronto Centre for Industrial Relations and Human Resources. The project I worked on involved analyzing data on wages in the agriculture and farming industry, led by <a href="http://www.gregdistelhorst.com/">Dr. Greg Distelhorst</a>. I also provided Statistical Consulting services for a management consulting firm to answer some questions they had regarding user data which they collected from their health improvement platform. Both positions required the use of R (dplry, tidyr, ggplot2) in RStudio.
+Prior to my industry positions, I worked as a Data Analyst at the University of Toronto Centre for Industrial Relations and Human Resources. The project I worked on involved analyzing data on wages in the agriculture and farming industry, led by [Dr. Greg Distelhorst](http://www.gregdistelhorst.com/). I also provided Statistical Consulting services for a management consulting firm to answer some questions they had regarding user data which they collected from their health improvement platform. Both positions required the use of R (dplry, tidyr, ggplot2) in RStudio.
 
 ## Rotman School of Management
-I worked as a Research Assistant at the Rotman School of Management under the supervision of <a href="https://business.uoregon.edu/faculty/chris-liu">Dr. Chris Liu</a> on projects about scientific publications and careers. I used Stata and Python (pandas, pybliometrics) for these projects.
+I worked as a Research Assistant at the Rotman School of Management under the supervision of [Dr. Chris Liu](https://business.uoregon.edu/faculty/chris-liu) on projects about scientific publications and careers. I used Stata and Python (pandas, pybliometrics) for these projects.

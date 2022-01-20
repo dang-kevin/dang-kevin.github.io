@@ -7,7 +7,7 @@ knitr::include_graphics("files/profile_picture.jpg")
 ```
 
 ## Introduction
-My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health,  Department of Computer Science and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
+My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health,  Department of Computer Science and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
 
 <br>
 
@@ -21,7 +21,7 @@ My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin Dang</a> and 
   + Instructor: Karen Huynh Wong
 
 ### Fall 2021
-* <a href="sta237.html">STA237:</a> Probability, Statistics and Data Analysis I
+* [STA237:](sta237.html) Probability, Statistics and Data Analysis I
   + Instructor: Selvakkadunko Selvaratnam
 
 

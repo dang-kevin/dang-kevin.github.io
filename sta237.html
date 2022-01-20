@@ -412,7 +412,7 @@ div.tocify {
 <div id="course-description" class="section level2 unlisted unnumbered">
 <h2 class="unlisted unnumbered">Course Description</h2>
 <p>An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.</p>
-<p>Solutions and code provided by Professor Selvakkadunko Selvaratnam.</p>
+<p>Solutions provided by Professor Selvakkadunko Selvaratnam.</p>
 </div>
 <div id="tutorial-1" class="section level2">
 <h2>Tutorial 1</h2>
@@ -423,7 +423,7 @@ div.tocify {
 </ul>
 <pre class="r"><code>### R code for Q4 in TUT 1 ###
 
-set.seed(305)
+set.seed(237)
 n = 10000
 ctr = 0
 simlist = numeric(n)
@@ -436,7 +436,7 @@ while (ctr &lt; n) {
   }
 }
 mean(simlist) # Proportion of the required events</code></pre>
-<pre><code>## [1] 0.1629</code></pre>
+<pre><code>## [1] 0.1698</code></pre>
 </div>
 <div id="tutorial-2" class="section level2">
 <h2>Tutorial 2</h2>
@@ -488,7 +488,7 @@ n_factorial(5)</code></pre>
 <ul>
 <li><a href="sta237/Tutorial3_Slides.pdf">Slides</a></li>
 <li><a href="sta237/TUT3_Answers.pdf">Solutions</a></li>
-<li><a href="sta237/Tables_1_&_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
+<li><a href="sta237/Tables_1_&amp;_2_-_Binomial_and_Poisson.pdf">Binomial and Poisson Tables</a></li>
 </ul>
 <pre class="r"><code>### TUT3 ###
 
@@ -585,7 +585,7 @@ ggplot(data, aes(x = Index, y = result)) + geom_point(size = 0.2) +
 <pre class="r"><code>### TUT 9 ###
 
 ## Binomial Distribution ##
-set.seed(503)
+set.seed(237)
 s &lt;- 50000 # number of simulations
 p &lt;- 0.15 # probability of success
 t &lt;- 5 # number of trials
