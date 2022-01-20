@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Exploratory Data Analysis Overview</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="CHL5202.html">
+        <span class="fa fa-book"></span>
+         
+        CHL5202 - Winter 2022
+      </a>
+    </li>
+    <li>
+      <a href="STA237.html">
+        <span class="fa fa-book"></span>
+         
+        STA237 - Fall 2021
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="cognitive.html">
+        <span class="fa fa-code"></span>
+         
+        Cognitive Flexibility
+      </a>
+    </li>
+    <li>
+      <a href="EDA.html">
+        <span class="fa fa-code"></span>
+         
+        Exploratory Data Analysis
+      </a>
+    </li>
+    <li>
+      <a href="heart.html">
+        <span class="fa fa-code"></span>
+         
+        Heart Disease Classifier
+      </a>
+    </li>
+    <li>
+      <a href="mice.html">
+        <span class="fa fa-code"></span>
+         
+        Mice Protein Expression
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li>
+  <a href="files/Resume_Kevin_Dang.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Exploratory Data Analysis Overview</h1>
+
+</div>
+
+
+<p>This page will contain projects completed using R Markdown. These are examples of exploratory data analysis as the format is unstructured. I highly recommend using it for projects in RStudio, along with the <code>tidyverse</code>, a collection of R packages for data science. Here is a useful <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf">tidyverse cheatsheet</a>.</p>
+<div id="calibrating-a-snow-gauge" class="section level1">
+<h1>Calibrating a Snow Gauge</h1>
+<p>Snow gauges are used to indirectly measure the density of snow; a high snow density leads to less absorption of water. Analyzing this information is important because we want to monitor water levels and prevent floods from occurring. My analysis involves specifying the relationship between <code>density</code> of polyethylene blocks (a substitute for snow) and <code>gain</code> – an amplified version of gamma photon count.</p>
+<p>Let’s load the tidyverse package and the snow gauge data.</p>
+<pre class="r"><code>library(tidyverse)
+# Load data
+gauge &lt;- readr::read_table(&quot;https://www.stat.berkeley.edu/~statlabs/data/gauge.data&quot;,col_types = &quot;dd&quot;)
+gauge &lt;- gauge[rowSums(is.na(gauge)) != ncol(gauge),]
+glimpse(gauge)</code></pre>
+<pre><code>## Rows: 90
+## Columns: 2
+## $ density &lt;dbl&gt; 0.686, 0.686, 0.686, 0.686, 0.686, 0.686, 0.686, 0.686, 0.686,~
+## $ gain    &lt;dbl&gt; 17.6, 17.3, 16.9, 16.2, 17.1, 18.5, 18.7, 17.4, 18.6, 16.8, 24~</code></pre>
+<p>Let’s plot the data and residuals.</p>
+<pre class="r"><code># Plot density vs gain
+gauge %&gt;%
+  ggplot(aes(x=gain, y=density)) + 
+  theme_classic() +
+  geom_point(pch=21) +
+  labs(title=&quot;Density vs Gain&quot;,
+       subtitle=&quot;Gauge data&quot;,
+       x=&quot;Gain&quot;,
+       y=&quot;Density&quot;~(g/cm^{3}))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># Residuals
+gauge_lm1 &lt;- lm(density~gain, data=gauge)
+data.frame(resid = residuals(gauge_lm1),
+           fitted = fitted(gauge_lm1)) %&gt;%
+  mutate_at(&quot;resid&quot;, ~((. - mean(.)) / sd(.))) %&gt;%
+  ggplot(aes(x = fitted,y = resid)) +
+  theme_classic() +
+  geom_point(pch=21) +
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = -2,linetype=&quot;dashed&quot;,colour=&quot;red&quot;) +
+  geom_hline(yintercept = 2,linetype=&quot;dashed&quot;,colour=&quot;red&quot;) +
+  labs(title = &quot;Residuals vs Fitted Values&quot;,
+       subtitle = &quot;Normal linear model for Gauge data&quot;,
+       x = &quot;Fitted Values&quot;,
+       y = &quot;Residuals&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<p>From the <em>Density vs Gain</em> plot, it appears as though there is an inverse exponential relationship between the variables. A linear model was initially created, however the <em>standardized residuals</em> appear to follow a distinct pattern, so a standard linear model cannot directly be fit to the data. We need to transform the data.</p>
+<pre class="r"><code>#Box-Cox transformation
+gain_boxcox &lt;- MASS::boxcox(gain ~ 1,data=gauge)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>gain_boxcox$x[which(gain_boxcox$y == max(gain_boxcox$y))]</code></pre>
+<pre><code>## [1] 0.02020202</code></pre>
+<pre class="r"><code>#Log transformation
+gauge_transform &lt;- gauge %&gt;%
+  mutate(log_gain = log(gain))</code></pre>
+<p>A <em>box-cox transformation</em> was done on the <code>gain</code> variable, and the plot shows that a value of <span class="math inline">\(\lambda\)</span> = 0.02020202 is the best power transformation; in this case, a log transformation is appropriate. Now let’s fit a model of <code>density</code> vs <code>log(gain)</code> and make some new plots.</p>
+<pre class="r"><code># Plot density vs log(gain)
+gauge_transform %&gt;%
+  ggplot(aes(x=log_gain, y=density)) + 
+  theme_classic() +
+  geom_point(pch=21) +
+  geom_smooth(method = &quot;lm&quot;) +
+  labs(title=&quot;Density vs log(Gain)&quot;,
+       subtitle=&quot;Transformed log model for Gauge data&quot;,
+       x=&quot;log(Gain)&quot;,
+       y=&quot;Density&quot;~(g/cm^{3}))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code># Residuals
+gauge_lm2 &lt;- lm(density ~ log_gain, data=gauge_transform)
+data.frame(resid = residuals(gauge_lm2),
+           fitted = fitted(gauge_lm2)) %&gt;%
+  mutate_at(&quot;resid&quot;, ~((. - mean(.)) / sd(.))) %&gt;%
+  ggplot(aes(x = fitted,y = resid)) +
+  theme_classic() +
+  geom_point(pch=21) +
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = -2,linetype=&quot;dashed&quot;,colour=&quot;red&quot;) +
+  geom_hline(yintercept = 2,linetype=&quot;dashed&quot;,colour=&quot;red&quot;) +
+  labs(title = &quot;Residuals vs Fitted Values&quot;,
+       subtitle = &quot;Transformed log model for Gauge data&quot;,
+       x = &quot;Fitted Values&quot;,
+       y = &quot;Residuals&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code># Normal Q-Q
+gauge_transform %&gt;%
+  mutate_at(&quot;log_gain&quot;, ~((. - mean(.)) / sd(.))) %&gt;%
+  arrange(log_gain) %&gt;%
+  mutate(q = qnorm(1:n() / (n() + 1))) %&gt;%
+  ggplot(aes(x = q,y = log_gain)) +
+  theme_classic() +
+  geom_point(pch=21) +
+  geom_abline(slope = 1,intercept = 0,colour = &quot;red&quot;) +
+  labs(title = &quot;Normal QQ-plot&quot;,
+       subtitle=&quot;Transformed log model for Gauge data&quot;,
+       x = &quot;Theoretical Quantiles&quot;,
+       y = &quot;Sample Quantiles&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<p>After completing a log transformation on the <code>gain</code> variable, a valid linear model for <em>Density vs log(Gain)</em> was produced since the new <em>Residuals vs Fitted Values</em> plot does not show a distinct pattern. Also, the <em>Normal QQ plot</em> on the transformed data does not show evidence of skew – the normality condition is met.</p>
+<pre class="r"><code>#Regression Output
+summary(gauge_lm2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = density ~ log_gain, data = gauge_transform)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.028031 -0.011079 -0.000018  0.011595  0.044911 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.298013   0.006857   189.3   &lt;2e-16 ***
+## log_gain    -0.216203   0.001494  -144.8   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.01471 on 88 degrees of freedom
+## Multiple R-squared:  0.9958, Adjusted R-squared:  0.9958 
+## F-statistic: 2.096e+04 on 1 and 88 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The <em>regression output</em> shows a significant relationship between <code>log(Gain)</code> and <code>density</code>, as the p-value is extremely small. In addition, the multiple R-squared value of 0.9958 provides further evidence that this model is appropriate.</p>
+<p>The linear model is: mean <code>density</code> = 1.298013 g/cm<sup>3</sup> - (0.216203 g/cm<sup>3</sup> * <code>log(gain)</code>). This model can be used to estimate the mean <code>density</code> of snow at a particular value of <code>gain</code> since the snow gauge has now been calibrated, but we must proceed with caution because polyethylene blocks were used in place of snow blocks for the model.</p>
+</div>
+<div id="dungeness-crab-growth" class="section level1">
+<h1>Dungeness Crab Growth</h1>
+<p>As Dungeness crabs grow, they need to replace their carapace; a process referred to as molting. My analysis involves grouping the adult female Dungeness crabs by whether they recently molted or not, estimating the mean carapace size of both groups, then determining whether there is a significant difference between the groups.</p>
+<p>Let’s load the crab growth data.</p>
+<pre class="r"><code>library(tidyverse)
+# Load data
+crab &lt;- readr::read_table(&quot;https://www.stat.berkeley.edu/users/statlabs/data/crabpop.data&quot;,col_types = &quot;dc&quot;)
+glimpse(crab)</code></pre>
+<pre><code>## Rows: 362
+## Columns: 2
+## $ size  &lt;dbl&gt; 116.8, 117.1, 118.4, 119.6, 120.1, 120.4, 120.6, 122.6, 123.5, 1~
+## $ shell &lt;chr&gt; &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;, &quot;1&quot;,~</code></pre>
+<p>First let’s create a <em>boxplot</em> of the shell size (<code>size</code>) by the shell type (<code>shell</code>). Shell type 0 represents a fouled carapace which can be interpreted as an old shell, while shell type 1 represents a clean carapace – a recently molted shell.</p>
+<pre class="r"><code>#Boxplot
+crab %&gt;%
+  ggplot(aes(x=shell, y=size)) +
+  theme_classic() +
+  geom_boxplot() +
+  labs(title=&quot;Boxplot of shell size by type&quot;,
+       subtitle = &quot;Crab Data&quot;,
+       x = &quot;Shell Type&quot;,
+       y = &quot;Shell Size&quot;~(mm))</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The boxplot shows that older shells contain some outliers, while recent shells have no outliers. Now take a look at the summary statistics:</p>
+<pre class="r"><code>group_means &lt;- crab %&gt;%
+  group_by(shell) %&gt;%
+  summarize(group_mean = mean(size),
+            group_median = median(size),
+            group_sd = sd(size),
+            group_size = n())
+group_means</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   shell group_mean group_median group_sd group_size
+##   &lt;chr&gt;      &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;      &lt;int&gt;
+## 1 0           149.         151.     11.3        161
+## 2 1           142.         141.     11.4        201</code></pre>
+<p>So type 0 shells are larger than type 1 shells by about 7mm on average. The next part involves statistical tests:</p>
+<pre class="r"><code>t_test &lt;- t.test(size ~ shell, data = crab, var.equal = TRUE)
+t_test</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  size by shell
+## t = 5.8328, df = 360, p-value = 1.215e-08
+## alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+## 95 percent confidence interval:
+##  4.637563 9.355447
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        149.1099        142.1134</code></pre>
+<pre class="r"><code>f_test &lt;- var.test(size ~ shell, data = crab)
+f_test</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  size by shell
+## F = 0.97771, num df = 160, denom df = 200, p-value = 0.8851
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.729754 1.316331
+## sample estimates:
+## ratio of variances 
+##          0.9777051</code></pre>
+<p>The <em>two sample t-test</em> yielded a statistically significant p-value; this indicates that the means of the 2 groups are not equivalent. The two sample groups are independent, since the traps that were used were designed to catch adult female Dungeness crabs of all sizes, meaning that this sample is representative of the population. An <em>F-test to compare two variances</em> shows that the two sample group variances are similar – the constant variance condition is met.</p>
+<p>Let’s check for normality:</p>
+<pre class="r"><code>#Normal QQ
+crab %&gt;%
+  mutate_at(&quot;size&quot;,~((. - mean(.)) / sd(.))) %&gt;%
+  arrange(size) %&gt;%
+  mutate(q = qnorm(1:n() / (n() + 1))) %&gt;%
+  ggplot(aes(x = q,y = size)) +
+  theme_classic() +
+  geom_point(pch=21) +
+  geom_abline(slope = 1,intercept = 0,colour = &quot;red&quot;) +
+  labs(title = &quot;Normal QQ-plot&quot;,
+       subtitle = &quot;Crab Data&quot;,
+       x = &quot;Theoretical Quantiles&quot;,
+       y = &quot;Sample Quantiles&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code># Histogram
+crab %&gt;%
+  ggplot(aes(x = size)) +
+  theme_classic() +
+  geom_histogram(aes(y = ..density..),colour=&quot;black&quot;,fill=&quot;lightblue&quot;,bins = 15) +
+  geom_density(colour = &quot;red&quot;) +
+  labs(title = &quot;Histogram of Shell Size&quot;,
+       subtitle = &quot;Crab Data&quot;,
+       x = &quot;Shell Size (mm)&quot;,
+       y = &quot;Density&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p>Both the <em>Normal QQ Plot</em> and <em>Histogram of Shell Size</em> show skew in the data, which may be a problem. Fortunately, the sample size of 362 (161 type 0, 201 type 1) is sufficiently large. By the Central Limit Theorem, means of samples from a population approach a normal distribution as sample size increases – regardless of the population distribution. Thus, the normality condition for the t-test is met.</p>
+<p>Given the strong supporting evidence, adult female Dungeness crabs with older carapaces (shell type 0) on average have larger shells than those with recently molted carapaces (shell type 1).</p>
+</div>
+<div id="nodal-involvement-in-prostate-cancer" class="section level1">
+<h1>Nodal Involvement in Prostate Cancer</h1>
+<p>When deciding on how to treat prostate cancer, physicians use a cancer staging system which takes into account the presence of cancer in the surrounding lymph nodes, referred to as nodal involvement. My analysis involves determining whether prostate cancer has spread to the lymph nodes based on certain characteristics.</p>
+<p>Let’s load the data from the <code>SMPracticals</code> package:</p>
+<pre class="r"><code>library(tidyverse)
+# Load SMPracticals package
+# install.packages(&quot;SMPracticals&quot;)
+library(SMPracticals)
+data(nodal)
+nodal_tbl &lt;- as.data.frame(nodal)
+dplyr::glimpse(nodal_tbl)</code></pre>
+<pre><code>## Rows: 53
+## Columns: 7
+## $ m     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+## $ r     &lt;dbl&gt; 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0~
+## $ aged  &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0~
+## $ stage &lt;fct&gt; 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0~
+## $ grade &lt;fct&gt; 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0~
+## $ xray  &lt;fct&gt; 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+## $ acid  &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0~</code></pre>
+<p>Starting with the <em>Nodal Involvement by Predictor</em> graph, it is difficult to tell whether any of the five characteristics are successful in predicting nodal involvement.</p>
+<pre class="r"><code># Nodal involvement by predictor
+nodal_tbl %&gt;%
+  gather(variable,value,aged:acid) %&gt;%
+  ggplot(aes(x = value,y = r)) +
+  theme_classic() +
+  facet_wrap(~variable) +
+  geom_jitter(width=0.3,height=0.3,alpha = 0.4) +
+  scale_y_continuous(breaks = c(0,1),labels = c(&quot;No Involvement&quot;,&quot;Nodal Involvement&quot;)) +
+  labs(title = &quot;Nodal Involvement, by Predictor&quot;,
+       subtitle = &quot;Nodal Data&quot;,
+       x = &quot;Predictor Value&quot;,
+       y = &quot;Nodal Involvement?&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Upon closer inspection, it appears as though <code>stage</code>, <code>acid</code> and <code>xray</code> have more true positive and true negative data points than false positive and false negative data points, which means that they may have a higher success rate when predicting nodal involvement.</p>
+<p>Let’s try fitting a model:</p>
+<pre class="r"><code># Fit an initial binary logistic regression model
+nodal_glm1 &lt;- glm(r ~ aged + stage + grade + xray + acid,data = nodal_tbl,family = binomial)
+summary(nodal_glm1)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = r ~ aged + stage + grade + xray + acid, family = binomial, 
+##     data = nodal_tbl)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3317  -0.6653  -0.2999   0.6386   2.1502  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)  -3.0794     0.9868  -3.121   0.0018 **
+## aged1        -0.2917     0.7540  -0.387   0.6988   
+## stage1        1.3729     0.7838   1.752   0.0799 . 
+## grade1        0.8720     0.8156   1.069   0.2850   
+## xray1         1.8008     0.8104   2.222   0.0263 * 
+## acid1         1.6839     0.7915   2.128   0.0334 * 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 70.252  on 52  degrees of freedom
+## Residual deviance: 47.611  on 47  degrees of freedom
+## AIC: 59.611
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>An initial <em>binary logistic regression model</em> shows that <code>acid</code> and <code>xray</code> are considered somewhat significant, <code>stage</code> is close to the standard significance level of 0.05, while <code>age</code> and <code>grade</code> are not close to the significance level at all.</p>
+<p>To explore the potentially significant predictors further, let’s fit a second <em>binary logistic regression model</em>, with nodal involvement (<code>r</code>) as the response and <code>stage</code>, <code>acid</code> and <code>xray</code> as the predictors.</p>
+<pre class="r"><code># Try simpler binary logistic regression model
+nodal_glm2 &lt;- glm(r ~ stage + xray + acid,data = nodal_tbl,family = binomial)
+summary(nodal_glm2)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = r ~ stage + xray + acid, family = binomial, data = nodal_tbl)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1231  -0.6620  -0.3039   0.4710   2.4892  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -3.0518     0.8420  -3.624  0.00029 ***
+## stage1        1.6453     0.7297   2.255  0.02414 *  
+## xray1         1.9116     0.7771   2.460  0.01390 *  
+## acid1         1.6378     0.7539   2.172  0.02983 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 70.252  on 52  degrees of freedom
+## Residual deviance: 49.180  on 49  degrees of freedom
+## AIC: 57.18
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<pre class="r"><code># Analyze the deviance
+anova(nodal_glm2, test=&quot;Chisq&quot;)</code></pre>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model: binomial, link: logit
+## 
+## Response: r
+## 
+## Terms added sequentially (first to last)
+## 
+## 
+##       Df Deviance Resid. Df Resid. Dev Pr(&gt;Chi)   
+## NULL                     52     70.252            
+## stage  1   7.6995        51     62.553 0.005524 **
+## xray   1   8.0901        50     54.463 0.004451 **
+## acid   1   5.2822        49     49.180 0.021544 * 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The <em>analysis of deviance table</em> for the second model shows a significant reduction in the residual deviance as each of the three variables are added to the null model.</p>
+<pre class="r"><code># Transform factor type into numeric type
+nodal_transform &lt;- transform(nodal_tbl, aged = as.numeric(aged),
+                                        stage = as.numeric(stage),
+                                        grade = as.numeric(grade),
+                                        xray = as.numeric(xray),
+                                        acid = as.numeric(acid))
+# Correlation matrix
+round(cor(nodal_transform %&gt;% dplyr::select(-c(m,r))),2)</code></pre>
+<pre><code>##        aged stage grade  xray  acid
+## aged   1.00  0.06 -0.19 -0.10 -0.20
+## stage  0.06  1.00  0.41  0.15  0.13
+## grade -0.19  0.41  1.00  0.22  0.01
+## xray  -0.10  0.15  0.22  1.00  0.16
+## acid  -0.20  0.13  0.01  0.16  1.00</code></pre>
+<pre class="r"><code># We can visualize this better using corrplot
+corrplot::corrplot(cor(nodal_transform %&gt;% dplyr::select(-c(m,r))),order=&quot;AOE&quot;)</code></pre>
+<p><img src="EDA_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>In regards to the model assumptions, the values are discrete (0 or 1) and there are also no outliers in the data since the z-value for each predictor is under 3. Also, there is low intercorrelation among the predictors, as shown in the <em>correlation matrix</em>.</p>
+<p>To clarify what each predictor represents, <code>stage</code> is a measure of the size and position of the tumour, <code>xray</code> indicates how serious the cancer is from an X-ray reading, and <code>acid</code> represents the level of acid phosphatase in the blood serum. These three variables may be helpful indicators of nodal involvement in prostate cancer, from evidence provided by the model. However, physicians should proceed with caution as there are some observations which incorrectly predict nodal involvement.</p>
+</div>
+<div id="smoking-age-and-death" class="section level1">
+<h1>Smoking, Age and Death</h1>
+<p>Smoking is a major health concern among the population, however many individuals of numerous age groups continue to smoke. The goal is to analyze potential relationships between age group, smoking status and mortality rate among women.</p>
+<p>Let’s load and view the data:</p>
+<pre class="r"><code>library(tidyverse)
+#Load data from the library
+library(SMPracticals)
+data(smoking)
+smoking_tbl &lt;- as.data.frame(smoking)
+dplyr::glimpse(smoking_tbl)</code></pre>
+<pre><code>## Rows: 14
+## Columns: 4
+## $ age    &lt;fct&gt; 18-24, 18-24, 25-34, 25-34, 35-44, 35-44, 45-54, 45-54, 55-64, ~
+## $ smoker &lt;dbl&gt; 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0
+## $ alive  &lt;dbl&gt; 53, 61, 121, 152, 95, 114, 103, 66, 64, 81, 7, 28, 0, 0
+## $ dead   &lt;dbl&gt; 2, 1, 3, 5, 14, 7, 27, 12, 51, 40, 29, 101, 13, 64</code></pre>
+<p>Now we need a way to view correlations between variables before fitting any models, and in this case a table is most suitable.</p>
+<pre class="r"><code># Relationship between mortality and smoking
+xtabs(cbind(dead,alive) ~ smoker,data=smoking_tbl) %&gt;% prop.table(1)</code></pre>
+<pre><code>##       
+## smoker      dead     alive
+##      0 0.3142077 0.6857923
+##      1 0.2388316 0.7611684</code></pre>
+<p>Looking at potential relationships, the first table shows that a greater proportion of smokers in the study were alive after 20 years than non-smokers.</p>
+<p>Let’s try a binomial regression model:</p>
+<pre class="r"><code># Binomial regression, mortality against smoking
+smoking_glm1 &lt;- glm(cbind(dead,alive) ~ smoker, data = smoking_tbl, family = binomial)
+summary(smoking_glm1)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(dead, alive) ~ smoker, family = binomial, 
+##     data = smoking_tbl)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -9.052  -5.674  -1.869   5.776  12.173  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -0.78052    0.07962  -9.803  &lt; 2e-16 ***
+## smoker      -0.37858    0.12566  -3.013  0.00259 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 641.5  on 13  degrees of freedom
+## Residual deviance: 632.3  on 12  degrees of freedom
+## AIC: 683.29
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The <em>binomial regression model</em> for mortality against smoking shows a significant negative relationship between the variables, which indicates that smoking decreases mortality rate. This is unexpected, but another factor (age) has not been taken into account, which could explain this unusual relationship. Also, the residual deviance is quite large compared to its degrees of freedom, so this model is not a good fit.</p>
+<p>To investigate this unintuitive relationship, we display a different table to show the relationship between smoking and age in groups of <code>dead</code> or <code>alive</code>.</p>
+<pre class="r"><code># Relationship between smoking and age in two groups: dead or alive.
+xtabs(cbind(dead,alive) ~ smoker + age,data=smoking_tbl) %&gt;% prop.table(2)</code></pre>
+<pre><code>## , ,  = dead
+## 
+##       age
+## smoker       18-24       25-34       35-44       45-54       55-64       65-74
+##      0 0.008547009 0.017793594 0.030434783 0.057692308 0.169491525 0.612121212
+##      1 0.017094017 0.010676157 0.060869565 0.129807692 0.216101695 0.175757576
+##       age
+## smoker         75+
+##      0 0.831168831
+##      1 0.168831169
+## 
+## , ,  = alive
+## 
+##       age
+## smoker       18-24       25-34       35-44       45-54       55-64       65-74
+##      0 0.521367521 0.540925267 0.495652174 0.317307692 0.343220339 0.169696970
+##      1 0.452991453 0.430604982 0.413043478 0.495192308 0.271186441 0.042424242
+##       age
+## smoker         75+
+##      0 0.000000000
+##      1 0.000000000</code></pre>
+<p>In this table, there is a larger proportion of younger women who smoke, relative to older women who smoke. Many of these younger women who smoke were still alive after 20 years into the study, while many of the older women passed away.</p>
+<p>Now try another <em>binomial regression model</em>, but with age groups as a predictor:</p>
+<pre class="r"><code># Binomial regression, mortality against age and smoking
+smoking_glm2 &lt;- glm(cbind(dead,alive) ~ age + smoker, data = smoking_tbl, family = binomial)
+summary(smoking_glm2)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = cbind(dead, alive) ~ age + smoker, family = binomial, 
+##     data = smoking_tbl)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -0.72545  -0.22836   0.00005   0.19146   0.68162  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)    -3.8601     0.5939  -6.500 8.05e-11 ***
+## age25-34        0.1201     0.6865   0.175 0.861178    
+## age35-44        1.3411     0.6286   2.134 0.032874 *  
+## age45-54        2.1134     0.6121   3.453 0.000555 ***
+## age55-64        3.1808     0.6006   5.296 1.18e-07 ***
+## age65-74        5.0880     0.6195   8.213  &lt; 2e-16 ***
+## age75+         27.8073 11293.1430   0.002 0.998035    
+## smoker          0.4274     0.1770   2.414 0.015762 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 641.4963  on 13  degrees of freedom
+## Residual deviance:   2.3809  on  6  degrees of freedom
+## AIC: 65.377
+## 
+## Number of Fisher Scoring iterations: 20</code></pre>
+<p>This model is a very strong fit since the residual deviance is quite small relative to its degrees of freedom. Now that <code>age</code> has been accounted for, the <code>smoker</code> variable is positively correlated with mortality; this is an example of Simpson’s paradox. The dependence of smoking status and mortality rate are explained by their respective relationship with age (i.e. smoking and mortality are dependent, conditional on age).</p>
+<p>If investigators in this study did not measure age, they may have incorrectly concluded that smoking correlates with a lower risk of death. In observational studies such as this one, investigators need to be careful in drawing conclusions before considering other factors that can influence relationships between the variables of interest.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
