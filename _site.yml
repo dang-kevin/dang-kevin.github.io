@@ -19,7 +19,7 @@ navbar:
           icon: fa-book
           href: STA237.html
     - text: Projects
-      icon: fa-folder-open
+      icon: fa-project-diagram
       menu:
       - text: Cognitive Flexibility
         icon: fa-code
@@ -36,6 +36,7 @@ navbar:
 
   right:
     - text: "About Me"
+      icon: fa-user
       href: about.html
     - text: Resume
       icon: fa-file-pdf-o
