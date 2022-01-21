@@ -8,17 +8,17 @@ knitr::include_graphics("files/profile_picture.jpg")
 ```
 
 ## Introduction
-My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health,  Department of Computer Science and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
+My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. 
 
-<br>
+Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health, Department of Computer Science, and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
 
 ## Teaching Assistantships 
 ### Winter 2022
 * [CHL5202:](CHL5202.html) Biostatistics II (graduate level course)
   + Instructors: Kevin Thorpe, Charles Keown-Stoneman
-* EEB125: Introductory Computation and Data Science for the Life and Physical Sciences
+* [EEB125:](https://utstat.toronto.edu/nathan/eeb125ggr274info.html) Introductory Computation and Data Science for the Life and Physical Sciences
   + Instructors: Paul Gries, Nathan Taback, Caroline Parins-Fukuchi
-* STA238: Probability, Statistics and Data Analysis II
+* [STA238:](STA238.html) Probability, Statistics and Data Analysis II
   + Instructor: Karen Huynh Wong
 
 ### Fall 2021
