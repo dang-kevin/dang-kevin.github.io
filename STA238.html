@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>STA238: Probability, Statistics and Data Analysis II</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Kevin Dang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    Teaching
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="CHL5202.html">
+        <span class="fa fa-book"></span>
+         
+        CHL5202 - Winter 2022
+      </a>
+    </li>
+    <li>
+      <a href="STA238.html">
+        <span class="fa fa-book"></span>
+         
+        STA238 - Winter 2022
+      </a>
+    </li>
+    <li>
+      <a href="STA237.html">
+        <span class="fa fa-book"></span>
+         
+        STA237 - Fall 2021
+      </a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-folder-open"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="cognitive.html">
+        <span class="fa fa-code"></span>
+         
+        Cognitive Flexibility
+      </a>
+    </li>
+    <li>
+      <a href="EDA.html">
+        <span class="fa fa-code"></span>
+         
+        Exploratory Data Analysis
+      </a>
+    </li>
+    <li>
+      <a href="heart.html">
+        <span class="fa fa-code"></span>
+         
+        Heart Disease Classifier
+      </a>
+    </li>
+    <li>
+      <a href="mice.html">
+        <span class="fa fa-code"></span>
+         
+        Mice Protein Expression
+      </a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About Me</a>
+</li>
+<li>
+  <a href="files/Resume_Kevin_Dang.pdf">
+    <span class="fa fa-file-pdf-o"></span>
+     
+    Resume
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">STA238: Probability, Statistics and Data Analysis II</h1>
+
+</div>
+
+
+<div id="course-description" class="section level1 unlisted unnumbered">
+<h1 class="unlisted unnumbered">Course Description</h1>
+<p>An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.</p>
+<p>Course material provided by Professor Karen Huynh Wong and modifications were made by myself.</p>
+</div>
+<div id="tutorial-1" class="section level1">
+<h1>Tutorial 1</h1>
+<p>In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. You are expected to have access to <a href="https://q.utoronto.ca/courses/253127/pages/getting-started-with-r?module_item_id=3266442">R + R Studio + LaTeX</a> in some capacity by this tutorial, whether it be locally installed or accessed through JupyterHub.</p>
+<div id="r-lab-learning-goals" class="section level2">
+<h2>R Lab Learning Goals</h2>
+<ul>
+<li>Install and load packages in R, use them in an R Markdown file</li>
+<li>Simple computations and referring to <code>?command_name</code> to find the documentation of various commands</li>
+<li>Select elements, columns, or rows from a dataset</li>
+<li>Produce simple plots in ggplot with informative and clearly formatted titles + labels</li>
+<li>Use LaTeX notation to neatly and correctly display math notation. You can knit this document as you type (which also helps you identify bugs in your code!) to see how the format of the text translates into the finished product, such as creating headers, bold-facing, and math notation!</li>
+<li>Knit your document to a finished document that includes written text and properly rendered math notation, with plots and source code separately embedded</li>
+</ul>
+<p>Follow the guide as your TA demonstrates these introductory syntax and tools, and use them along with what we covered in this week’s synchronous lecture to complete the exercises at the end of this document.</p>
+<p>Some additional resources you may find helpful as you learn is the <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">R Markdown Cheatsheet</a> and the <a href="http://tug.ctan.org/info/undergradmath/undergradmath.pdf">LaTeX Cheatsheet</a>. As you work more in LaTeX, the notation will get easier and become second nature!</p>
+</div>
+<div id="install-and-load-packages" class="section level2">
+<h2>1. Install and Load Packages</h2>
+<p>R packages are a collection of functions, code, and data sets that are developed by others and can be used to supplement the basic tools in R. R comes with some basic packages, but working with them can be sometimes clunky. You’ll begin by learning how to install packages and load packages, and the difference between these two actions!</p>
+<p>Begin by installing and loading the <code>tidyverse</code> package, which is a collection of R packages. We will use this extensively in our course, as all packages within share similar structure and design, making it a very intuitive and versatile tool to master!</p>
+<p><strong>Note: Never include a package install in your R chunks in an R Markdown file. R will not be able to knit your document! Instead, run it strictly within your console.</strong></p>
+<pre class="r"><code># Students: What do you think the &#39;message = F&#39; in the R chunk option does? 
+# Try knitting your document with and without the option
+
+# Can also try `warning = F` to hide warnings
+# echo = F` to run the chunk but hide the code
+
+# install.packages(&quot;tidyverse&quot;)
+library(tidyverse)
+
+# Use Ctrl + Alt + I shortcut for creating code chunks</code></pre>
+</div>
+<div id="loading-data-and-saving-it-to-an-object" class="section level2">
+<h2>2. Loading Data and Saving it to an Object</h2>
+<p>Let’s examine some datasets that are already available in R (see <code>library(help = "datasets")</code> for a list of datasets in base R), starting with the ToothGrowth dataset.</p>
+<pre class="r"><code># ?ToothGrowth
+
+# Variable Assignment
+dat &lt;- ToothGrowth
+
+# Mostly useful for smaller datasets, but for larger ones we prefer to use glimpse and summary
+# View(dat)
+
+glimpse(dat)</code></pre>
+<pre><code>## Rows: 60
+## Columns: 3
+## $ len  &lt;dbl&gt; 4.2, 11.5, 7.3, 5.8, 6.4, 10.0, 11.2, 11.2, 5.2, 7.0, 16.5, 16.5, 15.2, 17.3, 22~
+## $ supp &lt;fct&gt; VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, VC, ~
+## $ dose &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, ~</code></pre>
+<pre class="r"><code>summary(dat)</code></pre>
+<pre><code>##       len        supp         dose      
+##  Min.   : 4.20   OJ:30   Min.   :0.500  
+##  1st Qu.:13.07   VC:30   1st Qu.:0.500  
+##  Median :19.25           Median :1.000  
+##  Mean   :18.81           Mean   :1.167  
+##  3rd Qu.:25.27           3rd Qu.:2.000  
+##  Max.   :33.90           Max.   :2.000</code></pre>
+</div>
+<div id="simple-data-filtration" class="section level2">
+<h2>3. Simple Data Filtration</h2>
+<p>It looks like there are two groups of data in the <code>ToothGrowth</code> data set. What are they?</p>
+<p>What if you only want to study the growth based on one source of vitamin C? How do you go about extracting this information?</p>
+<pre class="r"><code># After loading and examining your data, and learning about selecting columns or elements
+# from your data set, consider the following two commands below. 
+# Briefly comment below what these two commands do:
+
+# What does
+which(dat$supp == &#39;VC&#39;) #do?
+# Extracts which indices are TRUE</code></pre>
+<pre class="r"><code># What does 
+dat[dat$supp==&#39;VC&#39;, 1] #do?
+# extracts the `len` variable/column, where `supp` is &#39;VC&#39;
+
+# Alternative 1
+# Pipe operator shortcut: Ctrl + Shift + M
+dat %&gt;% 
+  filter(supp == &quot;VC&quot;) %&gt;% 
+  select(len)
+
+# Alternative 2
+# This is basically Alternative 1 without the pipe operator
+select(filter(dat, supp == &quot;VC&quot;), len)</code></pre>
+<pre class="r"><code># Below we can also extract the other 2 columns
+dat[dat$supp==&#39;VC&#39;, 2]
+dat[dat$supp==&#39;VC&#39;, 3]</code></pre>
+</div>
+<div id="formulating-a-question" class="section level2">
+<h2>4. Formulating a Question</h2>
+<p>After examining the data set, what are some study questions we can ask? Make some suggestions in the Teams chat!</p>
+<p>Below are some questions suggested by students in the chat: * Does dosage and length have a positive correlation? * Which vitamin contributes to the most growth?</p>
+</div>
+<div id="calculations-in-r" class="section level2">
+<h2>5. Calculations in R</h2>
+<p>Find the (sample) mean and standard deviation of tooth length in the Vitamin C group and again in the group that only received Orange Juice. What can be said based on the numbers computed about the differences between the two groups?</p>
+<p>Do this using the formula, instead of the functions <code>mean()</code> or <code>sd()</code> to practice using R as a calculator!</p>
+<pre class="r"><code># Task for students: try to recreate the mean and variance values through
+# Calculations in R, and compare them with the values you should get through
+# mean() and sd() commands in R
+
+# Create tooth length variable for the vitamin C 
+vc &lt;- dat[dat$supp==&#39;VC&#39;, 1]
+
+# take the sum of the tooth length, then divide by the number of values
+n &lt;- length(vc)
+mean.vc &lt;- sum(vc)/n
+mean.vc</code></pre>
+<pre><code>## [1] 16.96333</code></pre>
+<pre class="r"><code># Can also compute using a for loop
+mean.vc2 &lt;- 0
+for (i in 1:n){
+  mean.vc2 &lt;- mean.vc2 + vc[i]/n
+}
+mean.vc2</code></pre>
+<pre><code>## [1] 16.96333</code></pre>
+<pre class="r"><code># Compare to mean() function
+mean(vc)</code></pre>
+<pre><code>## [1] 16.96333</code></pre>
+<pre class="r"><code># Standard deviation
+var.vc &lt;- sum((vc - mean.vc)^2)/(n-1)
+sd.vc &lt;- sqrt(var.vc)
+sd.vc</code></pre>
+<pre><code>## [1] 8.266029</code></pre>
+<pre class="r"><code># Compare to sd() function
+sd(vc)</code></pre>
+<pre><code>## [1] 8.266029</code></pre>
+<p>Below is a repeat of the above but for <code>OJ</code> (orange juice):</p>
+<pre class="r"><code># Orange Juice
+oj &lt;- dat[dat$supp==&#39;OJ&#39;, 1]
+
+# Mean
+n &lt;- length(oj)
+mean.oj &lt;- sum(oj)/n
+mean.oj</code></pre>
+<pre><code>## [1] 20.66333</code></pre>
+<pre class="r"><code># Can also compute using a for loop
+mean.oj2 &lt;- 0
+for (i in 1:n){
+  mean.oj2 &lt;- mean.oj2 + oj[i]/n
+}
+mean.oj2</code></pre>
+<pre><code>## [1] 20.66333</code></pre>
+<pre class="r"><code># Compare to mean()
+mean(oj)</code></pre>
+<pre><code>## [1] 20.66333</code></pre>
+<pre class="r"><code># Standard deviation
+var.oj &lt;- sum((oj - mean.oj)^2)/(n-1)
+sd.oj &lt;- sqrt(var.oj)
+sd.oj</code></pre>
+<pre><code>## [1] 6.605561</code></pre>
+<pre class="r"><code># Compare to sd()
+sd(oj)</code></pre>
+<pre><code>## [1] 6.605561</code></pre>
+<p>Trying to type the variance formula in plain-text is not visually appealing, nor helpful in communicating (it’s very difficult to read!). The beauty of LaTeX is the format is fairly intuitive, such as <code>$\frac{numerator}{denominator}$</code> will render as <span class="math inline">\(\frac{numerator}{denominator}\)</span> (the dollar signs indicate the start and end of the math setting, double-dollar sign will have the math rendered centre to the page). For example, the sample variance can be written as:</p>
+<p><span class="math display">\[s^2 = \frac{\sum_{i=1}^n (x_i - \bar{x})^2}{n-1}\]</span> Try to write the sample mean in LaTeX and quote the values computed in the R chunk above!</p>
+<p>For the mean we can use <code>\bar{x}_n = \frac{\sum_{i=1}^n x_i}{n}</code>: <span class="math display">\[\bar{x}_n = \frac{\sum_{i=1}^n x_i}{n}\]</span></p>
+</div>
+<div id="simple-plots" class="section level2">
+<h2>6. Simple Plots</h2>
+<p>Numerical summaries can be powerful to provide concrete, numerical evidence to support our claims. Using graphical displays can also communicate clearly in a visual manner the story that our numbers tell, and can sometimes be a more powerful communication tool than numbers because we can <em>see</em> the <em>scale</em> of differences. Let’s use the <code>ggplot</code> package in <code>tidyverse</code> to produce side-by-side box plots of how tooth length growth differs between the two sources of vitamin C:</p>
+<pre class="r"><code># Focus of this segment: understanding the layering language of ggplot
+# Note also the R chunk options that control the alignment and size of
+# The output figures
+
+dat %&gt;% 
+  ggplot(aes(x = supp, y = len)) +
+  geom_boxplot() + # passing aes(x,y) into here works too!
+  labs(title = &quot;Guinea Pig Tooth Length Growth by Vitamin C Source&quot;,
+       subtitle = &quot;ToothGrowth Dataset&quot;,
+       x = &quot;Vitamin C Source&quot;,
+       y = &quot;Tooth Length Growth&quot;) +
+  scale_x_discrete(labels = c(&quot;Orange Juice&quot;, &quot;Ascorbic Acid&quot;)) +
+  theme_bw() # there are many different themes from which to choose!</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What can we notice about tooth length growth between the two supplement groups?</p>
+<p>Practice using visual and numeric features to:</p>
+<ol style="list-style-type: decimal">
+<li>Write a conclusion about any perceivable differences between the two sources of vitamin C.</li>
+<li>Provide graphical and numerical features and their <span style="text-decoration:underline">interpretations</span>, explaining how they support your claim(s)!</li>
+</ol>
+<p>Here are things that we notice:</p>
+<ul>
+<li>The median tooth length growth for the orange juice supplement is almost at same level as the third quartile of tooth length growth for ascorbic acid.<br />
+</li>
+<li>There is some evidence which suggests that median tooth length growth for the orange juice supplement is statistically significantly larger than for the ascorbic acid supplement.</li>
+<li>We can use a t-test to test for this:</li>
+</ul>
+<pre class="r"><code># Two-sided t-test
+t.test(oj,vc)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  oj and vc
+## t = 1.9153, df = 55.309, p-value = 0.06063
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.1710156  7.5710156
+## sample estimates:
+## mean of x mean of y 
+##  20.66333  16.96333</code></pre>
+<pre class="r"><code># One-sided t-test
+t.test(oj,vc,&quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  oj and vc
+## t = 1.9153, df = 55.309, p-value = 0.03032
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  0.4682687       Inf
+## sample estimates:
+## mean of x mean of y 
+##  20.66333  16.96333</code></pre>
+<ul>
+<li>From the two-sided t-test (p-value = 0.06), there is some evidence to suggest that the difference in tooth length growth between the two supplement groups is statistically significant.</li>
+<li>From the one-sided t-test (p-value = 0.03), there is evidence to suggest that the mean tooth length growth for guinea pigs with orange juice supplements is statistically significantly greater than the mean tooth length growth for guinea pigs with ascorbic acid supplements.</li>
+<li>Note that the p-value for the one-sided t-test is half the p-value for the two-sided t-test.</li>
+</ul>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

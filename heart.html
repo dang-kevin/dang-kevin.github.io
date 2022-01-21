@@ -343,6 +343,13 @@ div.tocify {
       </a>
     </li>
     <li>
+      <a href="STA238.html">
+        <span class="fa fa-book"></span>
+         
+        STA238 - Winter 2022
+      </a>
+    </li>
+    <li>
       <a href="STA237.html">
         <span class="fa fa-book"></span>
          
@@ -1084,7 +1091,7 @@ theme_set(theme_bw())
 cleveland &lt;- read.csv(&quot;./files/cleveland.txt&quot;, header = F, na.strings = &quot;?&quot;)
 
 data &lt;- cleveland %&gt;%
-  summarize(age = V1, sex = as.factor(V2), cp = as.factor(V3), trestbps = V4, 
+  summarise(age = V1, sex = as.factor(V2), cp = as.factor(V3), trestbps = V4, 
             chol = V5, fbs = as.factor(V6), restecg = as.factor(V7), 
             thalach = V8, exang = as.factor(V9), oldpeak =  V10, 
             slope = as.factor(V11), ca = as.factor(V12), thal = as.factor(V13),

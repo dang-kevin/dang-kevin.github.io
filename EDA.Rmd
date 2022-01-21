@@ -7,6 +7,7 @@ output:
     toc_collapsed: true
 ---
 
+
 This page will contain projects completed using R Markdown. These are examples of exploratory data analysis as the format is unstructured. I highly recommend using it for projects in RStudio, along with the `tidyverse`, a collection of R packages for data science. Here is a useful [tidyverse cheatsheet](https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Tidyverse+Cheat+Sheet.pdf).
 
 # Calibrating a Snow Gauge
@@ -147,7 +148,7 @@ The boxplot shows that older shells contain some outliers, while recent shells h
 ```{r, message=FALSE, warning=FALSE}
 group_means <- crab %>%
   group_by(shell) %>%
-  summarize(group_mean = mean(size),
+  summarise(group_mean = mean(size),
             group_median = median(size),
             group_sd = sd(size),
             group_size = n())

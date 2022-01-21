@@ -9,10 +9,9 @@ output:
 
 
 # Course Description {.unlisted .unnumbered}
-
 An introduction to probability using simulation and mathematical frameworks, with emphasis on the probability needed for more advanced study in statistical practice. Topics covered include probability spaces, random variables, discrete and continuous probability distributions, probability mass, density, and distribution functions, expectation and variance, independence, conditional probability, the law of large numbers, the central limit theorem, sampling distributions. Computer simulation will be taught and used extensively for calculations and to guide the theoretical development.
 
-Solutions and code provided by Professor Selvakkadunko Selvaratnam and modifications were made by myself.
+Course material provided by Professor Selvakkadunko Selvaratnam and modifications were made by myself.
 
 # Tutorial 1
 - [Slides](STA237/Tutorial1_Slides.pdf)

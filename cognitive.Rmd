@@ -82,7 +82,7 @@ In Table \@ref(tab:tab1), there is a noticeable difference in the means of `cont
 # Table 1: Auditory distraction means
 data %>% 
   group_by(distraction) %>% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %>% 
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %>% 
   kable(caption = "Auditory distraction means")
 ```
 
@@ -109,7 +109,7 @@ model_dv <- lme(diff ~ distraction*order + device, random=~1|id,
 # Table 3: Order means
 data %>% 
   group_by(order) %>% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %>%
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %>%
   kable(caption = "Order means")
 ```
 
@@ -118,7 +118,7 @@ data %>%
 # Table 4: Distraction by Order means
 data %>% 
   group_by(distraction, order) %>% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2), count = n()) %>%
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2), count = n()) %>%
   kable(caption = "Distraction by Order means")
 ```
 
@@ -127,7 +127,7 @@ data %>%
 # Table 5: Device type means
 data %>% 
   group_by(device) %>% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %>% 
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %>% 
   kable(caption = "Device type means")
 ```
 

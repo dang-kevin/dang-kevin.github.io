@@ -2,6 +2,7 @@
 title: "Welcome!"
 ---
 
+
 ```{r, echo=FALSE, out.width="25%", out.extra='style="float:left; padding-right:30px"'}
 knitr::include_graphics("files/profile_picture.jpg")
 ```

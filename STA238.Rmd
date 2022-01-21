@@ -1,0 +1,242 @@
+---
+title: "STA238: Probability, Statistics and Data Analysis II"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+---
+
+
+# Course Description {.unlisted .unnumbered}
+An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.
+
+Course material provided by Professor Karen Huynh Wong and modifications were made by myself.
+
+# Tutorial 1
+In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. You are expected to have access to [R + R Studio + LaTeX](https://q.utoronto.ca/courses/253127/pages/getting-started-with-r?module_item_id=3266442) in some capacity by this tutorial, whether it be locally installed or accessed through JupyterHub. 
+
+
+## R Lab Learning Goals
+
+  * Install and load packages in R, use them in an R Markdown file
+  * Simple computations and referring to `?command_name` to find the documentation of various commands
+  * Select elements, columns, or rows from a dataset
+  * Produce simple plots in ggplot with informative and clearly formatted titles + labels
+  * Use LaTeX notation to neatly and correctly display math notation. You can knit this document as you type (which also helps you identify bugs in your code!) to see how the format of the text translates into the finished product, such as creating headers, bold-facing, and math notation!
+  * Knit your document to a finished document that includes written text and properly rendered math notation, with plots and source code separately embedded
+
+Follow the guide as your TA demonstrates these introductory syntax and tools, and use them along with what we covered in this week's synchronous lecture to complete the exercises at the end of this document. 
+
+Some additional resources you may find helpful as you learn is the [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) and the [LaTeX Cheatsheet](http://tug.ctan.org/info/undergradmath/undergradmath.pdf). As you work more in LaTeX, the notation will get easier and become second nature!
+
+
+## 1. Install and Load Packages
+
+R packages are a collection of functions, code, and data sets that are developed by others and can be used to supplement the basic tools in R. R comes with some basic packages, but working with them can be sometimes clunky. You'll begin by learning how to install packages and load packages, and the difference between these two actions!
+
+Begin by installing and loading the `tidyverse` package, which is a collection of R packages. We will use this extensively in our course, as all packages within share similar structure and design, making it a very intuitive and versatile tool to master!
+
+**Note: Never include a package install in your R chunks in an R Markdown file. R will not be able to knit your document! Instead, run it strictly within your console.**
+
+```{r, message=F}
+# Students: What do you think the 'message = F' in the R chunk option does? 
+# Try knitting your document with and without the option
+
+# Can also try `warning = F` to hide warnings
+# echo = F` to run the chunk but hide the code
+
+# install.packages("tidyverse")
+library(tidyverse)
+
+# Use Ctrl + Alt + I shortcut for creating code chunks
+```
+
+## 2. Loading Data and Saving it to an Object
+
+Let's examine some datasets that are already available in R (see `library(help = "datasets")` for a list of datasets in base R), starting with the ToothGrowth dataset. 
+
+```{r}
+# ?ToothGrowth
+
+# Variable Assignment
+dat <- ToothGrowth
+
+# Mostly useful for smaller datasets, but for larger ones we prefer to use glimpse and summary
+# View(dat)
+
+glimpse(dat)
+summary(dat)
+```
+
+## 3. Simple Data Filtration
+
+It looks like there are two groups of data in the `ToothGrowth` data set. What are they? 
+
+What if you only want to study the growth based on one source of vitamin C? How do you go about extracting this information?
+
+```{r, eval=F}
+# After loading and examining your data, and learning about selecting columns or elements
+# from your data set, consider the following two commands below. 
+# Briefly comment below what these two commands do:
+
+# What does
+which(dat$supp == 'VC') #do?
+# Extracts which indices are TRUE
+```
+
+
+```{r, eval=F}
+# What does 
+dat[dat$supp=='VC', 1] #do?
+# extracts the `len` variable/column, where `supp` is 'VC'
+
+# Alternative 1
+# Pipe operator shortcut: Ctrl + Shift + M
+dat %>% 
+  filter(supp == "VC") %>% 
+  select(len)
+
+# Alternative 2
+# This is basically Alternative 1 without the pipe operator
+select(filter(dat, supp == "VC"), len)
+```
+
+
+```{r, eval=F}
+# Below we can also extract the other 2 columns
+dat[dat$supp=='VC', 2]
+dat[dat$supp=='VC', 3]
+
+```
+
+## 4. Formulating a Question
+
+After examining the data set, what are some study questions we can ask? Make some suggestions in the Teams chat!
+
+Below are some questions suggested by students in the chat:
+* Does dosage and length have a positive correlation?
+* Which vitamin contributes to the most growth?
+
+## 5. Calculations in R
+
+Find the (sample) mean and standard deviation of tooth length in the Vitamin C group and again in the group that only received Orange Juice. What can be said based on the numbers computed about the differences between the two groups? 
+
+Do this using the formula, instead of the functions `mean()` or `sd()` to practice using R as a calculator!
+
+```{r}
+# Task for students: try to recreate the mean and variance values through
+# Calculations in R, and compare them with the values you should get through
+# mean() and sd() commands in R
+
+# Create tooth length variable for the vitamin C 
+vc <- dat[dat$supp=='VC', 1]
+
+# take the sum of the tooth length, then divide by the number of values
+n <- length(vc)
+mean.vc <- sum(vc)/n
+mean.vc
+
+# Can also compute using a for loop
+mean.vc2 <- 0
+for (i in 1:n){
+  mean.vc2 <- mean.vc2 + vc[i]/n
+}
+mean.vc2
+
+# Compare to mean() function
+mean(vc)
+
+# Standard deviation
+var.vc <- sum((vc - mean.vc)^2)/(n-1)
+sd.vc <- sqrt(var.vc)
+sd.vc
+
+# Compare to sd() function
+sd(vc)
+```
+
+Below is a repeat of the above but for `OJ` (orange juice):
+
+```{r}
+# Orange Juice
+oj <- dat[dat$supp=='OJ', 1]
+
+# Mean
+n <- length(oj)
+mean.oj <- sum(oj)/n
+mean.oj
+
+# Can also compute using a for loop
+mean.oj2 <- 0
+for (i in 1:n){
+  mean.oj2 <- mean.oj2 + oj[i]/n
+}
+mean.oj2
+
+# Compare to mean()
+mean(oj)
+
+
+# Standard deviation
+var.oj <- sum((oj - mean.oj)^2)/(n-1)
+sd.oj <- sqrt(var.oj)
+sd.oj
+
+# Compare to sd()
+sd(oj)
+```
+
+Trying to type the variance formula in plain-text is not visually appealing, nor helpful in communicating (it's very difficult to read!). The beauty of LaTeX is the format is fairly intuitive, such as `$\frac{numerator}{denominator}$` will render as $\frac{numerator}{denominator}$ (the dollar signs indicate the start and end of the math setting, double-dollar sign will have the math rendered centre to the page). For example, the sample variance can be written as:
+
+$$s^2 = \frac{\sum_{i=1}^n (x_i - \bar{x})^2}{n-1}$$
+Try to write the sample mean in LaTeX and quote the values computed in the R chunk above!
+
+For the mean we can use `\bar{x}_n = \frac{\sum_{i=1}^n x_i}{n}`:
+$$\bar{x}_n = \frac{\sum_{i=1}^n x_i}{n}$$
+
+## 6. Simple Plots 
+
+Numerical summaries can be powerful to provide concrete, numerical evidence to support our claims. Using graphical displays can also communicate clearly in a visual manner the story that our numbers tell, and can sometimes be a more powerful communication tool than numbers because we can *see* the *scale* of differences. Let's use the `ggplot` package in `tidyverse` to produce side-by-side box plots of how tooth length growth differs between the two sources of vitamin C: 
+
+```{r, fig.align='center', fig.dim=c(7, 5)}
+# Focus of this segment: understanding the layering language of ggplot
+# Note also the R chunk options that control the alignment and size of
+# The output figures
+
+dat %>% 
+  ggplot(aes(x = supp, y = len)) +
+  geom_boxplot() + # passing aes(x,y) into here works too!
+  labs(title = "Guinea Pig Tooth Length Growth by Vitamin C Source",
+       subtitle = "ToothGrowth Dataset",
+       x = "Vitamin C Source",
+       y = "Tooth Length Growth") +
+  scale_x_discrete(labels = c("Orange Juice", "Ascorbic Acid")) +
+  theme_bw() # there are many different themes from which to choose!
+```
+
+What can we notice about tooth length growth between the two supplement groups? 
+
+Practice using visual and numeric features to:
+
+  1. Write a conclusion about any perceivable differences between the two sources of vitamin C.
+  2. Provide graphical and numerical features and their <span style="text-decoration:underline">interpretations</span>, explaining how they support your claim(s)!
+
+Here are things that we notice:
+
+* The median tooth length growth for the orange juice supplement is almost at same level as the third quartile of tooth length growth for ascorbic acid.  
+* There is some evidence which suggests that median tooth length growth for the orange juice supplement is statistically significantly larger than for the ascorbic acid supplement.
+* We can use a t-test to test for this:
+
+```{r}
+# Two-sided t-test
+t.test(oj,vc)
+
+# One-sided t-test
+t.test(oj,vc,"greater")
+```
+
+* From the two-sided t-test (p-value = 0.06), there is some evidence to suggest that the difference in tooth length growth between the two supplement groups is statistically significant. 
+* From the one-sided t-test (p-value = 0.03), there is evidence to suggest that the mean tooth length growth for guinea pigs with orange juice supplements is statistically significantly greater than the mean tooth length growth for guinea pigs with ascorbic acid supplements.
+* Note that the p-value for the one-sided t-test is half the p-value for the two-sided t-test.
+

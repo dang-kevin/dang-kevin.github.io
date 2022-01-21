@@ -18,7 +18,7 @@ output:
 * Dealing with missing data
 * Introduce Bayesian methods
 
-Code provided by Professor Kevin Thorpe and modifications were made by myself.
+Course material provided by Professor Kevin Thorpe and modifications were made by myself.
 
 # Tutorial 1
 

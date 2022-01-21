@@ -343,6 +343,13 @@ div.tocify {
       </a>
     </li>
     <li>
+      <a href="STA238.html">
+        <span class="fa fa-book"></span>
+         
+        STA238 - Winter 2022
+      </a>
+    </li>
+    <li>
       <a href="STA237.html">
         <span class="fa fa-book"></span>
          
@@ -711,7 +718,7 @@ ggplot(data=data,aes(x=factor(order),y=diff, fill=distraction)) +
 # Table 1: Auditory distraction means
 data %&gt;% 
   group_by(distraction) %&gt;% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
   kable(caption = &quot;Auditory distraction means&quot;)
 
 # Linear Mixed Model 1
@@ -727,19 +734,19 @@ model_dv &lt;- lme(diff ~ distraction*order + device, random=~1|id,
 # Table 3: Order means
 data %&gt;% 
   group_by(order) %&gt;% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;%
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;%
   kable(caption = &quot;Order means&quot;)
 
 # Table 4: Distraction by Order means
 data %&gt;% 
   group_by(distraction, order) %&gt;% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2), count = n()) %&gt;%
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2), count = n()) %&gt;%
   kable(caption = &quot;Distraction by Order means&quot;)
 
 # Table 5: Device type means
 data %&gt;% 
   group_by(device) %&gt;% 
-  summarize(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
+  summarise(mean.ontime.minus.offtime = round(mean(diff), 2)) %&gt;% 
   kable(caption = &quot;Device type means&quot;)
 
 # Table 6: Linear Mixed Model 2

@@ -12,6 +12,9 @@ navbar:
         - text: "CHL5202 - Winter 2022"
           icon: fa-book
           href: CHL5202.html
+        - text: "STA238 - Winter 2022"
+          icon: fa-book
+          href: STA238.html
         - text: "STA237 - Fall 2021"
           icon: fa-book
           href: STA237.html

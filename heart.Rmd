@@ -60,7 +60,7 @@ theme_set(theme_bw())
 cleveland <- read.csv("./files/cleveland.txt", header = F, na.strings = "?")
 
 data <- cleveland %>%
-  summarize(age = V1, sex = as.factor(V2), cp = as.factor(V3), trestbps = V4, 
+  summarise(age = V1, sex = as.factor(V2), cp = as.factor(V3), trestbps = V4, 
             chol = V5, fbs = as.factor(V6), restecg = as.factor(V7), 
             thalach = V8, exang = as.factor(V9), oldpeak =  V10, 
             slope = as.factor(V11), ca = as.factor(V12), thal = as.factor(V13),
