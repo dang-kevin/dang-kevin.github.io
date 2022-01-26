@@ -13,7 +13,7 @@ An introduction to statistical inference and practice. Statistical models and pa
 
 Course material provided by Professor Karen Huynh Wong and modifications were made by myself.
 
-# Tutorial 1
+# Lab 0
 In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. You are expected to have access to [R + R Studio + LaTeX](https://q.utoronto.ca/courses/253127/pages/getting-started-with-r?module_item_id=3266442) in some capacity by this tutorial, whether it be locally installed or accessed through JupyterHub. 
 
 

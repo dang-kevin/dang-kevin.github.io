@@ -116,7 +116,6 @@ xyplot(e ~ yhat, data = dx1, type = c("p", "smooth"))
 
 
 ## Question 2
-
 Load the data frame FEV from the file FEV.RData. For these data, use the variable fev as the response and the rest as the explanatory covariates.
 
 Fit an additive linear model to fev using the other variables as the covariates. Evaluate whether any of the continuous variables should be fit as non-linear terms. 
@@ -199,7 +198,6 @@ ggplot(Predict(fev.full, height))
 
 
 ## Extra
-
 * `%>%`: pipe operator - very useful for performing multiple data wrangling steps
 * `ggplot2()`: plotting package, included in `rms()` and `tidyverse()`
 
@@ -212,3 +210,63 @@ FEV %>%
   labs(title = "Boxplot of heights by sex")
 ```
 
+
+# Tutorial 2
+
+## Question
+Use the hwy2.RData file available from the course page. After attaching the rms package and doing the usual `datadist()/options()` task, fit the following model:
+
+`fit <- ols(rate~rcs(trks,4)+rcs(sigs1,4)+type+hwy,data=hwy2,x=TRUE,y=TRUE)`
+
+Run both the ordinary bootstrap validation and the .632 bootstrap validation on this model. Use the same number of iterations and seed for both validations (to compare the results). What are your conclusions?
+
+```{r, message=F}
+library(rms)
+
+load("./CHL5202/hwy2.RData")
+
+h.dd <- datadist(hwy2)
+options(datadist="h.dd")
+
+fit <- ols(rate ~ rcs(trks,4) + rcs(sigs1,4) + type + hwy, data=hwy2, x=TRUE, y=TRUE)
+```
+
+
+```{r}
+# Standard bootstrap
+set.seed(321) # Set seed is reproducibility. Choose any number you like.
+validate(fit, B=100)
+
+# .632 bootstrap
+set.seed(321)
+validate(fit, method = ".632", B=100)
+```
+
+Conclusions:
+
+* There is a discrepancy in standard bootstrap vs .632 method -- the standard bootstrap may be overfitting so we use the .632 method to double check the validation results. The .632 bootstrap applies a correction factor to reduce the bias.
+
+* Standard bootstrap may believe the model is less overfit than what it actually is, i.e. low optimism so `index.corrected` is closer to `index.orig`.
+
+* The drop in R-square is very large from validation (went from positive to negative), indicating the original model was very overfit to the point where the relationship inverted.
+
+* Slope change seems to imply an adjusted slope estimate should be around 0.75 of what the original model guessed.
+
+
+## Extra
+Let's investigate the outputs from a simpler model.
+```{r}
+# We remove the restricted cubic splines which may be the main source of overfitting
+fit2 <- ols(rate ~ trks + sigs1 + type + hwy, data=hwy2, x=TRUE, y=TRUE)
+
+set.seed(321)
+validate(fit2, B=100)
+set.seed(321)
+validate(fit2, method = ".632", B=100)
+```
+
+* For the .632 bootstrap, the magnitude of the optimism for all 5 values is smaller than in the saturated model which showed overfitting.
+
+* Hard to say whether this model is still overfitting but it is certainly an improvement.
+
+* The R-square term in particular shows a major improvement, as the test R-square is positive rather than negative like previously shown.
