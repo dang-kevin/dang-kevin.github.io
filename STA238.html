@@ -434,7 +434,7 @@ div.tocify {
 </div>
 <div id="lab-0" class="section level1">
 <h1>Lab 0</h1>
-<p>In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. You are expected to have access to <a href="https://q.utoronto.ca/courses/253127/pages/getting-started-with-r?module_item_id=3266442">R + R Studio + LaTeX</a> in some capacity by this tutorial, whether it be locally installed or accessed through JupyterHub.</p>
+<p>In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs.</p>
 <div id="r-lab-learning-goals" class="section level2">
 <h2>R Lab Learning Goals</h2>
 <ul>
@@ -445,7 +445,6 @@ div.tocify {
 <li>Use LaTeX notation to neatly and correctly display math notation. You can knit this document as you type (which also helps you identify bugs in your code!) to see how the format of the text translates into the finished product, such as creating headers, bold-facing, and math notation!</li>
 <li>Knit your document to a finished document that includes written text and properly rendered math notation, with plots and source code separately embedded</li>
 </ul>
-<p>Follow the guide as your TA demonstrates these introductory syntax and tools, and use them along with what we covered in this week’s synchronous lecture to complete the exercises at the end of this document.</p>
 <p>Some additional resources you may find helpful as you learn is the <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">R Markdown Cheatsheet</a> and the <a href="http://tug.ctan.org/info/undergradmath/undergradmath.pdf">LaTeX Cheatsheet</a>. As you work more in LaTeX, the notation will get easier and become second nature!</p>
 </div>
 <div id="install-and-load-packages" class="section level2">
@@ -616,7 +615,7 @@ dat %&gt;%
 <li>The median tooth length growth for the orange juice supplement is almost at same level as the third quartile of tooth length growth for ascorbic acid.<br />
 </li>
 <li>There is some evidence which suggests that median tooth length growth for the orange juice supplement is statistically significantly larger than for the ascorbic acid supplement.</li>
-<li>We can use a t-test to test for this:</li>
+<li>We can use a t-test to test for the difference in means between two groups. This is just a quick example but make sure to check the assumptions before proceeding!</li>
 </ul>
 <pre class="r"><code># Two-sided t-test
 t.test(oj,vc)</code></pre>
@@ -648,6 +647,276 @@ t.test(oj,vc,&quot;greater&quot;)</code></pre>
 <li>From the two-sided t-test (p-value = 0.06), there is some evidence to suggest that the difference in tooth length growth between the two supplement groups is statistically significant.</li>
 <li>From the one-sided t-test (p-value = 0.03), there is evidence to suggest that the mean tooth length growth for guinea pigs with orange juice supplements is statistically significantly greater than the mean tooth length growth for guinea pigs with ascorbic acid supplements.</li>
 <li>Note that the p-value for the one-sided t-test is half the p-value for the two-sided t-test.</li>
+</ul>
+</div>
+</div>
+<div id="lab-1" class="section level1">
+<h1>Lab 1</h1>
+<p>In this R Lab, you will be guided by the TA to demonstrate the steps involved in performing an exploratory data analysis.</p>
+<div id="r-lab-learning-goals-1" class="section level2">
+<h2>R Lab Learning Goals</h2>
+<ul>
+<li>Load data from a local csv file</li>
+<li>Formulate a question for EDA</li>
+<li>Examine and pre-process your data using functions from the <code>tidyverse</code> package</li>
+<li>Use the <code>lubridate</code> package for manipulating dates</li>
+<li>Produce numerical summaries using the <code>summarize</code> function</li>
+<li>Produce plots in ggplot to explore your EDA question</li>
+</ul>
+<pre class="r"><code># Load Required Packages
+library(tidyverse)
+library(lubridate)
+
+# Set work directory
+setwd(&quot;~/GitHub/dang-kevin.github.io/STA238&quot;)
+
+# Read in Data
+weather &lt;- read.csv(&quot;weatherstats_vancouver_daily.csv&quot;)
+
+# Using file.choose() allows you to manually select the file you want
+# weather &lt;- read.csv(file.choose())
+
+# Quick overview of the data
+glimpse(weather)</code></pre>
+<pre><code>## Rows: 1,000
+## Columns: 71
+## $ X                             &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1~
+## $ date                          &lt;chr&gt; &quot;2022-01-16&quot;, &quot;2022-01-15&quot;, &quot;2022-01-14&quot;~
+## $ max_temperature               &lt;dbl&gt; 6.3, 7.0, 9.8, 11.1, 11.5, 10.0, 8.5, 6.~
+## $ avg_hourly_temperature        &lt;dbl&gt; 5.29, 5.66, 6.94, 7.56, 9.87, 8.97, 4.78~
+## $ avg_temperature               &lt;dbl&gt; 5.55, 5.15, 7.45, 7.50, 10.19, 8.35, 3.5~
+## $ min_temperature               &lt;dbl&gt; 4.8, 3.3, 5.1, 3.9, 8.9, 6.7, -1.4, -1.5~
+## $ max_humidex                   &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ min_windchill                 &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, -2, -5, NA, ~
+## $ max_relative_humidity         &lt;int&gt; 100, 100, 99, 99, 99, 99, 99, 99, 96, 99~
+## $ avg_hourly_relative_humidity  &lt;dbl&gt; 99.0, 99.2, 95.7, 94.8, 96.8, 96.3, 93.4~
+## $ avg_relative_humidity         &lt;dbl&gt; NA, 99.0, 93.0, 93.0, 94.5, 95.5, 91.5, ~
+## $ min_relative_humidity         &lt;int&gt; 97, 98, 87, 87, 90, 92, 84, 84, 62, 58, ~
+## $ max_dew_point                 &lt;dbl&gt; 6.1, 6.5, 7.4, 8.5, 10.2, 9.4, 6.9, 3.6,~
+## $ avg_hourly_dew_point          &lt;dbl&gt; 5.1, 5.6, 6.3, 6.7, 9.4, 8.4, 3.8, 1.6, ~
+## $ avg_dew_point                 &lt;dbl&gt; 5.3, 4.8, 6.3, 6.2, 9.2, 8.1, 3.4, 1.6, ~
+## $ min_dew_point                 &lt;dbl&gt; 4.6, 3.1, 5.3, 4.0, 8.2, 6.8, -0.1, -0.5~
+## $ max_wind_speed                &lt;int&gt; 11, 13, 14, 16, 23, 28, 28, 15, 24, 61, ~
+## $ avg_hourly_wind_speed         &lt;dbl&gt; 4.96, 6.21, 7.67, 8.58, 15.88, 20.58, 15~
+## $ avg_wind_speed                &lt;dbl&gt; 6.0, 8.0, 8.0, 9.0, 14.5, 21.0, 15.0, 8.~
+## $ min_wind_speed                &lt;int&gt; 1, 3, 2, 2, 6, 14, 2, 1, 5, 7, 4, 7, 2, ~
+## $ max_wind_gust                 &lt;int&gt; NA, NA, NA, NA, 38, 41, 38, NA, 32, 83, ~
+## $ wind_gust_dir_10s             &lt;int&gt; NA, NA, NA, NA, 9, 10, 7, NA, 7, 29, 10,~
+## $ max_pressure_sea              &lt;dbl&gt; 102.76, 102.90, 103.29, 103.06, 101.97, ~
+## $ avg_hourly_pressure_sea       &lt;dbl&gt; 102.34, 102.82, 103.10, 102.30, 101.77, ~
+## $ avg_pressure_sea              &lt;dbl&gt; 102.35, 102.81, 103.06, 102.37, 101.81, ~
+## $ min_pressure_sea              &lt;dbl&gt; 101.94, 102.71, 102.83, 101.68, 101.64, ~
+## $ max_pressure_station          &lt;dbl&gt; 102.71, 102.85, 103.24, 103.01, 101.92, ~
+## $ avg_hourly_pressure_station   &lt;dbl&gt; 102.29, 102.77, 103.05, 102.25, 101.72, ~
+## $ avg_pressure_station          &lt;dbl&gt; 102.30, 102.76, 103.01, 102.32, 101.75, ~
+## $ min_pressure_station          &lt;dbl&gt; 101.89, 102.66, 102.78, 101.63, 101.59, ~
+## $ max_visibility                &lt;int&gt; 16100, 24100, 48300, 48300, 32200, 32200~
+## $ avg_hourly_visibility         &lt;dbl&gt; 6950.0, 10870.8, 31570.8, 34525.0, 17116~
+## $ avg_visibility                &lt;int&gt; 8350, 12150, 33800, 36200, 19300, 18500,~
+## $ min_visibility                &lt;int&gt; 600, 200, 19300, 24100, 6400, 4800, 1290~
+## $ max_health_index              &lt;dbl&gt; 2.0, 2.2, 1.8, 2.3, 2.4, 2.3, 2.8, 3.0, ~
+## $ avg_hourly_health_index       &lt;dbl&gt; 1.3, 1.5, 1.3, 1.7, 1.7, 1.8, 2.1, 2.0, ~
+## $ avg_health_index              &lt;dbl&gt; 1.5, 1.6, 1.4, 1.6, 1.8, 1.8, 2.2, 2.2, ~
+## $ min_health_index              &lt;dbl&gt; 1.0, 1.0, 1.0, 1.0, 1.2, 1.3, 1.7, 1.5, ~
+## $ heatdegdays                   &lt;dbl&gt; 12.4, 12.8, 10.6, 10.5, 7.8, 9.7, 14.4, ~
+## $ cooldegdays                   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+## $ growdegdays_5                 &lt;dbl&gt; 0.6, 0.2, 2.5, 2.5, 5.2, 3.4, 0.0, 0.0, ~
+## $ growdegdays_7                 &lt;dbl&gt; 0.0, 0.0, 0.4, 0.5, 3.2, 1.4, 0.0, 0.0, ~
+## $ growdegdays_10                &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0, ~
+## $ precipitation                 &lt;dbl&gt; 0.0, 0.2, 0.0, 0.2, 29.3, 17.7, 4.6, 0.0~
+## $ rain                          &lt;dbl&gt; NA, 0.2, 0.0, 0.2, 29.3, 17.7, 4.6, 0.0,~
+## $ snow                          &lt;dbl&gt; NA, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0~
+## $ snow_on_ground                &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, 2, 1~
+## $ sunrise                       &lt;chr&gt; &quot;08:01:00&quot;, &quot;08:02:00&quot;, &quot;08:03:00&quot;, &quot;08:~
+## $ sunset                        &lt;chr&gt; &quot;16:43:00&quot;, &quot;16:42:00&quot;, &quot;16:40:00&quot;, &quot;16:~
+## $ daylight                      &lt;dbl&gt; 8.70, 8.67, 8.62, 8.58, 8.57, 8.52, 8.50~
+## $ sunrise_f                     &lt;dbl&gt; 8.02, 8.03, 8.05, 8.07, 8.07, 8.08, 8.08~
+## $ sunset_f                      &lt;dbl&gt; 16.72, 16.70, 16.67, 16.65, 16.63, 16.60~
+## $ min_uv_forecast               &lt;int&gt; 1, NA, 1, 1, NA, NA, NA, 1, NA, 1, NA, N~
+## $ max_uv_forecast               &lt;int&gt; 1, NA, 1, 1, NA, NA, NA, 1, NA, 1, NA, N~
+## $ min_high_temperature_forecast &lt;int&gt; 7, 7, 9, 9, 10, 10, 8, 6, 2, 3, 3, 2, 3,~
+## $ max_high_temperature_forecast &lt;int&gt; 7, 8, 9, 10, 10, 10, 8, 6, 3, 3, 3, 2, 4~
+## $ min_low_temperature_forecast  &lt;int&gt; 4, 5, 6, 6, 9, 6, 7, 0, 2, -1, 4, -2, -2~
+## $ max_low_temperature_forecast  &lt;int&gt; 4, 5, 6, 6, 9, 9, 8, 0, 4, -1, 4, 0, -2,~
+## $ solar_radiation               &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ max_cloud_cover_4             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ avg_hourly_cloud_cover_4      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ avg_cloud_cover_4             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ min_cloud_cover_4             &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ max_cloud_cover_8             &lt;int&gt; 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8~
+## $ avg_hourly_cloud_cover_8      &lt;dbl&gt; 6.7, 6.3, 8.0, 6.2, 7.9, 8.0, 6.9, 2.6, ~
+## $ avg_cloud_cover_8             &lt;dbl&gt; 5.0, 4.5, 8.0, 4.5, 7.5, 8.0, 4.0, 4.0, ~
+## $ min_cloud_cover_8             &lt;int&gt; 2, 1, 8, 1, 7, 8, 0, 0, 6, 1, 5, 2, 3, 6~
+## $ max_cloud_cover_10            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ avg_hourly_cloud_cover_10     &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ avg_cloud_cover_10            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ min_cloud_cover_10            &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~</code></pre>
+<p>Note that since this data is from a csv file, functions like <code>?weather</code> will not provide us with information about the data set. For the purposes of this lab, we assume that the variable names are sufficiently informative to intuit their contents. In practice, however, information about the data and its variables can be found in a documentation file that is usually available from the source of the data.</p>
+</div>
+<div id="formulating-questions-for-eda" class="section level2">
+<h2>1. Formulating questions for EDA</h2>
+<p>Our goal during exploratory data analysis (EDA) is to develop an understanding of our data. Real data is complicated, often containing missing data and irregular formatting.</p>
+<p>In this lab, we will demonstrate this process with the question: <strong>“What is the monthly total rainfall in Vancouver over 2021?”</strong></p>
+</div>
+<div id="checking-the-rain-variable" class="section level2">
+<h2>2. Checking the <code>rain</code> variable</h2>
+<p>The variable <code>rain</code> contains the daily rainfall measured in millimeters. Our first task is to check for any missing data. We could do this using the base R commands from Lab 0, but the code gets messy for complicated manipulations. Instead, we will use the pipe operator <code>%&gt;%</code> from the <code>tidyverse</code> package along with some data processing functions. The pipe operator <code>%&gt;%</code> allows us to take the output from one function and “pipe it in” to the argument of the next function. You will find that data manipulations using the pipe operator are much more readable than the equivalents in base R!</p>
+<pre class="r"><code># Examples of pipe operator
+
+#1. Pulling the first 5 rows of data containing date, rain, and average dew point
+
+# Tidyverse way
+weather %&gt;% 
+  select(date, rain, avg_dew_point) %&gt;%
+  head(5)</code></pre>
+<pre><code>##         date rain avg_dew_point
+## 1 2022-01-16   NA           5.3
+## 2 2022-01-15  0.2           4.8
+## 3 2022-01-14  0.0           6.3
+## 4 2022-01-13  0.2           6.2
+## 5 2022-01-12 29.3           9.2</code></pre>
+<pre class="r"><code># base R way
+head(weather[c(&quot;date&quot;, &quot;rain&quot;,&quot;avg_dew_point&quot;)], 5)</code></pre>
+<pre><code>##         date rain avg_dew_point
+## 1 2022-01-16   NA           5.3
+## 2 2022-01-15  0.2           4.8
+## 3 2022-01-14  0.0           6.3
+## 4 2022-01-13  0.2           6.2
+## 5 2022-01-12 29.3           9.2</code></pre>
+<pre class="r"><code># head(weather[, c(&quot;date&quot;, &quot;rain&quot;,&quot;avg_dew_point&quot;)], 5)
+
+#2. Adding new columns of data to the existing weather data:
+
+# Tidyverse way
+weather &lt;- weather %&gt;% 
+  mutate(new_variable_1 = 1.5 * avg_hourly_temperature,
+         new_variable_2 = rain + 10)
+
+# base R way
+weather$new_variable_1 &lt;- 1.5 * weather$avg_hourly_temperature
+weather$new_variable_2 &lt;- weather$rain + 10</code></pre>
+<p>First we will check which dates have missing rainfall data:</p>
+<pre class="r"><code># Base R way
+weather$date[is.na(weather$rain)]</code></pre>
+<pre><code>##  [1] &quot;2022-01-16&quot; &quot;2022-01-05&quot; &quot;2021-12-30&quot; &quot;2020-12-08&quot; &quot;2020-12-07&quot;
+##  [6] &quot;2020-12-06&quot; &quot;2020-12-05&quot; &quot;2020-12-04&quot; &quot;2020-12-03&quot; &quot;2020-12-02&quot;
+## [11] &quot;2020-12-01&quot;</code></pre>
+<pre class="r"><code># Tidyverse way
+weather %&gt;% 
+  filter(is.na(rain)) %&gt;% 
+  # can also use select(date)
+  pull(date)</code></pre>
+<pre><code>##  [1] &quot;2022-01-16&quot; &quot;2022-01-05&quot; &quot;2021-12-30&quot; &quot;2020-12-08&quot; &quot;2020-12-07&quot;
+##  [6] &quot;2020-12-06&quot; &quot;2020-12-05&quot; &quot;2020-12-04&quot; &quot;2020-12-03&quot; &quot;2020-12-02&quot;
+## [11] &quot;2020-12-01&quot;</code></pre>
+<pre class="r"><code># To show the days that DO NOT have missing rain values, add &#39;!&#39; in front of is.na()
+# e.g. weather$date[!is.na(weather$rain)]</code></pre>
+<p>We see that there is one missing value of rainfall in the year 2021. This might be a cause for concern if this was a day with particularly high rainfall. Unfortunately, we do not know if this was the case. The best we can do in these situations is to tell the reader that what is missing from our data so that they are aware of the limitations of our analysis.</p>
+</div>
+<div id="formatting-the-date-variable" class="section level2">
+<h2>3. Formatting the <code>date</code> variable</h2>
+<p>Since we are concerned with total monthly rainfall, our next task is to convert the <code>date</code> variable into a form that is amenable to analysis. First we examine the format <code>date</code>:</p>
+<pre class="r"><code># str() compactly displays the structure of an object
+# Good alternative to glimpse()
+str(weather$date)</code></pre>
+<pre><code>##  chr [1:1000] &quot;2022-01-16&quot; &quot;2022-01-15&quot; &quot;2022-01-14&quot; &quot;2022-01-13&quot; ...</code></pre>
+<p>We find that each entry of <code>date</code> is a character vector of the form “YYYY-MM-DD”. To prepare this data for use in <code>lubridate</code>, we convert <code>date</code> from a character vector to a datetime object.</p>
+<pre class="r"><code># First we convert date to a datetime object
+# To explain format, look at `?strptime`
+
+# The base R way
+weather$date &lt;- as.Date(weather$date, format = &quot;%Y-%m-%d&quot;)
+
+# The tidyverse way using mutate()
+# Make sure to reassign the dataset to ensure that the mutation step is saved
+weather &lt;- weather %&gt;% 
+  mutate(date = as.Date(date, format = &quot;%Y-%m-%d&quot;))</code></pre>
+<p>Now that we have a datetime object, we can use functions from <code>lubridate</code> to easily convert <code>date</code> into many useful quantities. We use the functions <code>year</code>, <code>month</code>, and <code>day</code> to define the corresponding variables in our data</p>
+<pre class="r"><code>######################################################################
+###  NOTE: There is an &#39;eval=F&#39; in the R Chunk Option! Make sure to ##
+###        delete this before knitting!!                            ##
+######################################################################
+
+# Demonstrate some lubridate functions
+
+# Extract weekday as character
+weekdays(weather$date) %&gt;% str()</code></pre>
+<pre><code>##  chr [1:1000] &quot;Sunday&quot; &quot;Saturday&quot; &quot;Friday&quot; &quot;Thursday&quot; &quot;Wednesday&quot; &quot;Tuesday&quot; ...</code></pre>
+<pre class="r"><code># Extract month as integer
+lubridate::month(weather$date) %&gt;% str()</code></pre>
+<pre><code>##  num [1:1000] 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code># Extract month as ordered factor
+month(weather$date, label = TRUE) %&gt;% str()</code></pre>
+<pre><code>##  Ord.factor w/ 12 levels &quot;Jan&quot;&lt;&quot;Feb&quot;&lt;&quot;Mar&quot;&lt;..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code># Extract the year as integer
+year(weather$date) %&gt;% str()</code></pre>
+<pre><code>##  num [1:1000] 2022 2022 2022 2022 2022 ...</code></pre>
+<pre class="r"><code># summarizing the pieces above
+# Create the year, month, and day variables
+weather &lt;- weather %&gt;%
+  mutate(year = year(date),
+         month = month(date, label = TRUE),
+         day = day(date))</code></pre>
+</div>
+<div id="filtering-and-summarizing-the-data" class="section level2">
+<h2>4. Filtering and summarizing the data</h2>
+<p>Now that we have examined and processed our data, we can start to answer our original question: “What is the monthly total rainfall in Vancouver over 2021?” To begin, we might use <code>filter</code> and <code>select</code> to inspect our data</p>
+<pre class="r"><code>weather %&gt;% 
+  filter(year == 2021) %&gt;% 
+  select(year, month, day, rain) %&gt;% 
+  head(10)</code></pre>
+<pre><code>##    year month day rain
+## 1  2021   Dec  31  0.0
+## 2  2021   Dec  30   NA
+## 3  2021   Dec  29  0.0
+## 4  2021   Dec  28  0.0
+## 5  2021   Dec  27  0.0
+## 6  2021   Dec  26  0.0
+## 7  2021   Dec  25  0.0
+## 8  2021   Dec  24  5.1
+## 9  2021   Dec  23  2.4
+## 10 2021   Dec  22  3.4</code></pre>
+<p>This output, however, is not as helpful as a numerical summary of the data. The function <code>group_by</code> and <code>summarize</code> provide a useful method for summarizing the data. First we choose a variable(s) to group by and then we define the numerical summaries we wish to compute. For example, we might be interested in the mean and the maximum rainfall each month.</p>
+<pre class="r"><code># Assign to new dataframe to use for plotting
+df &lt;- weather %&gt;% 
+  filter(year == 2021) %&gt;% 
+  group_by(month) %&gt;% 
+  summarise(rain_tot = sum(rain, na.rm = T),
+            rain_max = max(rain, na.rm = T))
+
+df</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##    month rain_tot rain_max
+##    &lt;ord&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Jan      176.      29.5
+##  2 Feb       75       19.2
+##  3 Mar       34        6  
+##  4 Apr       38       13.5
+##  5 May       30.2      8.2
+##  6 Jun       37.2     12.5
+##  7 Jul        0        0  
+##  8 Aug       36.7     22.1
+##  9 Sep      155       50.9
+## 10 Oct      148.      43.3
+## 11 Nov      312.      52.5
+## 12 Dec       93.5     31.3</code></pre>
+<p>These numerical summaries may be useful in some contexts, but a graph is generally better for examining these summaries. Thankfully, the results of the summary can easily be piped into ggplot to make such graphs!</p>
+<pre class="r"><code>df %&gt;% 
+  ggplot(aes(x = month, y = rain_tot)) +
+  geom_col(fill = &quot;skyblue&quot;) +
+  labs(title = &quot;Total monthly rainfall, Vancouver 2021&quot;,
+       x = &quot;Month&quot;,
+       y = &quot;Total rainfall (mm)&quot;) +
+  # Alternative labelling method instead of labs()
+  # ggtitle(&quot;Total monthly rainfall, Vancouver 2021&quot;) +
+  # xlab(&quot;Month&quot;) +
+  # ylab(&quot;Total rainfall (mm)&quot;) +
+  theme_bw()</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+<p>Some quick observations:</p>
+<ul>
+<li>No rainfall in July.</li>
+<li>A lot of rain in November!</li>
 </ul>
 </div>
 </div>

@@ -9,12 +9,14 @@ output:
 
 
 # Course Description {.unlisted .unnumbered}
+
 An introduction to statistical inference and practice. Statistical models and parameters, estimators of parameters and their statistical properties, methods of estimation, confidence intervals, hypothesis testing, likelihood function, the linear model. Use of statistical computation for data analysis and simulation.
 
 Course material provided by Professor Karen Huynh Wong and modifications were made by myself.
 
 # Lab 0
-In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. You are expected to have access to [R + R Studio + LaTeX](https://q.utoronto.ca/courses/253127/pages/getting-started-with-r?module_item_id=3266442) in some capacity by this tutorial, whether it be locally installed or accessed through JupyterHub. 
+
+In this R Lab, you will be guided by your TA to familiarize yourself with the R environment, using and formatting in R Markdown, and producing well-organized outputs. 
 
 
 ## R Lab Learning Goals
@@ -25,8 +27,6 @@ In this R Lab, you will be guided by your TA to familiarize yourself with the R 
   * Produce simple plots in ggplot with informative and clearly formatted titles + labels
   * Use LaTeX notation to neatly and correctly display math notation. You can knit this document as you type (which also helps you identify bugs in your code!) to see how the format of the text translates into the finished product, such as creating headers, bold-facing, and math notation!
   * Knit your document to a finished document that includes written text and properly rendered math notation, with plots and source code separately embedded
-
-Follow the guide as your TA demonstrates these introductory syntax and tools, and use them along with what we covered in this week's synchronous lecture to complete the exercises at the end of this document. 
 
 Some additional resources you may find helpful as you learn is the [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) and the [LaTeX Cheatsheet](http://tug.ctan.org/info/undergradmath/undergradmath.pdf). As you work more in LaTeX, the notation will get easier and become second nature!
 
@@ -226,7 +226,7 @@ Here are things that we notice:
 
 * The median tooth length growth for the orange juice supplement is almost at same level as the third quartile of tooth length growth for ascorbic acid.  
 * There is some evidence which suggests that median tooth length growth for the orange juice supplement is statistically significantly larger than for the ascorbic acid supplement.
-* We can use a t-test to test for this:
+* We can use a t-test to test for the difference in means between two groups. This is just a quick example but make sure to check the assumptions before proceeding!
 
 ```{r}
 # Two-sided t-test
@@ -240,3 +240,188 @@ t.test(oj,vc,"greater")
 * From the one-sided t-test (p-value = 0.03), there is evidence to suggest that the mean tooth length growth for guinea pigs with orange juice supplements is statistically significantly greater than the mean tooth length growth for guinea pigs with ascorbic acid supplements.
 * Note that the p-value for the one-sided t-test is half the p-value for the two-sided t-test.
 
+
+# Lab 1
+In this R Lab, you will be guided by the TA to demonstrate the steps involved in performing an exploratory data analysis.
+
+
+## R Lab Learning Goals
+
+  * Load data from a local csv file
+  * Formulate a question for EDA
+  * Examine and pre-process your data using functions from the `tidyverse` package
+  * Use the `lubridate` package for manipulating dates
+  * Produce numerical summaries using the `summarize` function
+  * Produce plots in ggplot to explore your EDA question
+
+
+```{r, message=F, warning=F}
+# Load Required Packages
+library(tidyverse)
+library(lubridate)
+
+# Set work directory
+setwd("~/GitHub/dang-kevin.github.io/STA238")
+
+# Read in Data
+weather <- read.csv("weatherstats_vancouver_daily.csv")
+
+# Using file.choose() allows you to manually select the file you want
+# weather <- read.csv(file.choose())
+
+# Quick overview of the data
+glimpse(weather)
+```
+
+Note that since this data is from a csv file, functions like `?weather` will not provide us with information about the data set. For the purposes of this lab, we assume that the variable names are sufficiently informative to intuit their contents. In practice, however, information about the data and its variables can be found in a documentation file that is usually available from the source of the data.
+
+## 1. Formulating questions for EDA
+
+Our goal during exploratory data analysis (EDA) is to develop an understanding of our data. Real data is complicated, often containing missing data and irregular formatting.
+
+In this lab, we will demonstrate this process with the question:
+**"What is the monthly total rainfall in Vancouver over 2021?"**
+
+## 2. Checking the `rain` variable
+
+The variable `rain` contains the daily rainfall measured in millimeters. Our first task is to check for any missing data. We could do this using the base R commands from Lab 0, but the code gets messy for complicated manipulations. Instead, we will use the pipe operator `%>%` from the `tidyverse` package along with some data processing functions. The pipe operator `%>%` allows us to take the output from one function and "pipe it in" to the argument of the next function. You will find that data manipulations using the pipe operator are much more readable than the equivalents in base R!
+
+```{r}
+# Examples of pipe operator
+
+#1. Pulling the first 5 rows of data containing date, rain, and average dew point
+
+# Tidyverse way
+weather %>% 
+  select(date, rain, avg_dew_point) %>%
+  head(5)
+
+# base R way
+head(weather[c("date", "rain","avg_dew_point")], 5)
+# head(weather[, c("date", "rain","avg_dew_point")], 5)
+
+#2. Adding new columns of data to the existing weather data:
+
+# Tidyverse way
+weather <- weather %>% 
+  mutate(new_variable_1 = 1.5 * avg_hourly_temperature,
+         new_variable_2 = rain + 10)
+
+# base R way
+weather$new_variable_1 <- 1.5 * weather$avg_hourly_temperature
+weather$new_variable_2 <- weather$rain + 10
+```
+
+First we will check which dates have missing rainfall data:
+```{r}
+# Base R way
+weather$date[is.na(weather$rain)]
+
+# Tidyverse way
+weather %>% 
+  filter(is.na(rain)) %>% 
+  # can also use select(date)
+  pull(date)
+
+# To show the days that DO NOT have missing rain values, add '!' in front of is.na()
+# e.g. weather$date[!is.na(weather$rain)]
+```
+
+We see that there is one missing value of rainfall in the year 2021. This might be a cause for concern if this was a day with particularly high rainfall. Unfortunately, we do not know if this was the case. The best we can do in these situations is to tell the reader that what is missing from our data so that they are aware of the limitations of our analysis.
+
+## 3. Formatting the `date` variable
+
+Since we are concerned with total monthly rainfall, our next task is to convert the `date` variable into a form that is amenable to analysis. First we examine the format `date`:
+
+```{r}
+# str() compactly displays the structure of an object
+# Good alternative to glimpse()
+str(weather$date)
+```
+
+We find that each entry of `date` is a character vector of the form "YYYY-MM-DD". To prepare this data for use in `lubridate`, we convert `date` from a character vector to a datetime object. 
+
+```{r}
+# First we convert date to a datetime object
+# To explain format, look at `?strptime`
+
+# The base R way
+weather$date <- as.Date(weather$date, format = "%Y-%m-%d")
+
+# The tidyverse way using mutate()
+# Make sure to reassign the dataset to ensure that the mutation step is saved
+weather <- weather %>% 
+  mutate(date = as.Date(date, format = "%Y-%m-%d"))
+```
+
+Now that we have a datetime object, we can use functions from `lubridate` to easily convert `date` into many useful quantities. We use the functions `year`, `month`, and `day` to define the corresponding variables in our data
+
+```{r}
+######################################################################
+###  NOTE: There is an 'eval=F' in the R Chunk Option! Make sure to ##
+###        delete this before knitting!!                            ##
+######################################################################
+
+# Demonstrate some lubridate functions
+
+# Extract weekday as character
+weekdays(weather$date) %>% str()
+# Extract month as integer
+lubridate::month(weather$date) %>% str()
+# Extract month as ordered factor
+month(weather$date, label = TRUE) %>% str()
+# Extract the year as integer
+year(weather$date) %>% str()
+
+# summarizing the pieces above
+# Create the year, month, and day variables
+weather <- weather %>%
+  mutate(year = year(date),
+         month = month(date, label = TRUE),
+         day = day(date))
+```
+
+## 4. Filtering and summarizing the data
+
+Now that we have examined and processed our data, we can start to answer our original question: "What is the monthly total rainfall in Vancouver over 2021?" To begin, we might use `filter` and `select` to inspect our data
+
+```{r}
+weather %>% 
+  filter(year == 2021) %>% 
+  select(year, month, day, rain) %>% 
+  head(10)
+```
+
+This output, however, is not as helpful as a numerical summary of the data. The function `group_by` and `summarize` provide a useful method for summarizing the data. First we choose a variable(s) to group by and then we define the numerical summaries we wish to compute. For example, we might be interested in the mean and the maximum rainfall each month.
+
+```{r}
+# Assign to new dataframe to use for plotting
+df <- weather %>% 
+  filter(year == 2021) %>% 
+  group_by(month) %>% 
+  summarise(rain_tot = sum(rain, na.rm = T),
+            rain_max = max(rain, na.rm = T))
+
+df
+```
+
+These numerical summaries may be useful in some contexts, but a graph is generally better for examining these summaries. Thankfully, the results of the summary can easily be piped into ggplot to make such graphs!
+
+```{r, fig.width=8, fig.height=5}
+df %>% 
+  ggplot(aes(x = month, y = rain_tot)) +
+  geom_col(fill = "skyblue") +
+  labs(title = "Total monthly rainfall, Vancouver 2021",
+       x = "Month",
+       y = "Total rainfall (mm)") +
+  # Alternative labelling method instead of labs()
+  # ggtitle("Total monthly rainfall, Vancouver 2021") +
+  # xlab("Month") +
+  # ylab("Total rainfall (mm)") +
+  theme_bw()
+```
+
+Some quick observations:
+
+  * No rainfall in July.
+  * A lot of rain in November! 
