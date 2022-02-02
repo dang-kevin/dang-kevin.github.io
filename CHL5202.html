@@ -749,8 +749,8 @@ FEV %&gt;%
 </div>
 <div id="tutorial-2" class="section level1">
 <h1>Tutorial 2</h1>
-<div id="question" class="section level2">
-<h2>Question</h2>
+<div id="question-1-1" class="section level2">
+<h2>Question 1</h2>
 <p>Use the hwy2.RData file available from the course page. After attaching the rms package and doing the usual <code>datadist()/options()</code> task, fit the following model:</p>
 <p><code>fit &lt;- ols(rate~rcs(trks,4)+rcs(sigs1,4)+type+hwy,data=hwy2,x=TRUE,y=TRUE)</code></p>
 <p>Run both the ordinary bootstrap validation and the .632 bootstrap validation on this model. Use the same number of iterations and seed for both validations (to compare the results). What are your conclusions?</p>
@@ -822,6 +822,85 @@ validate(fit2, method = &quot;.632&quot;, B=100)</code></pre>
 <li><p>For the .632 bootstrap, the magnitude of the optimism for all 5 values is smaller than in the saturated model which showed overfitting.</p></li>
 <li><p>Hard to say whether this model is still overfitting but it is certainly an improvement.</p></li>
 <li><p>The R-square term in particular shows a major improvement, as the test R-square is positive rather than negative like previously shown.</p></li>
+</ul>
+</div>
+</div>
+<div id="tutorial-3" class="section level1">
+<h1>Tutorial 3</h1>
+<div id="question-1-2" class="section level2">
+<h2>Question 1</h2>
+<p>Load the data from <code>tutdata</code> from the file <code>tutdata.RData</code> posted on the course page. Fit an additive model where <code>y</code> is the outcome and the predictors are <code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and <code>cholesterol</code> but they should use a restricted cubic spline with four knots for cholesterol.</p>
+<pre class="r"><code>library(rms)
+load(&quot;./CHL5202/tutdata.RData&quot;)
+
+dd &lt;- datadist(tutdata)
+options(datadist=&quot;dd&quot;)
+
+fit &lt;- lrm(y ~ blood.pressure + sex + age + rcs(cholesterol,4), data = tutdata)</code></pre>
+</div>
+<div id="question-2-1" class="section level2">
+<h2>Question 2</h2>
+<p>Which “variables” are significant at the 5% level?</p>
+<pre class="r"><code>anova(fit)</code></pre>
+<pre><code>##                 Wald Statistics          Response: y 
+## 
+##  Factor         Chi-Square d.f. P     
+##  blood.pressure  0.33      1    0.5640
+##  sex            13.45      1    0.0002
+##  age            25.58      1    &lt;.0001
+##  cholesterol     1.27      3    0.7368
+##   Nonlinear      0.78      2    0.6758
+##  TOTAL          38.63      6    &lt;.0001</code></pre>
+<ul>
+<li>At the 5% significance level, <code>sex</code> and <code>age</code> are statistically significant with p-values of 0.0002 and &lt; 0.0001 respectively.</li>
+</ul>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<p>Display the cholesterol effect.</p>
+<pre class="r"><code># log odds
+plot(Predict(fit,cholesterol))</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<pre class="r"><code># probability
+plot(Predict(fit,cholesterol,fun=plogis), ylab=&quot;Probability&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-27-2.png" width="672" /></p>
+<pre class="r"><code># odds
+plot(Predict(fit,cholesterol,fun=exp), ylab=&quot;Odds&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-27-3.png" width="672" /></p>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>Describe the effect of sex.</p>
+<pre class="r"><code>summary(fit)</code></pre>
+<pre><code>##              Effects              Response : y 
+## 
+##  Factor            Low     High    Diff.  Effect    S.E.     Lower 0.95
+##  blood.pressure    109.580 130.580 20.991 -0.052121 0.090347 -0.22920  
+##   Odds Ratio       109.580 130.580 20.991  0.949210       NA  0.79517  
+##  age                43.531  56.677 13.146  0.438050 0.086609  0.26830  
+##   Odds Ratio        43.531  56.677 13.146  1.549700       NA  1.30770  
+##  cholesterol       183.730 216.530 32.796  0.194330 0.174400 -0.14748  
+##   Odds Ratio       183.730 216.530 32.796  1.214500       NA  0.86288  
+##  sex - male:female   1.000   2.000     NA  0.477030 0.130050  0.22213  
+##   Odds Ratio         1.000   2.000     NA  1.611300       NA  1.24870  
+##  Upper 0.95
+##  0.12496   
+##  1.13310   
+##  0.60780   
+##  1.83640   
+##  0.53615   
+##  1.70940   
+##  0.73192   
+##  2.07910</code></pre>
+<ul>
+<li>The odds of the outcome <code>y</code> for males is 1.61 times the odds for females (with 95% CI [1.25,2.08]) controlled for blood pressure, age and cholesterol.</li>
+</ul>
+</div>
+<div id="extra-2" class="section level2">
+<h2>Extra</h2>
+<ul>
+<li>Interpreting odds ratios for continuous variables: for every one unit increase in the continuous variable, the odds of the outcome multiply by <span class="math inline">\(\exp(\beta)\)</span>, where <span class="math inline">\(\beta\)</span> represents the log-odds ratio.</li>
+<li>E.g. referring to Question 4 output: for every one year increase in age, the odds of the outcome multiply by 1.55. Alternatively, it might be more intuitive to say that the odds of the outcome increases by 55%.</li>
 </ul>
 </div>
 </div>

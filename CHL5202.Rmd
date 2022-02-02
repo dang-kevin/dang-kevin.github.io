@@ -213,7 +213,7 @@ FEV %>%
 
 # Tutorial 2
 
-## Question
+## Question 1
 Use the hwy2.RData file available from the course page. After attaching the rms package and doing the usual `datadist()/options()` task, fit the following model:
 
 `fit <- ols(rate~rcs(trks,4)+rcs(sigs1,4)+type+hwy,data=hwy2,x=TRUE,y=TRUE)`
@@ -270,3 +270,59 @@ validate(fit2, method = ".632", B=100)
 * Hard to say whether this model is still overfitting but it is certainly an improvement.
 
 * The R-square term in particular shows a major improvement, as the test R-square is positive rather than negative like previously shown.
+
+
+# Tutorial 3
+
+## Question 1
+Load the data from `tutdata` from the file `tutdata.RData` posted on the course page. Fit an additive model where `y` is the outcome and the predictors are `blood.pressure`, `sex`, `age`, and `cholesterol` but they should use a restricted cubic spline with four knots for cholesterol.
+
+```{r, message=F}
+library(rms)
+load("./CHL5202/tutdata.RData")
+
+dd <- datadist(tutdata)
+options(datadist="dd")
+
+fit <- lrm(y ~ blood.pressure + sex + age + rcs(cholesterol,4), data = tutdata)
+```
+
+
+## Question 2
+Which "variables" are significant at the 5% level?
+
+```{r}
+anova(fit)
+```
+
+* At the 5% significance level, `sex` and `age` are statistically significant with p-values of 0.0002 and < 0.0001 respectively.
+
+
+## Question 3
+Display the cholesterol effect.
+
+```{r}
+# log odds
+plot(Predict(fit,cholesterol))
+
+# probability
+plot(Predict(fit,cholesterol,fun=plogis), ylab="Probability")
+
+# odds
+plot(Predict(fit,cholesterol,fun=exp), ylab="Odds")
+```
+
+
+## Question 4
+Describe the effect of sex.
+
+```{r}
+summary(fit)
+```
+
+* The odds of the outcome `y` for males is 1.61 times the odds for females (with 95% CI [1.25,2.08]) controlled for blood pressure, age and cholesterol.
+
+
+## Extra
+* Interpreting odds ratios for continuous variables: for every one unit increase in the continuous variable, the odds of the outcome multiply by $\exp(\beta)$, where $\beta$ represents the log-odds ratio.
+* E.g. referring to Question 4 output: for every one year increase in age, the odds of the outcome multiply by 1.55. Alternatively, it might be more intuitive to say that the odds of the outcome increases by 55%.
