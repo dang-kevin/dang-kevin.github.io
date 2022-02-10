@@ -326,3 +326,96 @@ summary(fit)
 ## Extra
 * Interpreting odds ratios for continuous variables: for every one unit increase in the continuous variable, the odds of the outcome multiply by $\exp(\beta)$, where $\beta$ represents the log-odds ratio.
 * E.g. referring to Question 4 output: for every one year increase in age, the odds of the outcome multiply by 1.55. Alternatively, it might be more intuitive to say that the odds of the outcome increases by 55%.
+
+
+# Tutorial 4
+
+## Question 1
+Use the data from last week (`tutdata.RData`) and re-fit the model from last week which was an additive model where `y` is the outcome and the predictors are `blood.pressure`, `sex`, `age`, and `cholesterol` except this time use a restricted cubic spline with four knots for `cholesterol`. Re-run the anova also.
+
+```{r, message=F}
+library(rms)
+load("./CHL5202/tutdata.RData")
+
+dd <- datadist(tutdata)
+options(datadist="dd")
+
+fit1 <- lrm(y ~ blood.pressure + sex + age + rcs(cholesterol,4), data = tutdata)
+anova(fit1)
+```
+
+
+## Question 2
+Fit a model as above only this time, add interactions between sex and age as well as sex and the RCS for cholesterol and run anova() on this model.
+
+```{r}
+fit2 <- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata)
+anova(fit2)
+```
+
+* All interactions with sex are statistically significant.
+
+## Question 3
+Compare the two models with a likelihood ratio test. What does it show?
+
+```{r}
+lrtest(fit1,fit2)
+```
+
+* We are testing the null hypothesis that all of the coefficients for the interaction terms are equal to 0. 
+* Degrees of freedom (df): 10 df (more complicated model) minus 6 df (simpler model) equals 4 df.
+* With the extremely small p-value from the likelihood ratio test, we reject the null hypothesis and conclude that at least one of the coefficients is not equal to 0.
+* This p-value is equivalent to the p-value for `TOTAL INTERACTION` in the `anova(fit2)` output as this is what we are testing.
+
+
+## Question 4
+Describe the sex/age and sex/cholesterol relationships with outcome.
+
+```{r}
+plot(Predict(fit2,age,sex))
+plot(Predict(fit2,cholesterol,sex))
+```
+
+* We can use the non-overlapping confidence intervals to specify statistical significance. If this is too complicated we can also discuss the points where the lines cross. This is an open ended question.
+* At ages below 50, the log odds of the outcome is statistically significantly higher for males compared to females. From ages 50 to 70, the log odds is still higher for males but the confidence intervals overlap so the difference is not as significant.
+* For cholesterol levels below 150, the log odds of the outcome is statistically significantly higher for females compared to males. The opposite is true in cholesterol levels from 190 to 200, and above 220. There is a bit of overlap in confidence intervals between the 200-220 range.
+
+```{r}
+# Fancy way of combining the plots together but is harder to interpret
+bplot(Predict(fit2,cholesterol,age,sex,np=20),lfun=wireframe,drape=TRUE)
+```
+
+## Extra
+
+* Below we are fitting a third model with an interaction term between sex and the other 3 variables, including blood pressure.
+```{r}
+fit3 <- lrm(y ~ sex * (blood.pressure + age + rcs(cholesterol,4)), data = tutdata)
+# Alternate way
+#lrm(y ~ sex + blood.pressure + age + rcs(cholesterol,4) + sex:blood.pressure + sex:age + sex:rcs(cholesterol,4), data = tutdata)
+
+anova(fit3)
+```
+
+* The total interaction from the anova output is still statistically significant as it takes into account all interactions. 
+* We can also test for it below as follows:
+
+```{r}
+lrtest(fit1,fit3)
+```
+
+* The sex and blood pressure interaction term from the anova output is not significant (p=0.494). 
+* This is equivalent to the p-value from the likelihood ratio test below:
+
+```{r}
+lrtest(fit2,fit3)
+```
+
+* Let's try to plot the sex/blood pressure relationship:
+
+```{r}
+plot(Predict(fit3,blood.pressure,sex))
+```
+
+* At a first glance we do not see the lines meet like they do in the sex/age and sex/cholesterol interactions. The confidence intervals also overlap for the most part, except in the 115-130 range. 
+* Personally, I would avoid using this as a standalone method to check for a significant interaction, you should use either the anova function call or the likelihood ratio test.
+

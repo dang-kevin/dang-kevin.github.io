@@ -904,6 +904,154 @@ plot(Predict(fit,cholesterol,fun=exp), ylab=&quot;Odds&quot;)</code></pre>
 </ul>
 </div>
 </div>
+<div id="tutorial-4" class="section level1">
+<h1>Tutorial 4</h1>
+<div id="question-1-3" class="section level2">
+<h2>Question 1</h2>
+<p>Use the data from last week (<code>tutdata.RData</code>) and re-fit the model from last week which was an additive model where <code>y</code> is the outcome and the predictors are <code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and <code>cholesterol</code> except this time use a restricted cubic spline with four knots for <code>cholesterol</code>. Re-run the anova also.</p>
+<pre class="r"><code>library(rms)
+load(&quot;./CHL5202/tutdata.RData&quot;)
+
+dd &lt;- datadist(tutdata)
+options(datadist=&quot;dd&quot;)
+
+fit1 &lt;- lrm(y ~ blood.pressure + sex + age + rcs(cholesterol,4), data = tutdata)
+anova(fit1)</code></pre>
+<pre><code>##                 Wald Statistics          Response: y 
+## 
+##  Factor         Chi-Square d.f. P     
+##  blood.pressure  0.33      1    0.5640
+##  sex            13.45      1    0.0002
+##  age            25.58      1    &lt;.0001
+##  cholesterol     1.27      3    0.7368
+##   Nonlinear      0.78      2    0.6758
+##  TOTAL          38.63      6    &lt;.0001</code></pre>
+</div>
+<div id="question-2-2" class="section level2">
+<h2>Question 2</h2>
+<p>Fit a model as above only this time, add interactions between sex and age as well as sex and the RCS for cholesterol and run anova() on this model.</p>
+<pre class="r"><code>fit2 &lt;- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata)
+anova(fit2)</code></pre>
+<pre><code>##                 Wald Statistics          Response: y 
+## 
+##  Factor                                           Chi-Square d.f. P     
+##  blood.pressure                                    0.26       1   0.6105
+##  sex  (Factor+Higher Order Factors)               38.71       5   &lt;.0001
+##   All Interactions                                26.13       4   &lt;.0001
+##  age  (Factor+Higher Order Factors)               30.42       2   &lt;.0001
+##   All Interactions                                 3.86       1   0.0495
+##  cholesterol  (Factor+Higher Order Factors)       23.78       6   0.0006
+##   All Interactions                                22.47       3   0.0001
+##   Nonlinear (Factor+Higher Order Factors)          5.33       4   0.2550
+##  sex * age  (Factor+Higher Order Factors)          3.86       1   0.0495
+##  sex * cholesterol  (Factor+Higher Order Factors) 22.47       3   0.0001
+##   Nonlinear                                        4.79       2   0.0911
+##   Nonlinear Interaction : f(A,B) vs. AB            4.79       2   0.0911
+##  TOTAL NONLINEAR                                   5.33       4   0.2550
+##  TOTAL INTERACTION                                26.13       4   &lt;.0001
+##  TOTAL NONLINEAR + INTERACTION                    26.81       6   0.0002
+##  TOTAL                                            62.26      10   &lt;.0001</code></pre>
+<ul>
+<li>All interactions with sex are statistically significant.</li>
+</ul>
+</div>
+<div id="question-3-1" class="section level2">
+<h2>Question 3</h2>
+<p>Compare the two models with a likelihood ratio test. What does it show?</p>
+<pre class="r"><code>lrtest(fit1,fit2)</code></pre>
+<pre><code>## 
+## Model 1: y ~ blood.pressure + sex + age + rcs(cholesterol, 4)
+## Model 2: y ~ blood.pressure + sex * (age + rcs(cholesterol, 4))
+## 
+##   L.R. Chisq         d.f.            P 
+## 2.831616e+01 4.000000e+00 1.076137e-05</code></pre>
+<ul>
+<li>We are testing the null hypothesis that all of the coefficients for the interaction terms are equal to 0.</li>
+<li>Degrees of freedom (df): 10 df (more complicated model) minus 6 df (simpler model) equals 4 df.</li>
+<li>With the extremely small p-value from the likelihood ratio test, we reject the null hypothesis and conclude that at least one of the coefficients is not equal to 0.</li>
+<li>This p-value is equivalent to the p-value for <code>TOTAL INTERACTION</code> in the <code>anova(fit2)</code> output as this is what we are testing.</li>
+</ul>
+</div>
+<div id="question-4-1" class="section level2">
+<h2>Question 4</h2>
+<p>Describe the sex/age and sex/cholesterol relationships with outcome.</p>
+<pre class="r"><code>plot(Predict(fit2,age,sex))</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<pre class="r"><code>plot(Predict(fit2,cholesterol,sex))</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-32-2.png" width="672" /></p>
+<ul>
+<li>We can use the non-overlapping confidence intervals to specify statistical significance. If this is too complicated we can also discuss the points where the lines cross. This is an open ended question.</li>
+<li>At ages below 50, the log odds of the outcome is statistically significantly higher for males compared to females. From ages 50 to 70, the log odds is still higher for males but the confidence intervals overlap so the difference is not as significant.</li>
+<li>For cholesterol levels below 150, the log odds of the outcome is statistically significantly higher for females compared to males. The opposite is true in cholesterol levels from 190 to 200, and above 220. There is a bit of overlap in confidence intervals between the 200-220 range.</li>
+</ul>
+<pre class="r"><code># Fancy way of combining the plots together but is harder to interpret
+bplot(Predict(fit2,cholesterol,age,sex,np=20),lfun=wireframe,drape=TRUE)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div id="extra-3" class="section level2">
+<h2>Extra</h2>
+<ul>
+<li>Below we are fitting a third model with an interaction term between sex and the other 3 variables, including blood pressure.</li>
+</ul>
+<pre class="r"><code>fit3 &lt;- lrm(y ~ sex * (blood.pressure + age + rcs(cholesterol,4)), data = tutdata)
+# Alternate way
+#lrm(y ~ sex + blood.pressure + age + rcs(cholesterol,4) + sex:blood.pressure + sex:age + sex:rcs(cholesterol,4), data = tutdata)
+
+anova(fit3)</code></pre>
+<pre><code>##                 Wald Statistics          Response: y 
+## 
+##  Factor                                              Chi-Square d.f. P     
+##  sex  (Factor+Higher Order Factors)                  39.12       6   &lt;.0001
+##   All Interactions                                   26.58       5   0.0001
+##  blood.pressure  (Factor+Higher Order Factors)        0.73       2   0.6954
+##   All Interactions                                    0.47       1   0.4940
+##  age  (Factor+Higher Order Factors)                  30.58       2   &lt;.0001
+##   All Interactions                                    3.94       1   0.0471
+##  cholesterol  (Factor+Higher Order Factors)          23.96       6   0.0005
+##   All Interactions                                   22.59       3   &lt;.0001
+##   Nonlinear (Factor+Higher Order Factors)             5.24       4   0.2634
+##  sex * blood.pressure  (Factor+Higher Order Factors)  0.47       1   0.4940
+##  sex * age  (Factor+Higher Order Factors)             3.94       1   0.0471
+##  sex * cholesterol  (Factor+Higher Order Factors)    22.59       3   &lt;.0001
+##   Nonlinear                                           4.67       2   0.0966
+##   Nonlinear Interaction : f(A,B) vs. AB               4.67       2   0.0966
+##  TOTAL NONLINEAR                                      5.24       4   0.2634
+##  TOTAL INTERACTION                                   26.58       5   0.0001
+##  TOTAL NONLINEAR + INTERACTION                       27.25       7   0.0003
+##  TOTAL                                               62.64      11   &lt;.0001</code></pre>
+<ul>
+<li>The total interaction from the anova output is still statistically significant as it takes into account all interactions.</li>
+<li>We can also test for it below as follows:</li>
+</ul>
+<pre class="r"><code>lrtest(fit1,fit3)</code></pre>
+<pre><code>## 
+## Model 1: y ~ blood.pressure + sex + age + rcs(cholesterol, 4)
+## Model 2: y ~ sex * (blood.pressure + age + rcs(cholesterol, 4))
+## 
+##   L.R. Chisq         d.f.            P 
+## 2.878410e+01 5.000000e+00 2.556193e-05</code></pre>
+<ul>
+<li>The sex and blood pressure interaction term from the anova output is not significant (p=0.494).</li>
+<li>This is equivalent to the p-value from the likelihood ratio test below:</li>
+</ul>
+<pre class="r"><code>lrtest(fit2,fit3)</code></pre>
+<pre><code>## 
+## Model 1: y ~ blood.pressure + sex * (age + rcs(cholesterol, 4))
+## Model 2: y ~ sex * (blood.pressure + age + rcs(cholesterol, 4))
+## 
+## L.R. Chisq       d.f.          P 
+##  0.4679391  1.0000000  0.4939368</code></pre>
+<ul>
+<li>Let’s try to plot the sex/blood pressure relationship:</li>
+</ul>
+<pre class="r"><code>plot(Predict(fit3,blood.pressure,sex))</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<ul>
+<li>At a first glance we do not see the lines meet like they do in the sex/age and sex/cholesterol interactions. The confidence intervals also overlap for the most part, except in the 115-130 range.</li>
+<li>Personally, I would avoid using this as a standalone method to check for a significant interaction, you should use either the anova function call or the likelihood ratio test.</li>
+</ul>
+</div>
+</div>
 
 
 
