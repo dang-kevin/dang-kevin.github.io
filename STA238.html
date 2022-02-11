@@ -920,6 +920,176 @@ df</code></pre>
 </ul>
 </div>
 </div>
+<div id="lab-2" class="section level1">
+<h1>Lab 2</h1>
+<p>In this R Lab, you will be guided by the TA to demonstrate the steps involved in estimator analysis.</p>
+<div id="r-lab-learning-goals-2" class="section level2">
+<h2>R Lab Learning Goals</h2>
+<ul>
+<li>Review and implement the inverse CDF method</li>
+<li>Compute a point estimate for an estimator on a sample</li>
+<li>Perform a simulation study to investigate the sampling distribution of an estimator</li>
+<li>Learn about R’s <code>apply</code> functions for looping</li>
+<li>Use the package <code>gridExtra</code> and the function <code>grid.arrange</code> to combine plots, and <code>latex2exp</code> to include relevant details in plot labels</li>
+</ul>
+</div>
+<div id="motivation" class="section level2">
+<h2>0. Motivation</h2>
+<p>In our work we often find ourselves simulating data from a probability distributions. R provides built-in functions to simulate from the most common distributions (e.g. <code>rnorm</code>, <code>rbinom</code>, etc. ), but we sometimes need to sample from a distribution that is not included in base R.</p>
+<p>Fortunately, the inverse CDF method provides an all-purpose method for simulating from continuous probability densities, and in the next section we will demonstrate how it can be used to sample from an arbitrary continuous density provided we know the CDF and its inverse.</p>
+</div>
+<div id="the-inverse-cdf-method" class="section level2">
+<h2>1. The inverse CDF method</h2>
+<p>Suppose <span class="math inline">\(X\)</span> is a continuous random variable with distribution function <span class="math inline">\(F\)</span>. A realization of <span class="math inline">\(X\)</span> can be simulated as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Simulate a uniform random variable <span class="math inline">\(U\sim \text{Uniform(0,1)}\)</span></li>
+<li>Assign <span class="math inline">\(X = F^{-1}(U)\)</span></li>
+</ol>
+<p>To demonstrate this method, consider the following unusual density function, <span class="math display">\[\begin{equation*}
+f(x; \alpha) = 
+\begin{cases}
+\frac{\alpha}{\alpha - 1} \frac{1}{x^2}, &amp; 1 &lt; x \leq \alpha,\\
+0 &amp; \text{otherwise} 
+\end{cases}
+\end{equation*}\]</span> This density is definitely not included in R, so its a perfect opportunity to use the inverse CDF method!</p>
+<div id="mathematical-expressions" class="section level3">
+<h3>Mathematical expressions</h3>
+<p>The first step will be to find the distribution function <span class="math inline">\(F\)</span>. By integration we find that <span class="math display">\[\begin{equation*}
+F(x) = 
+\begin{cases}
+0 &amp; x \leq 1 \\
+\frac{\alpha}{\alpha - 1}\left(1 - \frac{1}{x}\right) &amp; 1 &lt; x \leq \alpha \\
+1 &amp; \alpha &lt; x.
+\end{cases}
+\end{equation*}\]</span> Next we find the inverse CDF by setting <span class="math inline">\(u = F(x)\)</span>, <span class="math inline">\((u \in [0,1])\)</span>, and solving for <span class="math inline">\(x\)</span>: <span class="math display">\[\begin{equation*}
+F^{-1}(u) =  \left[1 - \frac{\alpha - 1}{\alpha}u\right]^{-1}, \quad (u \in [0,1]).
+\end{equation*}\]</span></p>
+</div>
+<div id="implementing-method" class="section level3">
+<h3>Implementing Method</h3>
+<p>With these expressions we can now program a function <code>rdens</code> to sample from the linear density <span class="math inline">\(f\)</span> using the inverse CDF method.</p>
+<pre class="r"><code># Define the inverse CDF
+F_inv &lt;- function(u, a){
+  (1-((a-1)/a)*u)^(-1)
+}
+
+# Define a function that performs the sampling
+rdens &lt;- function(n,a){
+  u &lt;- runif(n) # u &lt;- runif(n = n, min = 0, max = 1)
+  x &lt;- F_inv(u, a)
+  return(x)
+}</code></pre>
+<p>It is important to verify that our function <code>rdens</code> behaves as expected. To check our function, we’ll plot a few samples of size <span class="math inline">\(n = 5000\)</span> from the function to make sure the density looks correct.</p>
+<pre class="r"><code>library(tidyverse)
+library(latex2exp)
+
+# Plot the result
+data.frame(x = rdens(n = 5000, a = 10)) %&gt;%
+  ggplot(aes(x = x, y = ..density..)) +
+  geom_histogram(binwidth = 0.2, center = 0.1) + 
+  ggtitle(label = TeX(r&#39;(A sample from $f(x)$)&#39;), 
+          subtitle = TeX(r&#39;($n = 5000, \alpha = 10$)&#39;)) +
+  theme_bw()</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="constructing-an-estimator" class="section level2">
+<h2>2. Constructing an Estimator</h2>
+<p>Now that we can sample from our distribution, we might be interested in the behaviour of certain estimators. Suppose we wish to estimate the parameter <span class="math inline">\(\alpha\)</span> using a sample from the distribution. Since <span class="math inline">\(\alpha\)</span> controls the width of the distribution, we might try estimating it using the maximum value of our sample. By the expression for the density, we define our estimator to be <span class="math display">\[
+\hat \alpha = \max(X_1,...,X_n)
+\]</span> It is easy to compute this estimate for each sample we generate using <code>rdens</code>. All that is needed is to evaluate <code>max</code> on each sample. For generalizability, we will write a wrapper function <code>get_ahat</code>.</p>
+<pre class="r"><code># Write wrapper function
+get_ahat &lt;- function(x){max(x)}
+
+# Evaluate the estimator on a sample
+ahat &lt;- get_ahat(rdens(n = 100, a = 10))
+cat(ahat)</code></pre>
+<pre><code>## 9.026881</code></pre>
+<p>By re-running the above chunk we see that there is substantial variation in the results and the estimates never quite reach the true value of <span class="math inline">\(10\)</span>. Thus it appears that our estimator is biased downwards, however it is not easy to calculate this bias due to the form of the estimator. In these cases, we typically turn to simulation methods to examine the estimator.</p>
+</div>
+<div id="bias-of-the-estimator" class="section level2">
+<h2>3. Bias of the Estimator</h2>
+<p>In this section, we will construct a simulation study to estimate the bias of the estimator when the sample size is <span class="math inline">\(n = 100\)</span> and the true value of the parameter is <span class="math inline">\(\alpha = 10\)</span>. To do this, we will simulate 1000 independent samples of size 100 from the density and compute the estimate on each of the samples. From this we will obtain a sample from the sampling distribution of the estimator, which we can then use to estimate the bias and other quantities.</p>
+<pre class="r"><code># Simulate 1000 datasets of size 100
+sim &lt;- replicate(n = 1000, rdens(n = 100, a = 10))
+str(sim)</code></pre>
+<pre><code>##  num [1:100, 1:1000] 2.99 5.65 2.9 1.74 1.32 ...</code></pre>
+<pre class="r"><code># For each sample (each column), compute the statistic
+ahat &lt;- apply(sim, MARGIN = 2, FUN = get_ahat)
+str(ahat)</code></pre>
+<pre><code>##  num [1:1000] 9.69 9.55 9.25 9.48 7.4 ...</code></pre>
+<p>Now that we have a sample of size <span class="math inline">\(1000\)</span> from the sampling distribution of <span class="math inline">\(\hat\alpha\)</span>, we plot it to learn more about the distribution</p>
+<pre class="r"><code># Plot the sampling distribution of the estimator
+data.frame(ahat) %&gt;%
+  ggplot(aes(x = ahat, y = ..density..)) +
+  geom_histogram(binwidth = 0.2, center = 0.1) +
+  ggtitle(
+    label = TeX(r&#39;(Sampling distribution for $\hat{\alpha}$)&#39;),
+    subtitle = TeX(r&#39;($n = 100, \alpha = 10$, (1000 replications))&#39;)) +
+  xlab(TeX(r&#39;($\hat{\alpha}$)&#39;)) +
+  theme_bw()</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From the above sampling distribution, we get a better idea of its sampling variation, bias, as well as any skewness of the distribution which is difficult to determine from numeric summaries alone. To get a more precise estimate of the bias, we simply compute the mean of the sampling distribution and subtract it from the true value <span class="math inline">\(\alpha = 10\)</span>.</p>
+<pre class="r"><code># Estimated bias of the estimator
+bias &lt;- mean(ahat) - 10
+cat(bias)</code></pre>
+<pre><code>## -0.729879</code></pre>
+<pre class="r"><code># 95% credible interval
+ci &lt;- quantile(ahat, probs = c(0.025, 0.975))
+cat(ci)</code></pre>
+<pre><code>## 7.567039 9.980255</code></pre>
+</div>
+<div id="consistency-of-the-estimator" class="section level2">
+<h2>4. Consistency of the Estimator</h2>
+<p>A natural question once we have an estimator is whether or not it is consistent, that is, as the sample size increases does the estimator converge in probability to the true value. Once again, this is typically difficult to prove analytically, so we might satisfy ourselves by examining the behaviour of the estimator via a simulation study. To do this, we simulate the sampling distribution of the estimator for sample sizes of <span class="math inline">\(n = 50\)</span>, <span class="math inline">\(100\)</span>, <span class="math inline">\(500\)</span>, and <span class="math inline">\(1000\)</span> and plot the distributions.</p>
+<pre class="r"><code># Function for simulations
+sim_study &lt;- function(B, n, a){
+  # Simulate B samples of size n
+  sim &lt;- replicate(n = B, rdens(n = n, a = a))
+  ahat &lt;- apply(sim, MARGIN = 2, FUN = get_ahat)
+  
+  # Compute bias
+  bias &lt;- mean(ahat) - a
+  
+  # Plot
+  fig &lt;- data.frame(ahat) %&gt;%
+  ggplot(aes(x = ahat, y = ..density..)) +
+  geom_histogram(binwidth = 0.2, center = 0.1) +
+  scale_x_continuous(limits = c(5,10)) +
+  ggtitle(paste0(&quot;n =&quot;, n)) +
+  xlab(TeX(r&#39;($\hat{\alpha}$)&#39;)) +
+  theme_bw()
+  
+  return(list(fig = fig, bias = bias))
+}
+
+# Set parameters of simulation study
+a &lt;- 10
+B &lt;- 1000
+n &lt;- c(50, 100, 500, 1000)
+
+# Set seed for reproducibility
+set.seed(324)
+
+# Run simulation for each value in n
+result &lt;- lapply(n, function(n) sim_study(B = B, n = n, a = a))
+names(result) &lt;- paste0(&quot;n_&quot;, n)</code></pre>
+<pre class="r"><code># Plot all four plots on a grid using grid.arrange
+library(gridExtra)
+grid.arrange(result$n_50$fig,
+             result$n_100$fig,
+             result$n_500$fig,
+             result$n_1000$fig)</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From the above plots, what can you say about the estimator as the sample size increases? Does it appear consistent? Is the bias shrinking? How else does the distribution change?</p>
+<p>We can also see our numeric estimates of the bias as follows:</p>
+<pre class="r"><code># Print the bias in a data.frame
+bias &lt;- lapply(result, function(x) x$bias) %&gt;% as.data.frame()
+bias</code></pre>
+<pre><code>##        n_50      n_100      n_500      n_1000
+## 1 -1.311561 -0.7815966 -0.1703174 -0.09099329</code></pre>
+</div>
+</div>
 
 
 
