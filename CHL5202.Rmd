@@ -419,3 +419,70 @@ plot(Predict(fit3,blood.pressure,sex))
 * At a first glance we do not see the lines meet like they do in the sex/age and sex/cholesterol interactions. The confidence intervals also overlap for the most part, except in the 115-130 range. 
 * Personally, I would avoid using this as a standalone method to check for a significant interaction, you should use either the anova function call or the likelihood ratio test.
 
+
+# Tutorial 5
+
+## Question 1
+Using the data from the last few tutorials, fit the following model.
+
+`fit <- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata, x=TRUE, y=TRUE)`
+
+```{r, message=F}
+library(rms)
+load("./CHL5202/tutdata.RData")
+
+dd <- datadist(tutdata)
+options(datadist = "dd")
+```
+
+
+```{r}
+fit <- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol, 4)), data = tutdata, 
+           x = TRUE, y = TRUE)
+fit
+```
+
+
+## Question 2
+Validate the model using the bootstrap with 100 replications and comment on the overfitting.
+
+```{r}
+set.seed(123)
+validate(fit, B = 100)
+```
+
+* There is mild evidence of overfitting.
+* $D_{xy}$ and Brier score (`B`) do not change much at all.
+* Slope parameter indicates a need to shrink by about 12% to calibrate
+
+
+## Question 3
+Investigate influential observations and partial residual plots.
+
+```{r}
+dff <- resid(fit, "dffits")
+plot(dff)
+```
+
+* The DFFITS statistic indicate the effect that deleting each observation has on the predicted values of the model.
+* Some use $|\text{DFFITS}| > 2\sqrt{\frac{p+1}{n-p-1}}$ to indicate an influential observation.
+
+```{r}
+show.influence(which.influence(fit), data.frame(tutdata, dffits = dff), report = c("dffits"))
+```
+
+* Using `which.influence()` gives the indices of influential observations, which are listed in the first column of the dataframe above.
+* The variables with significant DFBETA are marked with an asterisk. Note that all of these observations have significant DFFITS.
+* The DFBETAS are statistics that indicate the effect that deleting each observation has on the estimates for the regression coefficients.
+* For DFBETAS one can use $|\text{DFBETAS}| > u$ for a given cutoff, the default is 0.2.
+
+Below we investigate partial residual plots which can be used to verify the functional form of continuous covariates. 
+```{r}
+# Option below saves the following plots to a pdf file
+# pdf("resid_plots.pdf")
+
+resid(fit, "partial", pl = "loess")
+```
+
+* There is very little evidence of non-linearity in most of these plots, i.e. there is not much value in including a non-linear component for these variables.
+

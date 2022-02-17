@@ -1052,6 +1052,106 @@ anova(fit3)</code></pre>
 </ul>
 </div>
 </div>
+<div id="tutorial-5" class="section level1">
+<h1>Tutorial 5</h1>
+<div id="question-1-4" class="section level2">
+<h2>Question 1</h2>
+<p>Using the data from the last few tutorials, fit the following model.</p>
+<p><code>fit &lt;- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata, x=TRUE, y=TRUE)</code></p>
+<pre class="r"><code>library(rms)
+load(&quot;./CHL5202/tutdata.RData&quot;)
+
+dd &lt;- datadist(tutdata)
+options(datadist = &quot;dd&quot;)</code></pre>
+<pre class="r"><code>fit &lt;- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol, 4)), data = tutdata, 
+           x = TRUE, y = TRUE)
+fit</code></pre>
+<pre><code>## Logistic Regression Model
+##  
+##  lrm(formula = y ~ blood.pressure + sex * (age + rcs(cholesterol, 
+##      4)), data = tutdata, x = TRUE, y = TRUE)
+##  
+##                         Model Likelihood    Discrimination    Rank Discrim.    
+##                               Ratio Test           Indexes          Indexes    
+##  Obs          1000    LR chi2      69.39    R2       0.090    C       0.642    
+##   0            460    d.f.            10    g        0.623    Dxy     0.283    
+##   1            540    Pr(&gt; chi2) &lt;0.0001    gr       1.865    gamma   0.283    
+##  max |deriv| 1e-08                          gp       0.146    tau-a   0.141    
+##                                             Brier    0.232                     
+##  
+##                           Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  Intercept                 3.2474 2.3426  1.39  0.1657  
+##  blood.pressure           -0.0022 0.0044 -0.51  0.6105  
+##  sex=male                 -9.3612 3.5422 -2.64  0.0082  
+##  age                       0.0474 0.0094  5.06  &lt;0.0001 
+##  cholesterol              -0.0308 0.0133 -2.31  0.0209  
+##  cholesterol&#39;              0.0738 0.0376  1.96  0.0499  
+##  cholesterol&#39;&#39;            -0.3072 0.1552 -1.98  0.0477  
+##  sex=male * age           -0.0263 0.0134 -1.96  0.0495  
+##  sex=male * cholesterol    0.0620 0.0203  3.06  0.0022  
+##  sex=male * cholesterol&#39;  -0.1241 0.0569 -2.18  0.0293  
+##  sex=male * cholesterol&#39;&#39;  0.5116 0.2362  2.17  0.0303  
+## </code></pre>
+</div>
+<div id="question-2-3" class="section level2">
+<h2>Question 2</h2>
+<p>Validate the model using the bootstrap with 100 replications and comment on the overfitting.</p>
+<pre class="r"><code>set.seed(123)
+validate(fit, B = 100)</code></pre>
+<pre><code>##           index.orig training   test optimism index.corrected   n
+## Dxy           0.2832   0.3025 0.2685   0.0340          0.2493 100
+## R2            0.0896   0.1024 0.0792   0.0232          0.0664 100
+## Intercept     0.0000   0.0000 0.0108  -0.0108          0.0108 100
+## Slope         1.0000   1.0000 0.8768   0.1232          0.8768 100
+## Emax          0.0000   0.0000 0.0311   0.0311          0.0311 100
+## D             0.0684   0.0788 0.0601   0.0187          0.0496 100
+## U            -0.0020  -0.0020 0.0013  -0.0033          0.0013 100
+## Q             0.0704   0.0808 0.0588   0.0220          0.0484 100
+## B             0.2316   0.2289 0.2341  -0.0052          0.2367 100
+## g             0.6230   0.6708 0.5787   0.0921          0.5309 100
+## gp            0.1457   0.1541 0.1358   0.0183          0.1273 100</code></pre>
+<ul>
+<li>There is mild evidence of overfitting.</li>
+<li><span class="math inline">\(D_{xy}\)</span> and Brier score (<code>B</code>) do not change much at all.</li>
+<li>Slope parameter indicates a need to shrink by about 12% to calibrate</li>
+</ul>
+</div>
+<div id="question-3-2" class="section level2">
+<h2>Question 3</h2>
+<p>Investigate influential observations and partial residual plots.</p>
+<pre class="r"><code>dff &lt;- resid(fit, &quot;dffits&quot;)
+plot(dff)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<ul>
+<li>The DFFITS statistic indicate the effect that deleting each observation has on the predicted values of the model.</li>
+<li>Some use <span class="math inline">\(|\text{DFFITS}| &gt; 2\sqrt{\frac{p+1}{n-p-1}}\)</span> to indicate an influential observation.</li>
+</ul>
+<pre class="r"><code>show.influence(which.influence(fit), data.frame(tutdata, dffits = dff), report = c(&quot;dffits&quot;))</code></pre>
+<pre><code>##     Count     sex cholesterol     dffits
+## 143     2  female   *274.0808  1.6108318
+## 173     4 *female   *138.5056 -1.1265158
+## 181     2 *male      146.4978  0.8026558
+## 408     2 *male      148.1649  0.6813596
+## 411     1  female    146.3522  0.5594519
+## 834     2  female   *146.6413 -0.4908278
+## 840     2  female   *147.0025 -0.5604495</code></pre>
+<ul>
+<li>Using <code>which.influence()</code> gives the indices of influential observations, which are listed in the first column of the dataframe above.</li>
+<li>The variables with significant DFBETA are marked with an asterisk. Note that all of these observations have significant DFFITS.</li>
+<li>The DFBETAS are statistics that indicate the effect that deleting each observation has on the estimates for the regression coefficients.</li>
+<li>For DFBETAS one can use <span class="math inline">\(|\text{DFBETAS}| &gt; u\)</span> for a given cutoff, the default is 0.2.</li>
+</ul>
+<p>Below we investigate partial residual plots which can be used to verify the functional form of continuous covariates.</p>
+<pre class="r"><code># Option below saves the following plots to a pdf file
+# pdf(&quot;resid_plots.pdf&quot;)
+
+resid(fit, &quot;partial&quot;, pl = &quot;loess&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-43-1.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-2.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-3.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-4.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-5.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-6.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-7.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-8.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-9.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-10.png" width="672" /></p>
+<ul>
+<li>There is very little evidence of non-linearity in most of these plots, i.e. there is not much value in including a non-linear component for these variables.</li>
+</ul>
+</div>
+</div>
 
 
 
