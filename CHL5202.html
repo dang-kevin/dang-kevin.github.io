@@ -1207,7 +1207,7 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 <div id="question-3-3" class="section level2">
 <h2>Question 3</h2>
 <p>Compute the risk difference at one year.</p>
-<pre class="r"><code>(surv &lt;- summary(fit, times = 12)) # time is in months</code></pre>
+<pre class="r"><code>(summ &lt;- summary(fit, times = 12)) # time is in months</code></pre>
 <pre><code>## Call: npsurv(formula = Surv(futime, death) ~ sex, data = mgus2)
 ## 
 ##                 sex=F 
@@ -1236,7 +1236,7 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 <ul>
 <li>Using R:</li>
 </ul>
-<pre class="r"><code>(rd &lt;- surv$surv[2] - surv$surv[1])</code></pre>
+<pre class="r"><code>(rd &lt;- summ$surv[2] - summ$surv[1])</code></pre>
 <pre><code>## [1] -0.05194881</code></pre>
 <pre class="r"><code>fit$surv[length(fit$surv)-232+12] - fit$surv[12] # alternative</code></pre>
 <pre><code>## [1] -0.05194881</code></pre>
@@ -1254,7 +1254,7 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 <ul>
 <li>Using R:</li>
 </ul>
-<pre class="r"><code>bound &lt;- 1.96*sqrt(surv$std.err[1]^2 + surv$std.err[2]^2)
+<pre class="r"><code>bound &lt;- 1.96*sqrt(summ$std.err[1]^2 + summ$std.err[2]^2)
 
 c(rd-bound, rd+bound)</code></pre>
 <pre><code>## [1] -0.08628336 -0.01761427</code></pre>

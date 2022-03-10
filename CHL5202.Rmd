@@ -529,7 +529,7 @@ print(fit.mh <- survdiff(Surv(futime, death) ~ sex, data = mgus2))
 Compute the risk difference at one year.
 
 ```{r}
-(surv <- summary(fit, times = 12)) # time is in months
+(summ <- summary(fit, times = 12)) # time is in months
 ```
 
 * The risk difference (assigning females as control and males as treatment) is:
@@ -547,7 +547,7 @@ $$
 * Using R:
 
 ```{r}
-(rd <- surv$surv[2] - surv$surv[1])
+(rd <- summ$surv[2] - summ$surv[1])
 
 fit$surv[length(fit$surv)-232+12] - fit$surv[12] # alternative
 ```
@@ -567,7 +567,7 @@ $$
 * Using R:
 
 ```{r}
-bound <- 1.96*sqrt(surv$std.err[1]^2 + surv$std.err[2]^2)
+bound <- 1.96*sqrt(summ$std.err[1]^2 + summ$std.err[2]^2)
 
 c(rd-bound, rd+bound)
 ```
