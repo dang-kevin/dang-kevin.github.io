@@ -486,3 +486,139 @@ resid(fit, "partial", pl = "loess")
 
 * There is very little evidence of non-linearity in most of these plots, i.e. there is not much value in including a non-linear component for these variables.
 
+
+# Tutorial 6
+
+Over the next few weeks the tutorials will use the data frame `mgus2` which may be found in the survival package. Since the survival package is attached when `rms` is, nothing special is required to access it, other than loading the `rms` package.
+
+```{r, message=F}
+library(rms)
+
+str(mgus2)
+```
+
+More information about the data can be found in the help file (e.g. `?mgus2`).
+
+
+## Question 1
+Estimate the Kaplan-Meier curves for survival for males and females and plot the result.
+
+```{r}
+# The rms package has a function npsurv which is used in place of the usual survfit.
+fit <- npsurv(Surv(futime, death) ~ sex, data = mgus2)
+
+# Two methods below:
+plot(fit, lty = c(1, 2)) # standard method
+
+survplot(fit, n.risk = TRUE) #a more flexible function from rms
+```
+
+
+## Question 2
+Test $H_0 : S_F(t) = S_M(t)$ versus $H_0 : S_F(t) \neq S_M(t).$
+
+```{r}
+# This requires the Mantel-Haenzel (log-rank) test.
+print(fit.mh <- survdiff(Surv(futime, death) ~ sex, data = mgus2))
+```
+
+* The Mantel-Haenzel test yields a p-value of 0.002, so we reject the null hypothesis as there is strong evidence that the survival function for females is not equal to the survival function for males.
+
+
+## Question 3
+Compute the risk difference at one year.
+
+```{r}
+(surv <- summary(fit, times = 12)) # time is in months
+```
+
+* The risk difference (assigning females as control and males as treatment) is:
+
+$$ 
+\begin{aligned}
+\widehat{RD} &= \hat{F}_C(t_0)-\hat{F}_T(t_0) \\
+&= (1-\hat{S}_C(t_0))(1-\hat{S}_T(t_0)) \\
+&= \hat{S}_T(t_0)-\hat{S}_C(t_0) \\
+&= 0.851 - 0.9032 \\
+&= -0.0522
+\end{aligned}
+$$
+
+* Using R:
+
+```{r}
+(rd <- surv$surv[2] - surv$surv[1])
+
+fit$surv[length(fit$surv)-232+12] - fit$surv[12] # alternative
+```
+
+* Interpretation: The observed risk of death in females at one year is 5.2% lower than in males.
+
+* (Extra) A 95% confidence interval for the risk difference is:
+
+$$
+\begin{aligned}
+&\widehat{RD} \pm 1.96\sqrt{\hat{V}[\hat{S}_C(t_0)] + \hat{V}[\hat{S}_T(t_0)]} \\
+&= -0.0522 \pm 1.96\sqrt{0.0118^2 + 0.013^2} \\
+&= (-0.0866,-0.0178)
+\end{aligned}
+$$
+
+* Using R:
+
+```{r}
+bound <- 1.96*sqrt(surv$std.err[1]^2 + surv$std.err[2]^2)
+
+c(rd-bound, rd+bound)
+```
+
+
+## Question 4
+Compute a hazard ratio using the output from `survdiff`.
+
+$$ 
+\widehat{HR} = \frac{O_T/E_T}{O_C/E_C} = \frac{540/492}{423/471} = 1.222
+$$
+
+* Alternatively, we can calculate using `fit.mh`:
+
+```{r}
+# We can extract the numbers from fit.mh 
+fit.mh$obs
+fit.mh$exp
+```
+
+```{r}
+# Observed / Expected 
+female <- fit.mh$obs[1]/fit.mh$exp[1] # 423/471
+male <- fit.mh$obs[2]/fit.mh$exp[2] # 540/492
+
+# Hazard Ratio Using females as reference
+hr <- male/female # (540/492)/(423/471)
+hr
+```
+
+* The hazard ratio of 1.222 means that the rate of death for males is 1.222 times the rate of death for females.
+
+* (Extra) Obtaining a 95% CI for the hazard ratio, we start with the standard error:
+
+$$
+SE[\log\widehat{HR}] = \sqrt{\frac{1}{E_T} + \frac{1}{E_C}} = \sqrt{\frac{1}{492} + \frac{1}{471}} = 0.06446
+$$
+
+* Which gives a 95% CI of:
+
+$$
+1.222 \times e^{\pm1.96\times0.06446} = (1.0769,1.3866)
+$$
+
+* Using R:
+
+```{r}
+# Standard error of log hazard ratio
+se <- sqrt((1/fit.mh$exp[2]) + (1/fit.mh$exp[1]))
+
+# 95% Confidence interval
+c(1.222*exp(-1.96*se), 1.222*exp(+1.96*se))
+```
+
