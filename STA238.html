@@ -1004,7 +1004,7 @@ get_ahat &lt;- function(x){max(x)}
 # Evaluate the estimator on a sample
 ahat &lt;- get_ahat(rdens(n = 100, a = 10))
 cat(ahat)</code></pre>
-<pre><code>## 9.026881</code></pre>
+<pre><code>## 9.742614</code></pre>
 <p>By re-running the above chunk we see that there is substantial variation in the results and the estimates never quite reach the true value of <span class="math inline">\(10\)</span>. Thus it appears that our estimator is biased downwards, however it is not easy to calculate this bias due to the form of the estimator. In these cases, we typically turn to simulation methods to examine the estimator.</p>
 </div>
 <div id="bias-of-the-estimator" class="section level2">
@@ -1013,11 +1013,11 @@ cat(ahat)</code></pre>
 <pre class="r"><code># Simulate 1000 datasets of size 100
 sim &lt;- replicate(n = 1000, rdens(n = 100, a = 10))
 str(sim)</code></pre>
-<pre><code>##  num [1:100, 1:1000] 2.99 5.65 2.9 1.74 1.32 ...</code></pre>
+<pre><code>##  num [1:100, 1:1000] 1.23 1.64 1.23 1.21 1.85 ...</code></pre>
 <pre class="r"><code># For each sample (each column), compute the statistic
 ahat &lt;- apply(sim, MARGIN = 2, FUN = get_ahat)
 str(ahat)</code></pre>
-<pre><code>##  num [1:1000] 9.69 9.55 9.25 9.48 7.4 ...</code></pre>
+<pre><code>##  num [1:1000] 9.38 9.24 8.63 9.28 9.51 ...</code></pre>
 <p>Now that we have a sample of size <span class="math inline">\(1000\)</span> from the sampling distribution of <span class="math inline">\(\hat\alpha\)</span>, we plot it to learn more about the distribution</p>
 <pre class="r"><code># Plot the sampling distribution of the estimator
 data.frame(ahat) %&gt;%
@@ -1033,11 +1033,11 @@ data.frame(ahat) %&gt;%
 <pre class="r"><code># Estimated bias of the estimator
 bias &lt;- mean(ahat) - 10
 cat(bias)</code></pre>
-<pre><code>## -0.729879</code></pre>
+<pre><code>## -0.8000599</code></pre>
 <pre class="r"><code># 95% credible interval
 ci &lt;- quantile(ahat, probs = c(0.025, 0.975))
 cat(ci)</code></pre>
-<pre><code>## 7.567039 9.980255</code></pre>
+<pre><code>## 7.329384 9.967306</code></pre>
 </div>
 <div id="consistency-of-the-estimator" class="section level2">
 <h2>4. Consistency of the Estimator</h2>
@@ -1088,6 +1088,152 @@ bias &lt;- lapply(result, function(x) x$bias) %&gt;% as.data.frame()
 bias</code></pre>
 <pre><code>##        n_50      n_100      n_500      n_1000
 ## 1 -1.311561 -0.7815966 -0.1703174 -0.09099329</code></pre>
+</div>
+</div>
+<div id="lab-3" class="section level1">
+<h1>Lab 3</h1>
+<p>In this R Lab, you will be guided by your TA through a second example of constructing empirical bootstrapped confidence intervals (like we did in class this week). You will also learn how to produce your own Normal QQ plots as a means of verifying normality of data.</p>
+<div id="r-lab-learning-goals-3" class="section level2">
+<h2>R Lab Learning Goals</h2>
+<ul>
+<li>Review how to read in data and check for missing values</li>
+<li>Review steps to construct a confidence interval via empirical bootstrapping</li>
+<li>Learn how to produce a normal QQ plot to check for evidence of non-normality (violations in normality)</li>
+<li>Implement empirical bootstrap and construct your own <span class="math inline">\(95\%\)</span> bootstrap confidence interval</li>
+<li>Interpret the interval constructed</li>
+</ul>
+</div>
+<div id="motivation-1" class="section level2">
+<h2>0. Motivation</h2>
+<p>In this lab we will be considering laboratory values associated with diagnosing Type 2 diabetes, specifically glycated hemoglobin (A1C). Diabetes mellitus is one of the leading causes of death in the United States and estimating population-level prevalence is therefore an area of interest in public health research. This data is a subset of <a href="https://www.cdc.gov/nchs/nhanes/index.htm">The Nation’s Mobile Health Survey (NHANES)</a> survey for 2017-2018.</p>
+</div>
+<div id="formulate-a-research-question" class="section level2">
+<h2>1. Formulate a research question</h2>
+<p>In this presentation we will be considering the following research question:</p>
+<p><em>“What is the average value of A1C in the U.S. population in the period 2017-2018?”</em></p>
+<p>Investigating this question provides us with a crude index for the prevalence of diabetes in the U.S. population.</p>
+<p>Since our inferences are based on a small sample from the whole population, we will want to quantify the uncertainty in our estimates due to sampling variation. To this end, we will construct confidence intervals for our estimates using a bootstrap approach.</p>
+</div>
+<div id="data-preparation" class="section level2">
+<h2>2. Data preparation</h2>
+<p>The first task is to load the NHANES data into memory using the function <code>read.csv</code>.</p>
+<pre class="r"><code>library(tidyverse)
+library(latex2exp)
+
+# Load the Data:
+# It may be helpful to manually set your working directory using `setwd`
+setwd(&quot;~/GitHub/dang-kevin.github.io/STA238&quot;)
+diabetes &lt;- read.csv(&quot;diabetes.csv&quot;)
+
+# Get a summary of the variables in the nhanes data
+# str(diabetes)
+glimpse(diabetes)</code></pre>
+<pre><code>## Rows: 135
+## Columns: 3
+## $ seqn &lt;int&gt; 100934, 99455, 99224, 99184, 97031, 98571, 96236, 101113, 95690, ~
+## $ gh   &lt;dbl&gt; 4.8, 5.2, 5.4, 5.6, 5.2, 5.0, 8.3, 5.8, 7.4, 4.9, 4.9, 5.4, 5.4, ~
+## $ fpg  &lt;int&gt; 79, 108, 103, 103, 98, 88, 107, 98, 106, 106, 90, 103, 101, 104, ~</code></pre>
+<p>In the above printout, <code>seqn</code> is a subject ID number in the database, <code>gh</code> is the percentage of glycated hemoglobin (A1C), and <code>fpg</code> is fasting plasma glucose in mm/dL. The latter two variables are lab measurements used for diagnosing Type II diabetes, though our focus in the presentation portion of the lab will be on the A1C values in <code>gh</code>.</p>
+<p>Before we get started on the analysis proper, it is a good idea to account for any missing values in the data.</p>
+<pre class="r"><code># Print a summary of `gh` to check for missing data
+summary(diabetes)</code></pre>
+<pre><code>##       seqn              gh              fpg       
+##  Min.   : 93732   Min.   : 4.600   Min.   : 74.0  
+##  1st Qu.: 96355   1st Qu.: 5.275   1st Qu.: 95.0  
+##  Median : 99289   Median : 5.500   Median :103.0  
+##  Mean   : 98779   Mean   : 5.791   Mean   :111.9  
+##  3rd Qu.:101137   3rd Qu.: 5.800   3rd Qu.:112.0  
+##  Max.   :102935   Max.   :10.900   Max.   :313.0  
+##                   NA&#39;s   :11       NA&#39;s   :11</code></pre>
+<p>We see from the summary printout that there are 11 missing values. For the purposes of this lab we simply note this fact and remove them from the data.</p>
+<pre class="r"><code># For this analysis, we remove missing values 
+# You learned other methods of doing this in R Lab #1
+
+diabetes &lt;- diabetes[complete.cases(diabetes),]
+
+# diabetes &lt;- na.omit(diabetes)</code></pre>
+</div>
+<div id="a-point-estimate" class="section level2">
+<h2>3. A point estimate</h2>
+<p>Recall that our goal is to estimate the mean A1C of the U.S. population from 2017-2018.</p>
+<p>The estimate based on our sample is:</p>
+<pre class="r"><code># Compute the mean A1C in our sample
+x_bar &lt;- mean(diabetes$gh)
+x_bar</code></pre>
+<pre><code>## [1] 5.791129</code></pre>
+<p>We would, however, like to include a confidence interval for this estimate to reflect the uncertainty in our estimate due to sampling variability. In the next sections we will demonstrate how we will use a bootstrap approach to construct this confidence interval.</p>
+</div>
+<div id="bootstrap-confidence-intervals" class="section level2">
+<h2>4. Bootstrap confidence intervals</h2>
+<p>The first component of any bootstrap approach is deciding how the bootstrapped datasets will be simulated; will we use a parametric or empirical approach? To help us decide, we should first examine the distribution of our data to see if it resembles a parametric density or not.</p>
+<pre class="r"><code>###########################################
+### Remove the eval=F from the R chunk! ###
+###########################################
+
+# Histogram of `gh`
+diabetes %&gt;% 
+  ggplot(aes(x = gh)) +
+  geom_histogram(aes(y=..density..), 
+                 binwidth = 0.2,
+                 fill = &#39;thistle2&#39;,
+                 colour = &#39;black&#39;) +
+  labs(title = &quot;Sample distribution of A1C&quot;,
+       x = &quot;A1C&quot;,
+       y = &quot;Density&quot;)</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-33-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>On inspection, this distribution looks like it is positively-skewed, and that a parametric bootstrap based on a normal sampling distribution is inappropriate. To get a closer look, we can plot the quantiles of the sample against a normal distribution in a Q-Q plot.</p>
+<pre class="r"><code>###########################################
+### Remove the eval=F from the R chunk! ###
+###########################################
+
+# QQ-plot to assess normality of `gh`
+diabetes %&gt;% 
+  ggplot(aes(sample = gh)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = &quot;Normal Q-Q plot&quot;,
+       subtitle = &quot;Data: A1C&quot;,
+       x = TeX(r&#39;($N(0,1)$ Quantiles)&#39;),
+       y = &quot;A1C Quantiles&quot;)</code></pre>
+<p><img src="STA238_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The Q-Q plot confirms our suspicions that the data in non-normally distributed. Indeed, about 16% of A1C values reside in the heavy tails of the sample. (To see this, note that the points that leave the normal line fall above the <span class="math inline">\(N(0,1)\)</span> quantile value of <span class="math inline">\(Z \approx 1\)</span>, which corresponds to <span class="math inline">\(P(Z \geq 1) \approx 0.16\)</span>.)</p>
+<p>Because of this non-normality, we opt for an empirical bootstrap approach to construct confidence intervals for the mean A1C.</p>
+</div>
+<div id="simulation" class="section level2">
+<h2>5. Simulation</h2>
+<p>To construct the confidence intervals, we will used what is called <em>studentized bootstrap confidence intervals</em>. This involves computing the studentized mean <span class="math display">\[
+t^* = \frac{\bar x_n^* - \bar x_n}{s^*_n/\sqrt n}
+\]</span> for each bootstrap sample, where <span class="math inline">\(\bar x_n^*\)</span> and <span class="math inline">\(s^*_n\)</span> are the bootstrap mean and standard deviation, respectively, and <span class="math inline">\(\bar x_n\)</span> is the sample mean of the original data. The confidence interval for the population mean <span class="math inline">\(\mu\)</span> is then <span class="math display">\[
+\left(\bar x_n - c_u^*\frac{s_n}{\sqrt{n}}, \bar x_n - c_l^*\frac{s_n}{\sqrt{n}}\right),
+\]</span> where <span class="math inline">\(c_l^*\)</span> and <span class="math inline">\(c_u^*\)</span> are the lower and upper critical values of the sampling distribution of <span class="math inline">\(t^*\)</span> that give the desired significance level. In this lab, we will construct a <span class="math inline">\(95\%\)</span> confidence interval by taking <span class="math inline">\(c_l^*\)</span> and <span class="math inline">\(c_u^*\)</span> to be the <span class="math inline">\(2.5\%\)</span> and <span class="math inline">\(97.5\%\)</span> quantiles of the sampling distribution, respectively.</p>
+<pre class="r"><code>## Using For-Loop
+
+# Define the required inputs:
+mean.sample &lt;- mean(diabetes$gh) # sample mean of original data
+sd.sample &lt;- sd(diabetes$gh) #sample sd of original data
+B &lt;-  2000
+n.sample &lt;- length(diabetes$gh)
+sim.t &lt;- c() #empty vector to store studentized means
+
+## Bootstrapping Step ##
+for (i in 1:B){
+  boot.sample &lt;- sample(diabetes$gh, n.sample, replace = T)
+  boot.mean &lt;- mean(boot.sample)
+  boot.sd &lt;- sd(boot.sample)
+  
+  # Compute studentized mean and store it into sim.t
+  sim.t[i] &lt;- (boot.mean-x_bar)/(boot.sd/sqrt(n.sample))
+}
+
+## Find the Critical Values ##
+(crit.t &lt;- quantile(sim.t, probs = c(0.975, 0.025)))</code></pre>
+<pre><code>##     97.5%      2.5% 
+##  1.676319 -2.351053</code></pre>
+<pre class="r"><code># Compute Bootstrapped CI 
+(ci.student &lt;- mean.sample - crit.t*sd.sample/sqrt(n.sample))</code></pre>
+<pre><code>##    97.5%     2.5% 
+## 5.639214 6.004191</code></pre>
+<p>Since we know that if we performed this analysis many times on new samples of people, the true population mean A1C would be contained in any interval calculated in the above method in <span class="math inline">\(95\%\)</span> of replications, this allows us to interpret the calculated interval: We can say that based on our data, we are 95% confident that the average A1C in the population could be as low as 5.6392143 to as high as 6.0041909. (The interpretation of confidence intervals can be tricky!)</p>
 </div>
 </div>
 
