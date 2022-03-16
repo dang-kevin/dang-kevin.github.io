@@ -1305,6 +1305,246 @@ c(1.222*exp(-1.96*se), 1.222*exp(+1.96*se))</code></pre>
 <pre><code>## [1] 1.076956 1.386579</code></pre>
 </div>
 </div>
+<div id="tutorial-7" class="section level1">
+<h1>Tutorial 7</h1>
+<p>You will again use the data frame mgus2 from the <code>rms</code> package.</p>
+<pre class="r"><code>library(rms)
+
+str(mgus2)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1384 obs. of  11 variables:
+##  $ id    : num  1 2 3 4 5 6 7 8 9 10 ...
+##  $ age   : num  88 78 94 68 90 90 89 87 86 79 ...
+##   ..- attr(*, &quot;label&quot;)= chr &quot;AGE AT mgus_sp&quot;
+##  $ sex   : Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 1 1 2 2 1 2 1 1 1 1 ...
+##   ..- attr(*, &quot;label&quot;)= chr &quot;Sex&quot;
+##   ..- attr(*, &quot;format&quot;)= chr &quot;$desex&quot;
+##  $ dxyr  : num  1981 1968 1980 1977 1973 ...
+##  $ hgb   : num  13.1 11.5 10.5 15.2 10.7 12.9 10.5 12.3 14.5 9.4 ...
+##  $ creat : num  1.3 1.2 1.5 1.2 0.8 1 0.9 1.2 0.9 1.1 ...
+##  $ mspike: num  0.5 2 2.6 1.2 1 0.5 1.3 1.6 2.4 2.3 ...
+##   ..- attr(*, &quot;label&quot;)= chr &quot;SEP SPIKE AT mgus_sp&quot;
+##  $ ptime : num  30 25 46 92 8 4 151 2 57 136 ...
+##  $ pstat : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ futime: num  30 25 46 92 8 4 151 2 57 136 ...
+##  $ death : num  1 1 1 1 1 1 1 1 0 1 ...</code></pre>
+<pre class="r"><code>dd &lt;- datadist(mgus2)
+options(datadist = &quot;dd&quot;)</code></pre>
+<div id="question-1-6" class="section level2">
+<h2>Question 1</h2>
+<p>Investigate if either the exponential or Weibull models would be appropriate to model the dependency of survival on sex.</p>
+<pre class="r"><code>fit.km &lt;- npsurv(Surv(futime, death) ~ sex, data = mgus2)
+
+# Check exponential
+plot(fit.km, fun = &quot;cumhaz&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<pre class="r"><code># Check Weibull
+plot(fit.km, fun = &quot;cloglog&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-54-2.png" width="672" /></p>
+<ul>
+<li>The plots indicate that both models could be a good fit (as they are linear).</li>
+</ul>
+</div>
+<div id="question-2-5" class="section level2">
+<h2>Question 2</h2>
+<p>Fit and interpret an exponential model and plot the result.</p>
+<pre class="r"><code>print(fit1 &lt;- psm(Surv(futime,death)~sex,data=mgus2,dist=&quot;exponential&quot;))</code></pre>
+<pre><code>## Parametric Survival Model: Exponential Distribution
+##  
+##  psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;exponential&quot;)
+##  
+##                 Model Likelihood    Discrimination    
+##                       Ratio Test           Indexes    
+##  Obs   1384    LR chi2      9.99    R2       0.007    
+##  Events 963    d.f.            1    Dxy      0.062    
+##  sigma    1    Pr(&gt; chi2) 0.0016    g        0.102    
+##                                     gr       1.107    
+##  
+##              Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  (Intercept)  5.0344 0.0486 103.54 &lt;0.0001 
+##  sex=M       -0.2045 0.0649  -3.15 0.0016  
+## </code></pre>
+<ul>
+<li>P-value of 0.0016 provides strong evidence that the rate of death is higher in males than females.</li>
+</ul>
+<pre class="r"><code># HR for sex: M vs. F
+exp(-coef(fit1)[2])</code></pre>
+<pre><code>##    sex=M 
+## 1.226934</code></pre>
+<ul>
+<li>The hazard ratio of 1.227 means that the rate of death for males is 1.227 times the rate of death for females.</li>
+</ul>
+<pre class="r"><code># Survival time ratio
+summary(fit1,sex=&quot;F&quot;)</code></pre>
+<pre><code>##              Effects              Response : Surv(futime, death) 
+## 
+##  Factor               Low High Diff. Effect   S.E.    Lower 0.95 Upper 0.95
+##  sex - M:F            1   2    NA    -0.20452 0.06493 -0.33189   -0.077146 
+##   Survival Time Ratio 1   2    NA     0.81504      NA  0.71757    0.925750</code></pre>
+<ul>
+<li>The survival time ratio of 0.815 means that the median survival time for males is 0.815 times the median survival time for females.</li>
+<li>The results can be interpreted in terms of any percentile survival time, but median is most common.</li>
+<li>For the exponential model, the survival time ratio is the inverse of the hazard ratio. This is not the case for other models.</li>
+</ul>
+<pre class="r"><code>survplot(fit1,sex)
+survplot(fit.km,add=TRUE,label.curves=FALSE,conf=&quot;none&quot;,col=&quot;red&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+</div>
+<div id="question-3-4" class="section level2">
+<h2>Question 3</h2>
+<p>Fit and interpret a Weibull model and plot the result.</p>
+<pre class="r"><code>print(fit2 &lt;- psm(Surv(futime,death)~sex,data=mgus2,dist=&quot;weibull&quot;))</code></pre>
+<pre><code>## Parametric Survival Model: Weibull Distribution
+##  
+##  psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;weibull&quot;)
+##  
+##                     Model Likelihood    Discrimination    
+##                           Ratio Test           Indexes    
+##  Obs       1384    LR chi2      9.18    R2       0.007    
+##  Events     963    d.f.            1    Dxy      0.062    
+##  sigma 1.101582    Pr(&gt; chi2) 0.0024    g        0.107    
+##                                         gr       1.113    
+##  
+##              Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  (Intercept)  5.0494 0.0538 93.87  &lt;0.0001 
+##  sex=M       -0.2162 0.0716 -3.02  0.0025  
+##  Log(scale)   0.0967 0.0278  3.48  0.0005  
+## </code></pre>
+<ul>
+<li>P-value of 0.0025 provides strong evidence that the rate of death is higher in males than females.</li>
+</ul>
+<pre class="r"><code># HR for sex: M vs. F
+exp(-coef(fit2)[2]/fit2$scale)</code></pre>
+<pre><code>##    sex=M 
+## 1.216865</code></pre>
+<ul>
+<li>The rate of death for males is 1.217 times the rate of death for females.</li>
+</ul>
+<pre class="r"><code># Survival time ratio
+summary(fit2,sex=&quot;F&quot;)</code></pre>
+<pre><code>##              Effects              Response : Surv(futime, death) 
+## 
+##  Factor               Low High Diff. Effect   S.E.     Lower 0.95 Upper 0.95
+##  sex - M:F            1   2    NA    -0.21622 0.071609 -0.35669   -0.075742 
+##   Survival Time Ratio 1   2    NA     0.80556       NA  0.69999    0.927060</code></pre>
+<ul>
+<li>The median survival time for males is 0.806 times the median survival time for females.</li>
+</ul>
+<pre class="r"><code>survplot(fit2,sex)
+survplot(fit.km,add=TRUE,label.curves=FALSE,conf=&quot;none&quot;,col=&quot;red&quot;)</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+</div>
+<div id="question-4-3" class="section level2">
+<h2>Question 4</h2>
+<p>Which looks better (exponential or Weibull)?</p>
+<pre class="r"><code>survplot(fit.km,conf=&quot;none&quot;)
+survplot(fit1,sex,add=TRUE,label.curves=FALSE,col=&quot;red&quot;) # exponential
+survplot(fit2,sex,add=TRUE,label.curves=FALSE,col=&quot;blue&quot;) # weibull</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<ul>
+<li>There’s very little difference between the two models in this example. The AIC for the Weibull is slightly smaller, which may or may not mean anything.</li>
+</ul>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<p>Fit a Cox model with sex as the covariate and interpret.</p>
+<pre class="r"><code>print(fit1.cox &lt;- cph(Surv(futime,death)~sex,data=mgus2))</code></pre>
+<pre><code>## Cox Proportional Hazards Model
+##  
+##  cph(formula = Surv(futime, death) ~ sex, data = mgus2)
+##  
+##                         Model Tests    Discrimination    
+##                                               Indexes    
+##  Obs      1384    LR chi2      9.68    R2       0.007    
+##  Events    963    d.f.            1    Dxy      0.062    
+##  Center 0.1098    Pr(&gt; chi2) 0.0019    g        0.100    
+##                   Score chi2   9.65    gr       1.105    
+##                   Pr(&gt; chi2) 0.0019                      
+##  
+##        Coef   S.E.   Wald Z Pr(&gt;|Z|)
+##  sex=M 0.2017 0.0651 3.10   0.0019  
+## </code></pre>
+<pre class="r"><code>summary(fit1.cox,sex=&quot;F&quot;)</code></pre>
+<pre><code>##              Effects              Response : Surv(futime, death) 
+## 
+##  Factor        Low High Diff. Effect  S.E.     Lower 0.95 Upper 0.95
+##  sex - M:F     1   2    NA    0.20174 0.065062 0.074221   0.32926   
+##   Hazard Ratio 1   2    NA    1.22350       NA 1.077000   1.38990</code></pre>
+<ul>
+<li>The rate of death for males is 1.224 times the rate of death for females.</li>
+<li>There is strong evidence that the rate of death is higher in males than females (HR=1.22350; 95% CI: (1.07700,1.38990); p-value: 0.0019)</li>
+</ul>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6</h2>
+<p>Add age using a restricted cubic spline with 4 knots. Test it with a LRT and display results.</p>
+<pre class="r"><code>print(fit2.cox &lt;- cph(Surv(futime,death)~sex+rcs(age,4),data=mgus2))</code></pre>
+<pre><code>## Cox Proportional Hazards Model
+##  
+##  cph(formula = Surv(futime, death) ~ sex + rcs(age, 4), data = mgus2)
+##  
+##                        Model Tests    Discrimination    
+##                                              Indexes    
+##  Obs     1384    LR chi2    396.10    R2       0.249    
+##  Events   963    d.f.            4    Dxy      0.334    
+##  Center 3.248    Pr(&gt; chi2) 0.0000    g        0.838    
+##                  Score chi2 408.99    gr       2.311    
+##                  Pr(&gt; chi2) 0.0000                      
+##  
+##        Coef    S.E.   Wald Z Pr(&gt;|Z|)
+##  sex=M  0.3605 0.0657  5.48  &lt;0.0001 
+##  age    0.0380 0.0108  3.52  0.0004  
+##  age&#39;   0.0473 0.0214  2.21  0.0272  
+##  age&#39;&#39; -0.2396 0.1233 -1.94  0.0520  
+## </code></pre>
+<pre class="r"><code># LRT
+lrtest(fit1.cox,fit2.cox)</code></pre>
+<pre><code>## 
+## Model 1: Surv(futime, death) ~ sex
+## Model 2: Surv(futime, death) ~ sex + rcs(age, 4)
+## 
+## L.R. Chisq       d.f.          P 
+##     386.42       3.00       0.00</code></pre>
+<ul>
+<li>We are testing the null hypothesis that the coefficients for the age variable are equal to 0, against the alternative hypothesis that at least one coefficient is not equal to 0.</li>
+<li>Since the p-value is approximately 0.00, there is sufficient evidence to suggest that we should retain the age variable using a restricted cubic spline with 4 knots.</li>
+</ul>
+<pre class="r"><code># Adjusted effect for sex
+summary(fit2.cox,sex=&quot;F&quot;)</code></pre>
+<pre><code>##              Effects              Response : Surv(futime, death) 
+## 
+##  Factor        Low High Diff. Effect  S.E.     Lower 0.95 Upper 0.95
+##  age           63  79   16    1.13420 0.094988 0.94802    1.32040   
+##   Hazard Ratio 63  79   16    3.10870       NA 2.58060    3.74480   
+##  sex - M:F      1   2   NA    0.36049 0.065742 0.23164    0.48935   
+##   Hazard Ratio  1   2   NA    1.43400       NA 1.26070    1.63120</code></pre>
+<ul>
+<li>The rate of death for 79-year-olds is 3.109 times the rate of death for 63-year-olds when adjusted for <code>sex</code>.</li>
+<li>There is strong evidence that the rate of death is higher in 79-year-olds than 63-year-olds (HR=3.10870; 95% CI: (2.58060,3.74480), p-value: 0.0004)</li>
+<li>The rate of death for males is 1.434 times the rate of death for females when adjusted for <code>age</code>.</li>
+<li>There is strong evidence that the rate of death is higher in males than females (HR=1.43400; 95% CI: (1.26070,1.63120); p-value: &lt;0.0001)</li>
+</ul>
+<pre class="r"><code># You can specify the specific age groups
+summary(fit2.cox,sex=&quot;F&quot;,age=c(40,80))</code></pre>
+<pre><code>##              Effects              Response : Surv(futime, death) 
+## 
+##  Factor        Low High Diff. Effect  S.E.     Lower 0.95 Upper 0.95
+##  age           40  80   40    2.16870 0.194200 1.78810     2.54930  
+##   Hazard Ratio 40  80   40    8.74700       NA 5.97800    12.79800  
+##  sex - M:F      1   2   NA    0.36049 0.065742 0.23164     0.48935  
+##   Hazard Ratio  1   2   NA    1.43400       NA 1.26070     1.63120</code></pre>
+<ul>
+<li>The rate of death for 80-year-olds is 8.747 times the rate of death for 40-year-olds.</li>
+<li>Note that the hazard ratio for <code>sex</code> remains unchanged.</li>
+</ul>
+<pre class="r"><code># Plot of age effect
+plot(Predict(fit2.cox,age,sex))</code></pre>
+<p><img src="CHL5202_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<ul>
+<li>The vertical distance between the two curves remain constant throughout as that represents the <code>sex</code> effect.</li>
+<li>The curves both fluctuate together depending on the <code>age</code>.</li>
+</ul>
+</div>
+</div>
 
 
 

@@ -622,3 +622,162 @@ se <- sqrt((1/fit.mh$exp[2]) + (1/fit.mh$exp[1]))
 c(1.222*exp(-1.96*se), 1.222*exp(+1.96*se))
 ```
 
+
+# Tutorial 7
+You will again use the data frame mgus2 from the `rms` package.
+
+```{r, message=F}
+library(rms)
+
+str(mgus2)
+
+dd <- datadist(mgus2)
+options(datadist = "dd")
+```
+
+
+## Question 1
+Investigate if either the exponential or Weibull models would be appropriate to model the dependency of survival on sex.
+
+```{r}
+fit.km <- npsurv(Surv(futime, death) ~ sex, data = mgus2)
+
+# Check exponential
+plot(fit.km, fun = "cumhaz")
+
+# Check Weibull
+plot(fit.km, fun = "cloglog")
+```
+
+* The plots indicate that both models could be a good fit (as they are linear).
+
+
+## Question 2
+Fit and interpret an exponential model and plot the result.
+
+```{r}
+print(fit1 <- psm(Surv(futime,death)~sex,data=mgus2,dist="exponential"))
+```
+
+* P-value of 0.0016 provides strong evidence that the rate of death is higher in males than females.
+
+```{r}
+# HR for sex: M vs. F
+exp(-coef(fit1)[2])
+```
+
+* The hazard ratio of 1.227 means that the rate of death for males is 1.227 times the rate of death for females.
+
+```{r}
+# Survival time ratio
+summary(fit1,sex="F")
+```
+
+* The survival time ratio of 0.815 means that the median survival time for males is 0.815 times the median survival time for females.
+* The results can be interpreted in terms of any percentile survival time, but median is most common.
+* For the exponential model, the survival time ratio is the inverse of the hazard ratio. This is not the case for other models.
+
+```{r}
+survplot(fit1,sex)
+survplot(fit.km,add=TRUE,label.curves=FALSE,conf="none",col="red")
+```
+
+
+## Question 3
+Fit and interpret a Weibull model and plot the result.
+
+```{r}
+print(fit2 <- psm(Surv(futime,death)~sex,data=mgus2,dist="weibull"))
+```
+
+* P-value of 0.0025 provides strong evidence that the rate of death is higher in males than females.
+
+```{r}
+# HR for sex: M vs. F
+exp(-coef(fit2)[2]/fit2$scale)
+```
+
+* The rate of death for males is 1.217 times the rate of death for females.
+
+```{r}
+# Survival time ratio
+summary(fit2,sex="F")
+```
+
+* The median survival time for males is 0.806 times the median survival time for females.
+
+```{r}
+survplot(fit2,sex)
+survplot(fit.km,add=TRUE,label.curves=FALSE,conf="none",col="red")
+```
+
+## Question 4
+Which looks better (exponential or Weibull)?
+
+```{r}
+survplot(fit.km,conf="none")
+survplot(fit1,sex,add=TRUE,label.curves=FALSE,col="red") # exponential
+survplot(fit2,sex,add=TRUE,label.curves=FALSE,col="blue") # weibull
+```
+
+* There's very little difference between the two models in this example. The AIC for the Weibull is slightly smaller, which may or may not mean anything.
+
+
+## Question 5
+Fit a Cox model with sex as the covariate and interpret.
+
+```{r}
+print(fit1.cox <- cph(Surv(futime,death)~sex,data=mgus2))
+```
+
+
+```{r}
+summary(fit1.cox,sex="F")
+```
+
+* The rate of death for males is 1.224 times the rate of death for females.
+* There is strong evidence that the rate of death is higher in males than females (HR=1.22350; 95% CI: (1.07700,1.38990); p-value: 0.0019)
+
+## Question 6
+Add age using a restricted cubic spline with 4 knots. Test it with a LRT and display results.
+
+```{r}
+print(fit2.cox <- cph(Surv(futime,death)~sex+rcs(age,4),data=mgus2))
+```
+
+
+```{r}
+# LRT
+lrtest(fit1.cox,fit2.cox)
+```
+
+* We are testing the null hypothesis that the coefficients for the age variable are equal to 0, against the alternative hypothesis that at least one coefficient is not equal to 0.
+* Since the p-value is approximately 0.00, there is sufficient evidence to suggest that we should retain the age variable using a restricted cubic spline with 4 knots.
+
+
+```{r}
+# Adjusted effect for sex
+summary(fit2.cox,sex="F")
+```
+
+* The rate of death for 79-year-olds is 3.109 times the rate of death for 63-year-olds when adjusted for `sex`.
+* There is strong evidence that the rate of death is higher in 79-year-olds than 63-year-olds (HR=3.10870; 95% CI: (2.58060,3.74480), p-value: 0.0004)
+* The rate of death for males is 1.434 times the rate of death for females when adjusted for `age`.
+* There is strong evidence that the rate of death is higher in males than females (HR=1.43400; 95% CI: (1.26070,1.63120); p-value: <0.0001)
+
+```{r}
+# You can specify the specific age groups
+summary(fit2.cox,sex="F",age=c(40,80))
+```
+
+* The rate of death for 80-year-olds is 8.747 times the rate of death for 40-year-olds.
+* Note that the hazard ratio for `sex` remains unchanged.
+
+```{r}
+# Plot of age effect
+plot(Predict(fit2.cox,age,sex))
+```
+
+* The vertical distance between the two curves remain constant throughout as that represents the `sex` effect.
+* The curves both fluctuate together depending on the `age`.
+
