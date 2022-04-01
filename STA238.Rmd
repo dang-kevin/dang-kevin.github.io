@@ -74,7 +74,7 @@ It looks like there are two groups of data in the `ToothGrowth` data set. What a
 
 What if you only want to study the growth based on one source of vitamin C? How do you go about extracting this information?
 
-```{r, eval=F}
+```{r}
 # After loading and examining your data, and learning about selecting columns or elements
 # from your data set, consider the following two commands below. 
 # Briefly comment below what these two commands do:
@@ -85,7 +85,7 @@ which(dat$supp == 'VC') #do?
 ```
 
 
-```{r, eval=F}
+```{r}
 # What does 
 dat[dat$supp=='VC', 1] #do?
 # extracts the `len` variable/column, where `supp` is 'VC'
@@ -102,7 +102,7 @@ select(filter(dat, supp == "VC"), len)
 ```
 
 
-```{r, eval=F}
+```{r}
 # Below we can also extract the other 2 columns
 dat[dat$supp=='VC', 2]
 dat[dat$supp=='VC', 3]
@@ -356,11 +356,6 @@ weather <- weather %>%
 Now that we have a datetime object, we can use functions from `lubridate` to easily convert `date` into many useful quantities. We use the functions `year`, `month`, and `day` to define the corresponding variables in our data
 
 ```{r}
-######################################################################
-###  NOTE: There is an 'eval=F' in the R Chunk Option! Make sure to ##
-###        delete this before knitting!!                            ##
-######################################################################
-
 # Demonstrate some lubridate functions
 
 # Extract weekday as character
@@ -708,10 +703,6 @@ The first component of any bootstrap approach is deciding how the bootstrapped d
 To help us decide, we should first examine the distribution of our data to see if it resembles a parametric density or not.
 
 ```{r, fig.align='center'}
-###########################################
-### Remove the eval=F from the R chunk! ###
-###########################################
-
 # Histogram of `gh`
 diabetes %>% 
   ggplot(aes(x = gh)) +
@@ -727,10 +718,6 @@ diabetes %>%
 On inspection, this distribution looks like it is positively-skewed, and that a parametric bootstrap based on a normal sampling distribution is inappropriate.
 To get a closer look, we can plot the quantiles of the sample against a normal distribution in a Q-Q plot.
 ```{r, fig.align='center'}
-###########################################
-### Remove the eval=F from the R chunk! ###
-###########################################
-
 # QQ-plot to assess normality of `gh`
 diabetes %>% 
   ggplot(aes(sample = gh)) +
@@ -795,3 +782,229 @@ for (i in 1:B){
 Since we know that if we performed this analysis many times on new samples of people, the true population mean A1C would be contained in any interval calculated in the above method in $95\%$ of replications, this allows us to interpret the calculated interval: We can say that based on our data, we are 95\% confident that the average A1C in the population could be as low as `r ci.student[1]` to as high as `r ci.student[2]`.
 (The interpretation of confidence intervals can be tricky!)
 
+
+# Lab 4
+In this R Lab, you will be guided by your TA on how to adapt bootstrapping and simulation to construct confidence intervals and perform hypothesis tests on two-sample data when normality assumptions fail. At this point, it is assumed that you will have decent familiarity in creating histograms using `ggplot` to assess distribution shape.
+
+## R Lab Learning Goals
+
+  * Review: Using `filter` in `dplyr` (a package already contained in `tidyverse`) to filter data in dataframe according to some criteria.
+  * Review: Using histograms to gauge normality, and a visual check on equal-variance assumption.
+  * Use empirical bootstrap to generate confidence intervals for the difference in population means (for simplicity, you will use the percentile method instead of the studentized method).
+  * Use permutation test to test for equal population means under assumptions of equal variance.
+  
+## 0. Motivation
+
+The data we will be working with today is from a study reported in *A Longitudinal Study of the Development of Elementary School Children's Private Speech*. 
+In this study, researchers recorded instances where children were engaged in private speech during a randomly chosen 10 second interval. Private speech refers to speech spoken aloud that is either addressed to oneself or to no particular listener.
+Many such intervals were observed for **each** child, and the percentage of intervals where private speech occurred for each child was recorded.
+One of the outcomes of interest for this study and the focus of our tutorial is the following research question:
+
+*Does the amount of private speech differ between boys and girls?*
+
+To put this question into a mathematical context, let $(X_1,...X_m)$ and $(Y_1,...,Y_n)$ denote the percentage of private speech observed for boys and girls, respectively.
+Furthermore, assume that each observation $X_i$ comes from a population with mean $\mu_1$ and $Y_j$ from a population with mean $\mu_2$.
+This problem can then be viewed as that of making inferences about differences in means $\mu_1 - \mu_2$, or determining whether boys and girls have different engagements in private speech. 
+
+## 1. Exploratory data analysis
+
+To begin exploring this question, let us first load in the study data and the relevant libraries for our analysis.
+```{r, message= FALSE}
+library(tidyverse)
+library(latex2exp)
+library(gridExtra)
+
+# Load in the speech data
+# Remember to set your working directory and ensure data files are stored
+# in the same location
+setwd("~/GitHub/dang-kevin.github.io/STA238")
+speech <- read.csv("speech.csv")
+glimpse(speech)
+```
+
+Next we will plot the data for boys and girls separately to get an idea of their distribution.
+For the purposes of this analysis, the labels boy and girl refer to a child being labeled as male or female in the data set.
+```{r, fig.align='center'}
+
+###########################################
+### Remove the eval=F from the R chunk! ###
+###########################################
+
+
+# Plot the samples for boys and girls using gridExtra
+# Density histograms to compare the density histogram of the two samples
+plot.boys <- speech %>% 
+  filter(gender == "male") %>% 
+  ggplot(aes(x = percentage, y =..density..)) + #density histogram
+  geom_histogram(binwidth = 0.5, center = 0.25, #bin aesthetics
+                 color = "black",
+                 fill = "thistle2") +
+  labs(title = "Private speech: Boys",
+       x = "Percentage",
+       y = "Density") +
+  xlim(c(0,30)) #common range
+
+plot.girls <- speech %>% 
+  filter(gender == "female") %>% 
+  ggplot(aes(x = percentage, y =..density..)) +
+  geom_histogram(binwidth = 0.5, center = 0.25,
+                 color = "black",
+                 fill ="thistle2") +
+  labs(title = "Private speech: Girls",
+       x = "Percentage",
+       y = "Density") +
+  xlim(c(0,30))
+
+grid.arrange(plot.boys, plot.girls)
+```
+From these plots it is clear that the data is not normal and with the limited data size, any confidence intervals or hypothesis tests based on the assumption of normality will be misleading.
+In such situations, we typically relax the assumption of normal data and turn to non-parametric approaches to form inferences about the quantities of interest.
+
+In the following sections, we will demonstrate how confidence intervals can be obtained using a bootstrap approach and how the so-called permutation test can be used to perform hypothesis testing with minimal distributional assumptions.
+
+## 2. Bootstrap confidence interval for the difference in means
+
+In this first section we will demonstrate how to construct a confidence interval for the difference in means $\mu_1 - \mu_2$ using a bootstrap approach.
+The general approach is very similar to that of the one-sample problem:
+
+* Draw a bootstrap sample $(X_1^*,...,X_m^*)$ with replacement from the first group $(X_1,...,X_m)$
+
+* Draw a bootstrap sample $(Y_1^*,...,Y_m^*)$ with replacement from the second group $(Y_1,...,Y_m)$
+
+* Compute the difference in means $\bar X^* - \bar Y^*$ for the bootstrap samples
+
+* Repeat this process many times to obtain the bootstrapped sampling distribution
+
+* Construct a bootstrap confidence interval $(C_{lower}^*, C_{upper}^*)$ from the sampling distribution.
+
+In this presentation, we will be using the **percentile method** to construct the $(1-\alpha)$-level confidence intervals in the final step, where $C_{lower}^*$ and $C_{upper}^*$ are taken to be the $\alpha/2$ and $1 - \alpha/2$ sample quantiles of the bootstrap sampling distribution, respectively.
+This method is simple, and makes few assumptions about the shape of the bootstrap sampling distribution, though the resulting interval is typically biased.
+To see another approach similar to the studentized approach from the previous tutorial, see the discussion in section 10.6 of the textbook.
+
+### 2.1 Implementation in R
+
+Let's use this recipe to construct a bootstrapped confidence interval in R:
+```{r}
+
+###########################################
+### Remove the eval=F from the R chunk! ###
+###########################################
+
+# Create vectors containing the observed data for each group
+
+# obs.boys <- speech$percentage[speech$gender == "male"]
+# obs.girls <- speech$percentage[speech$gender == "female"]
+
+# Index of data entries that are "male"
+index.boys <- speech$gender == "male"
+
+# Percentage entries for the same index that were identified as "male"
+obs.boys <- speech$percentage[index.boys] 
+
+# Percentage entries for the indices that are NOT male
+obs.girls <- speech$percentage[!index.boys]
+
+# Define the bootstrap experiment
+set.seed(431)
+
+B <- 5000
+boot.mean.diff <- c()
+
+for(b in 1:B){
+  
+  # Bootstrap sample for each gender
+  boot.boys <- sample(obs.boys, replace = T)
+  boot.girls <- sample(obs.girls, replace = T)
+  
+  # Compute difference in bootstrap means
+  boot.mean.diff[b] <- mean(boot.boys) - mean(boot.girls)
+  
+}
+
+```
+
+The 95\% bootstrap confidence interval for the difference in means is then 
+```{r}
+###########################################
+### Remove the eval=F from the R chunk! ###
+###########################################
+
+# Compute the 95% percentile confidence interval
+ci.mean.diff <- quantile(boot.mean.diff, probs = c(0.025, 0.975))
+ci.mean.diff
+```
+
+The corresponding confidence interval based on the assumption of normal data can be calculated to be $(1.29, 9.47)$, which has a smaller lower limit compared to our bootstrapped interval.
+Given that our data is definitely not normal, we have more confidence in the validity of the bootstrap-based interval.
+
+## 3. Permutation test for hypothesis testing
+
+Another common approach to studying the difference in means between two groups is the hypothesis testing approach.
+Here, we consider the following null and alternative hypotheses:
+
+* $H_0: \quad \mu_1 - \mu_2 = 0$
+* $H_1: \quad \mu_1 - \mu_2 \neq 0$
+
+Since our data is not normally distributed, we can no longer use the two-sample $t-$test approach, where the null distribution of the sample statistic is a known $t-$distribution.
+
+### 3.1 The permutation test
+If we are comfortable assuming that the *only* possible difference in the distribution of the two samples is in their means $\mu_1, \mu_2$, then we can use what is called **the permutation test** to perform this hypothesis test.
+
+Under the null hypothesis $\mu_1 = \mu_2$, where both sampling distributions are the same, every observation could equally well belong to either group and so the group labels have no effect on the outcome.
+Since the group labels are exchangeable, we can randomly assign them to the observed values and we will obtain what looks like a new observation from the null distribution with the same probability as the original sample.
+By comparing our observed difference $\bar X - \bar Y$ to the difference measured on these new permuted data, we can get a sense of how unlikely it is to observe such a difference under the null hypothesis.
+
+Following this reasoning, the recipe for the permutation test is as follows:
+
+* Compute the test statistic $T_{obs} = \bar X - \bar Y$ on the original data (this test statistic is labeled T, but does not imply that it has a T-distribution).
+
+* Create a permuted data set by randomly assigning the group labels to the observed values and compute the test statistic $T^* = \bar X^* - \bar Y^*$. \textbf{Note: this is not the same as sampling with replacement. Rather we are relabeling each of the data points as a 'male' or 'female'.}
+
+* Repeat this process for every permutation of the data (or a very large number of permutations)
+
+* Compute $p-$value of $T_{obs}$ by computing the proportion of permuted test statistics $T^*$ that are at least as "extreme" as $T_{obs}$.
+
+### 3.2 Implementation in R
+
+We implement the permutation test for our data as follows:
+```{r}
+# Compute the observed difference between genders
+obs.mean.boys <- mean(speech$percentage[index.boys])
+obs.mean.girls <- mean(speech$percentage[!index.boys])
+obs.mean.diff <- obs.mean.boys - obs.mean.girls
+# obs.mean.diff <- mean(obs.boys) - mean(obs.girls)
+
+# Permutation test
+set.seed(134)
+
+B <- 5000
+perm.mean.diff <- c()
+
+for(b in 1:B){
+  
+  # Generate new permutation of data
+  perm <- sample(speech$percentage, replace = F)
+
+  # Compute the mean for each group for the permutation
+  perm.mean.boys <- mean(perm[index.boys])
+  perm.mean.girls <- mean(perm[!index.boys])
+  
+  # Compute the difference in means for the permutation
+  perm.mean.diff[b] <- perm.mean.boys - perm.mean.girls
+}
+
+```
+
+The $p-$value for the our particular value of (FILL THIS IN) is then
+```{r}
+# Compute p-value
+mean(abs(perm.mean.diff) >= abs(obs.mean.diff))
+```
+where we have defined "extreme" to mean $|T|\geq |T_{obs}|$, which is a two-tailed test.
+Therefore we reject the null hypothesis that $\mu_1 = \mu_2$ at the $5\%$ level.
+
+### Note
+
+The assumption that both distributions are the same in every possible way except perhaps the mean is a very strong assumption that should typically be checked.
+In practice we usually require this be approximately true by checking that the sample variances are roughly equal.
+If we check this for our the speech data set, we find that this is unlikely satisfied and that we may want to use another approach for testing this hypothesis.
