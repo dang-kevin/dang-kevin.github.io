@@ -10,9 +10,13 @@ knitr::include_graphics("files/profile_picture.jpg")
 ## Introduction
 My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. 
 
-Currently, I am a Teaching Assistant for courses in the Dalla Lana School of Public Health, Department of Computer Science, and Department of Statistical Sciences. I am also working at St. Michael's Hospital for my biostatistics practicum.
+Currently, I am a Teaching Assistant for the Department of Statistical Sciences. I am also finishing my biostatistics practicum at St. Michael's Hospital.
 
 ## Teaching Assistantships 
+### Summer 2022
+* [STA303:](https://artsci.calendar.utoronto.ca/course/sta303h1) Methods of Data Analysis II
+  + Instructor: Justin Slater
+  
 ### Winter 2022
 * [CHL5202:](CHL5202.html) Biostatistics II (graduate level course)
   + Instructors: Kevin Thorpe, Charles Keown-Stoneman
