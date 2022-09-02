@@ -13,7 +13,7 @@
 
 <title>About Me</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -62,6 +62,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -82,6 +83,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -139,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -234,7 +242,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -251,7 +259,7 @@ $(document).ready(function () {
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-university"></span>
      
     Teaching
@@ -283,7 +291,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-project-diagram"></span>
      
     Projects
@@ -353,43 +361,113 @@ $(document).ready(function () {
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>I am an MSc Candidate at the University of Toronto, and a Teaching Assistant for graduate and undergraduate courses in data science and statistics. My hobbies include calisthenics, soccer, table tennis, piano, and video games. The sections below are a summary of my work history.</p>
+<p>I am a recent MSc graduate from the University of Toronto, and former
+Teaching Assistant for graduate and undergraduate courses in data
+science and statistics. My hobbies include calisthenics, table tennis,
+piano, and video games. The sections below are a summary of my work
+history.</p>
 </div>
 <div id="st.-michaels-hospital" class="section level1">
 <h1>St. Michael’s Hospital</h1>
-<p>In the Applied Health Research Centre at St. Michael’s Hospital, I am working closely with <a href="http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/">Dr. Charles Keown-Stoneman</a>, an Investigator/Biostatistician within the <a href="https://www.targetkids.ca/about">TARGetKids!</a> research group. I am classified as a Research Visitor, and the title that best describes my role is Junior Biostatistician. My work is on the TARGetKids! COVID-19 Study, specifically studying COVID-19 public health measure adherence amongst parents and children in the Greater Toronto Area. Methods include linear mixed effects regression, piecewise linear regression, bootstrapping, cross-validation, LASSO regularization.</p>
+<p>In the Applied Health Research Centre at St. Michael’s Hospital, I
+worked closely with <a
+href="http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/">Dr. Charles
+Keown-Stoneman</a>, an Investigator/Biostatistician within the <a
+href="https://www.targetkids.ca/about">TARGetKids!</a> research group. I
+was classified as a Research Visitor but the title that best describes
+my role is Statistician. As part of the TARGetKids! COVID-19 Study, we
+studied COVID-19 public health measure adherence amongst parents and
+children in the Greater Toronto Area. Methods include linear mixed
+effects regression, piecewise linear regression, bootstrapping,
+cross-validation, LASSO regularization.</p>
 </div>
 <div id="export-development-canada" class="section level1">
 <h1>Export Development Canada</h1>
-<p>My responsibilities as a Business Intelligence Analyst at EDC included working in R (tidyverse, caret) to predict customer retention and conversion of EDC insurance products using logistic regression and random forest classifiers. Additionally, I created dashboards in PowerBI and Excel to provide succinct summaries of targets and results for key metrics such as retention rates for SVPs, VPs, and other leaders at EDC. I also produced weekly reports which involve querying data and running SAS EG projects and process flows.</p>
+<p>My responsibilities as a Business Intelligence Analyst at EDC
+included working in R (tidyverse, caret) to predict customer retention
+and conversion of EDC insurance products using logistic regression and
+random forest classifiers. Additionally, I created dashboards in PowerBI
+and Excel to provide succinct summaries of targets and results for key
+metrics such as retention rates for stakeholders. I also produced weekly
+reports which involve querying data and running SAS EG projects and
+process flows.</p>
 </div>
 <div id="globaldata" class="section level1">
 <h1>GlobalData</h1>
-<p>I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office. Majority of my time was spent working on a pricing tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables, macros). In addition to my projects, I was also required to write press releases, which are linked below.</p>
+<p>I worked at GlobalData Plc as a Medical Data Analyst in their Toronto
+office. Majority of my time was spent working on a pricing tool that
+shows insightful pricing information about medical device brands on a
+global scale. The markets that are addressed in this project include
+cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow
+diverters). Software used for this project include Python (pandas) and
+Excel (pivot tables, macros). In addition to my projects, I was also
+required to write press releases, which are linked below.</p>
 <div id="globaldata-press-releases" class="section level2">
 <h2>GlobalData Press Releases</h2>
 <ul>
-<li><a href="https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/">Wearable technology is a key driver in the growth of mobile health, says GlobalData</a></li>
-<li><a href="https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/">ENT devices market to reach US$2.3bn in 2030, forecasts GlobalData</a></li>
-<li><a href="https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/">Global cloud services in medical devices expected to generate revenues of $4.4bn in 2024, says GlobalData</a></li>
-<li><a href="https://www.globaldata.com/dental-devices-market-rebound-2021-acquisitions-rise/">Dental devices market to rebound in 2021 as acquisitions rise</a></li>
-<li><a href="https://www.globaldata.com/anesthesia-respiratory-devices-market-reach-20bn-2025-driven-recent-surge-510k-clearances-says-globaldata/">Anesthesia and respiratory devices market to reach $20bn in 2025 driven by recent surge in 510(k) clearances, says GlobalData</a></li>
-<li><a href="https://www.globaldata.com/ai-market-set-reach-52bn-2024-medical-device-companies-invest-ai-technologies-says-globaldata/">AI market is set to reach $52bn in 2024 as medical device companies invest in AI technologies, says GlobalData</a></li>
-<li><a href="https://www.globaldata.com/impressive-performance-cardiac-assist-devices-will-help-cardiovascular-devices-market-surpass-62bn-2025-forecasts-globaldata/">Impressive performance of cardiac assist devices will help cardiovascular devices market surpass $62bn by 2025, forecasts GlobalData</a></li>
-<li><a href="https://www.globaldata.com/orthopedics-market-set-reach-64bn-2025-acquisitions-surge/">Orthopedics market set to reach $64bn by 2025 as acquisitions surge</a></li>
-<li><a href="https://www.globaldata.com/remote-patient-monitoring-market-set-surpass-645m-2025-covid-19-pandemic-drives-growth/">Remote patient monitoring market set to surpass $645m by 2025 as COVID-19 pandemic drives growth</a></li>
-<li><a href="https://www.globaldata.com/elective-procedures-spark-massive-surge-demand-robotic-systems-medtech-industry/">Elective procedures spark massive surge in demand for robotic systems in medtech industry</a></li>
-<li><a href="https://www.globaldata.com/democratic-victory-will-improve-access-telemedicine-rural-areas/">A Democratic victory will improve access to telemedicine in rural areas</a></li>
+<li><a
+href="https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/">Wearable
+technology is a key driver in the growth of mobile health, says
+GlobalData</a></li>
+<li><a
+href="https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/">ENT
+devices market to reach US$2.3bn in 2030, forecasts GlobalData</a></li>
+<li><a
+href="https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/">Global
+cloud services in medical devices expected to generate revenues of
+$4.4bn in 2024, says GlobalData</a></li>
+<li><a
+href="https://www.globaldata.com/dental-devices-market-rebound-2021-acquisitions-rise/">Dental
+devices market to rebound in 2021 as acquisitions rise</a></li>
+<li><a
+href="https://www.globaldata.com/anesthesia-respiratory-devices-market-reach-20bn-2025-driven-recent-surge-510k-clearances-says-globaldata/">Anesthesia
+and respiratory devices market to reach $20bn in 2025 driven by recent
+surge in 510(k) clearances, says GlobalData</a></li>
+<li><a
+href="https://www.globaldata.com/ai-market-set-reach-52bn-2024-medical-device-companies-invest-ai-technologies-says-globaldata/">AI
+market is set to reach $52bn in 2024 as medical device companies invest
+in AI technologies, says GlobalData</a></li>
+<li><a
+href="https://www.globaldata.com/impressive-performance-cardiac-assist-devices-will-help-cardiovascular-devices-market-surpass-62bn-2025-forecasts-globaldata/">Impressive
+performance of cardiac assist devices will help cardiovascular devices
+market surpass $62bn by 2025, forecasts GlobalData</a></li>
+<li><a
+href="https://www.globaldata.com/orthopedics-market-set-reach-64bn-2025-acquisitions-surge/">Orthopedics
+market set to reach $64bn by 2025 as acquisitions surge</a></li>
+<li><a
+href="https://www.globaldata.com/remote-patient-monitoring-market-set-surpass-645m-2025-covid-19-pandemic-drives-growth/">Remote
+patient monitoring market set to surpass $645m by 2025 as COVID-19
+pandemic drives growth</a></li>
+<li><a
+href="https://www.globaldata.com/elective-procedures-spark-massive-surge-demand-robotic-systems-medtech-industry/">Elective
+procedures spark massive surge in demand for robotic systems in medtech
+industry</a></li>
+<li><a
+href="https://www.globaldata.com/democratic-victory-will-improve-access-telemedicine-rural-areas/">A
+Democratic victory will improve access to telemedicine in rural
+areas</a></li>
 </ul>
 </div>
 </div>
 <div id="university-of-toronto" class="section level1">
 <h1>University of Toronto</h1>
-<p>Prior to my industry positions, I worked as a Data Analyst at the University of Toronto Centre for Industrial Relations and Human Resources. The project I worked on involved analyzing data on wages in the agriculture and farming industry, led by <a href="http://www.gregdistelhorst.com/">Dr. Greg Distelhorst</a>. I also provided Statistical Consulting services for a management consulting firm to answer some questions they had regarding user data which they collected from their health improvement platform. Both positions required the use of R (dplry, tidyr, ggplot2) in RStudio.</p>
+<p>Prior to my industry positions, I worked as a Data Analyst at the
+University of Toronto Centre for Industrial Relations and Human
+Resources. The project I worked on involved analyzing data on wages in
+the agriculture and farming industry, led by <a
+href="http://www.gregdistelhorst.com/">Dr. Greg Distelhorst</a>. I also
+provided Statistical Consulting services for a management consulting
+firm to answer some questions they had regarding user data which they
+collected from their health improvement platform. Both positions
+required the use of R (dplry, tidyr, ggplot2) in RStudio.</p>
 </div>
 <div id="rotman-school-of-management" class="section level1">
 <h1>Rotman School of Management</h1>
-<p>I worked as a Research Assistant at the Rotman School of Management under the supervision of <a href="https://business.uoregon.edu/faculty/chris-liu">Dr. Chris Liu</a> on projects about scientific publications and careers. I used Stata and Python (pandas, pybliometrics) for these projects.</p>
+<p>I worked as a Research Assistant at the Rotman School of Management
+under the supervision of <a
+href="https://business.uoregon.edu/faculty/chris-liu">Dr. Chris Liu</a>
+on projects about scientific publications and careers. I used Stata and
+Python (pandas, pybliometrics) for these projects.</p>
 </div>
 
 

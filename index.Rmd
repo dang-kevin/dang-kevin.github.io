@@ -8,9 +8,11 @@ knitr::include_graphics("files/profile_picture.jpg")
 ```
 
 ## Introduction
-My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a graduate student at the University of Toronto Dalla Lana School of Public Health, pursuing a Master of Science in Biostatistics with an Emphasis in Artificial Intelligence and Data Science Option. I hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. 
+My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a recent graduate of the Master of Science in Biostatistics program from the University of Toronto, Dalla Lana School of Public Health. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. 
 
-Currently, I am a Teaching Assistant for the Department of Statistical Sciences. I am also finishing my biostatistics practicum at St. Michael's Hospital.
+Currently, I am a Data Analyst at the College of Nurses of Ontario. I recently finished my biostatistics practicum at St. Michael's Hospital where I now also work as a part-time Statistician.
+
+<br>
 
 ## Teaching Assistantships 
 ### Summer 2022
