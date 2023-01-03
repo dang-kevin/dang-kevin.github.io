@@ -13,7 +13,7 @@
 
 <title>Welcome!</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -180,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -189,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -364,13 +357,14 @@ $(document).ready(function () {
 <h2>Introduction</h2>
 <p>My name is <a href="https://www.linkedin.com/in/dang-kevin/">Kevin
 Dang</a> and I am a recent graduate of the Master of Science in
-Biostatistics program from the University of Toronto, Dalla Lana School
+Biostatistics program with an Emphasis in Artificial Intelligence and
+Data Science Option, from the University of Toronto - Dalla Lana School
 of Public Health. I also hold a Bachelor’s degree from the University of
 Toronto in Applied Statistics and a minor in Mathematics, conferred in
 Spring 2020.</p>
-<p>Currently, I am a Data Analyst at the College of Nurses of Ontario. I
-recently finished my biostatistics practicum at St. Michael’s Hospital
-where I now also work as a part-time Statistician.</p>
+<p>Currently, I am a Data Analyst at the College of Nurses of Ontario,
+and my position involves analyzing nursing data and building <a
+href="https://www.cno.org/en/what-is-cno/nursing-demographics/statistical-reports/">reports</a>.</p>
 <p><br></p>
 </div>
 <div id="teaching-assistantships" class="section level2">
