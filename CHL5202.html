@@ -13,7 +13,7 @@
 
 <title>CHL5202: Biostatistics II</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -35,8 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.2.1/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.2.1/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -142,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -175,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -184,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -310,7 +311,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -327,7 +328,7 @@ div.tocify {
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-university"></span>
      
     Teaching
@@ -359,7 +360,7 @@ div.tocify {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-project-diagram"></span>
      
     Projects
@@ -400,10 +401,10 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">
+  <a href="work.html">
     <span class="fa fa-user"></span>
      
-    About Me
+    Work History
   </a>
 </li>
 <li>
@@ -427,62 +428,86 @@ div.tocify {
 </div>
 
 
-<div id="course-description-and-objectives" class="section level1 unlisted unnumbered">
+<div id="course-description-and-objectives"
+class="section level1 unlisted unnumbered">
 <h1 class="unlisted unnumbered">Course Description and Objectives</h1>
 <ul>
-<li>The goal of this course is to continue development and application of skills in statistical analysis required in epidemiologic and health care research.</li>
-<li>Analysis where outcome is continuous and exposure and covariates are a mix of continuous and categorical variables (multiple linear regression)</li>
-<li>Relaxing linearity assumptions of continuous exposure variables through the use of regression splines</li>
-<li>Perform internal validation by means of bootstrapping or cross-validation</li>
+<li>The goal of this course is to continue development and application
+of skills in statistical analysis required in epidemiologic and health
+care research.</li>
+<li>Analysis where outcome is continuous and exposure and covariates are
+a mix of continuous and categorical variables (multiple linear
+regression)</li>
+<li>Relaxing linearity assumptions of continuous exposure variables
+through the use of regression splines</li>
+<li>Perform internal validation by means of bootstrapping or
+cross-validation</li>
 <li>Extension to binary outcomes (multiple logistic regression)</li>
-<li>Extension to time to event and censored outcomes (survival analysis)</li>
+<li>Extension to time to event and censored outcomes (survival
+analysis)</li>
 <li>Dealing with missing data</li>
 <li>Introduce Bayesian methods</li>
 </ul>
-<p>Course material provided by Professor Kevin Thorpe and modifications were made by myself.</p>
+<p>Course material provided by Professor Kevin Thorpe and modifications
+were made by myself.</p>
 </div>
 <div id="tutorial-1" class="section level1">
 <h1>Tutorial 1</h1>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<p>Load the data frame <code>tut1</code> into R from the file <code>tut1.RData</code> available on the course page. The data frame contains the variables x and y.</p>
-<p>Fit a simple regression with y as the response and x as the predictor. Use diagnostic plots to determine if a non-linear relationship should be modelled. If you believe a non-linear relationship is present, model it using a restricted cubic spline. The number of knots is up to you.</p>
+<p>Load the data frame <code>tut1</code> into R from the file
+<code>tut1.RData</code> available on the course page. The data frame
+contains the variables x and y.</p>
+<p>Fit a simple regression with y as the response and x as the
+predictor. Use diagnostic plots to determine if a non-linear
+relationship should be modelled. If you believe a non-linear
+relationship is present, model it using a restricted cubic spline. The
+number of knots is up to you.</p>
 <pre class="r"><code># Load packages and data
 library(rms)
+library(lattice)
+library(tidyverse)
 
 load(&quot;./CHL5202/tut1.RData&quot;)
 
 dd &lt;- datadist(tut1)
 options(datadist=&quot;dd&quot;)</code></pre>
 <ul>
-<li><p>Some notes taken from <a href="https://thomaselove.github.io/432-notes/using-ols-from-the-rms-package-to-fit-linear-models.html">here</a>.</p></li>
-<li><p>Comparing <code>ols()</code> vs <code>lm()</code>: one advantage for <code>ols()</code> is that the entire variance-covariance matrix is saved</p></li>
+<li><p>Some notes taken from <a
+href="https://thomaselove.github.io/432-notes/using-ols-from-the-rms-package-to-fit-linear-models.html">here</a>.</p></li>
+<li><p>Comparing <code>ols()</code> vs <code>lm()</code>: one advantage
+for <code>ols()</code> is that the entire variance-covariance matrix is
+saved</p></li>
 </ul>
 <pre class="r"><code>fit0 &lt;- ols(y~x,data=tut1)
 fit0</code></pre>
 <pre><code>## Linear Regression Model
-##  
-##  ols(formula = y ~ x, data = tut1)
-##  
-##                  Model Likelihood    Discrimination    
-##                        Ratio Test           Indexes    
-##  Obs     100    LR chi2     32.07    R2       0.274    
-##  sigma1.0827    d.f.            1    R2 adj   0.267    
-##  d.f.     98    Pr(&gt; chi2) 0.0000    g        0.769    
-##  
-##  Residuals
-##  
-##       Min       1Q   Median       3Q      Max 
-##  -2.21787 -0.73287  0.02416  0.74941  2.75329 
-##  
-##  
-##            Coef    S.E.   t     Pr(&gt;|t|)
-##  Intercept  1.2185 0.2149  5.67 &lt;0.0001 
-##  x         -0.3597 0.0591 -6.09 &lt;0.0001 
-## </code></pre>
+## 
+## ols(formula = y ~ x, data = tut1)
+## 
+##                 Model Likelihood    Discrimination    
+##                       Ratio Test           Indexes    
+## Obs     100    LR chi2     32.07    R2       0.274    
+## sigma1.0827    d.f.            1    R2 adj   0.267    
+## d.f.     98    Pr(&gt; chi2) 0.0000    g        0.769    
+## 
+## Residuals
+## 
+##      Min       1Q   Median       3Q      Max 
+## -2.21787 -0.73287  0.02416  0.74941  2.75329 
+## 
+## 
+##           Coef    S.E.   t     Pr(&gt;|t|)
+## Intercept  1.2185 0.2149  5.67 &lt;0.0001 
+## x         -0.3597 0.0591 -6.09 &lt;0.0001</code></pre>
 <ul>
-<li>When applying <code>anova</code> to an <code>ols</code> model, it separates out the linear and non-linear components of restricted cubic splines and polynomial terms (and product terms if they are present).</li>
-<li>Unlike for <code>lm()</code>, using <code>anova()</code> with <code>ols()</code> we have partial F-tests that describe the marginal impact of removing each covariate from the model.</li>
+<li>When applying <code>anova</code> to an <code>ols</code> model, it
+separates out the linear and non-linear components of restricted cubic
+splines and polynomial terms (and product terms if they are
+present).</li>
+<li>Unlike for <code>lm()</code>, using <code>anova()</code> with
+<code>ols()</code> we have partial F-tests that describe the marginal
+impact of removing each covariate from the model.</li>
 </ul>
 <pre class="r"><code>anova(fit0)</code></pre>
 <pre><code>##                 Analysis of Variance          Response: y 
@@ -493,7 +518,9 @@ fit0</code></pre>
 ##  ERROR      98   114.88584   1.172305</code></pre>
 <ul>
 <li>Next, we check the model assumptions using diagnostic plots.</li>
-<li>In the Normal Q-Q Plot we are looking for normally distributed error terms, i.e. most of the points lie on the line and do not show a non-linear pattern.</li>
+<li>In the Normal Q-Q Plot we are looking for normally distributed error
+terms, i.e. most of the points lie on the line and do not show a
+non-linear pattern.</li>
 </ul>
 <pre class="r"><code># for diagnostic plots
 dx0 &lt;- data.frame(tut1, e = resid(fit0), yhat = fitted(fit0)) 
@@ -503,8 +530,11 @@ qqnorm(dx0$e)
 qqline(dx0$e)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <ul>
-<li><code>xyplot()</code>: Common Bivariate Trellis Plots. Produces conditional scatterplots, typically between two continuous variables. Below we have residual plots.</li>
-<li>We are looking for the residuals to not show a distinct (non-linear) pattern which would suggest that a transformation is required.</li>
+<li><code>xyplot()</code>: Common Bivariate Trellis Plots. Produces
+conditional scatterplots, typically between two continuous variables.
+Below we have residual plots.</li>
+<li>We are looking for the residuals to not show a distinct (non-linear)
+pattern which would suggest that a transformation is required.</li>
 </ul>
 <pre class="r"><code># Residual Plots
 xyplot(e~x, data = dx0, type = c(&quot;p&quot;,&quot;smooth&quot;))</code></pre>
@@ -512,35 +542,38 @@ xyplot(e~x, data = dx0, type = c(&quot;p&quot;,&quot;smooth&quot;))</code></pre>
 <pre class="r"><code>xyplot(e~yhat, data = dx0, type = c(&quot;p&quot;,&quot;smooth&quot;))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
 <ul>
-<li>A non-linear relationship is present, so we will model it using a restricted cubic spline. For this example, we are going to use 4 knots.</li>
+<li>A non-linear relationship is present, so we will model it using a
+restricted cubic spline. For this example, we are going to use 4
+knots.</li>
 </ul>
 <pre class="r"><code>fit1 &lt;- ols(y ~ rcs(x, 4), data = tut1)
 
 fit1</code></pre>
 <pre><code>## Linear Regression Model
-##  
-##  ols(formula = y ~ rcs(x, 4), data = tut1)
-##  
-##                  Model Likelihood    Discrimination    
-##                        Ratio Test           Indexes    
-##  Obs     100    LR chi2     46.60    R2       0.372    
-##  sigma1.0173    d.f.            3    R2 adj   0.353    
-##  d.f.     96    Pr(&gt; chi2) 0.0000    g        0.875    
-##  
-##  Residuals
-##  
-##      Min      1Q  Median      3Q     Max 
-##  -2.0412 -0.7268  0.1088  0.5716  2.3664 
-##  
-##  
-##            Coef    S.E.   t     Pr(&gt;|t|)
-##  Intercept  0.2834 0.3389  0.84 0.4050  
-##  x          0.6559 0.2760  2.38 0.0195  
-##  x&#39;        -3.3087 0.8566 -3.86 0.0002  
-##  x&#39;&#39;        9.3222 2.4876  3.75 0.0003  
-## </code></pre>
+## 
+## ols(formula = y ~ rcs(x, 4), data = tut1)
+## 
+##                 Model Likelihood    Discrimination    
+##                       Ratio Test           Indexes    
+## Obs     100    LR chi2     46.60    R2       0.372    
+## sigma1.0173    d.f.            3    R2 adj   0.353    
+## d.f.     96    Pr(&gt; chi2) 0.0000    g        0.875    
+## 
+## Residuals
+## 
+##     Min      1Q  Median      3Q     Max 
+## -2.0412 -0.7268  0.1088  0.5716  2.3664 
+## 
+## 
+##           Coef    S.E.   t     Pr(&gt;|t|)
+## Intercept  0.2834 0.3389  0.84 0.4050  
+## x          0.6559 0.2760  2.38 0.0195  
+## x&#39;        -3.3087 0.8566 -3.86 0.0002  
+## x&#39;&#39;        9.3222 2.4876  3.75 0.0003</code></pre>
 <ul>
-<li>It is difficult to interpret the coefficients above. The <code>anova()</code> output below is more useful and shows a significant non-linear component.</li>
+<li>It is difficult to interpret the coefficients above. The
+<code>anova()</code> output below is more useful and shows a significant
+non-linear component.</li>
 </ul>
 <pre class="r"><code>anova(fit1)</code></pre>
 <pre><code>##                 Analysis of Variance          Response: y 
@@ -571,9 +604,15 @@ xyplot(e ~ x, data = dx1, type = c(&quot;p&quot;, &quot;smooth&quot;))</code></p
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>Load the data frame FEV from the file FEV.RData. For these data, use the variable fev as the response and the rest as the explanatory covariates.</p>
-<p>Fit an additive linear model to fev using the other variables as the covariates. Evaluate whether any of the continuous variables should be fit as non-linear terms.</p>
-<p>Fit an another additive model but this time model the continuous covariates with restricted cubic splines with four knots. Describe the results.</p>
+<p>Load the data frame FEV from the file FEV.RData. For these data, use
+the variable fev as the response and the rest as the explanatory
+covariates.</p>
+<p>Fit an additive linear model to fev using the other variables as the
+covariates. Evaluate whether any of the continuous variables should be
+fit as non-linear terms.</p>
+<p>Fit an another additive model but this time model the continuous
+covariates with restricted cubic splines with four knots. Describe the
+results.</p>
 <pre class="r"><code>load(&quot;./CHL5202/FEV.RData&quot;)
 
 fev.dd &lt;- datadist(FEV)
@@ -585,12 +624,12 @@ library(dplyr)
 glimpse(FEV)</code></pre>
 <pre><code>## Rows: 654
 ## Columns: 6
-## $ id     &lt;int&gt; 301, 451, 501, 642, 901, 1701, 1752, 1753, 1901, 1951, 1952, 20~
-## $ age    &lt;int&gt; 9, 8, 7, 9, 9, 8, 6, 6, 8, 9, 6, 8, 8, 8, 8, 7, 5, 6, 9, 9, 5, ~
-## $ fev    &lt;dbl&gt; 1.708, 1.724, 1.720, 1.558, 1.895, 2.336, 1.919, 1.415, 1.987, ~
-## $ height &lt;dbl&gt; 57.0, 67.5, 54.5, 53.0, 57.0, 61.0, 58.0, 56.0, 58.5, 60.0, 53.~
-## $ sex    &lt;fct&gt; female, female, female, male, male, female, female, female, fem~
-## $ smoke  &lt;fct&gt; non-current smoker, non-current smoker, non-current smoker, non~</code></pre>
+## $ id     &lt;int&gt; 301, 451, 501, 642, 901, 1701, 1752, 1753, 1901, 1951, 1952, 20…
+## $ age    &lt;int&gt; 9, 8, 7, 9, 9, 8, 6, 6, 8, 9, 6, 8, 8, 8, 8, 7, 5, 6, 9, 9, 5, …
+## $ fev    &lt;dbl&gt; 1.708, 1.724, 1.720, 1.558, 1.895, 2.336, 1.919, 1.415, 1.987, …
+## $ height &lt;dbl&gt; 57.0, 67.5, 54.5, 53.0, 57.0, 61.0, 58.0, 56.0, 58.5, 60.0, 53.…
+## $ sex    &lt;fct&gt; female, female, female, male, male, female, female, female, fem…
+## $ smoke  &lt;fct&gt; non-current smoker, non-current smoker, non-current smoker, non…</code></pre>
 <pre class="r"><code>summary(FEV)</code></pre>
 <pre><code>##        id             age              fev            height          sex     
 ##  Min.   :  201   Min.   : 3.000   Min.   :0.791   Min.   :46.00   female:318  
@@ -610,28 +649,27 @@ glimpse(FEV)</code></pre>
 fev.lin &lt;- ols(fev ~ age + height + sex + smoke, data = FEV)
 fev.lin</code></pre>
 <pre><code>## Linear Regression Model
-##  
-##  ols(formula = fev ~ age + height + sex + smoke, data = FEV)
-##  
-##                  Model Likelihood    Discrimination    
-##                        Ratio Test           Indexes    
-##  Obs     654    LR chi2    976.59    R2       0.775    
-##  sigma0.4122    d.f.            4    R2 adj   0.774    
-##  d.f.    649    Pr(&gt; chi2) 0.0000    g        0.869    
-##  
-##  Residuals
-##  
-##        Min        1Q    Median        3Q       Max 
-##  -1.376562 -0.250333  0.008938  0.255879  1.920471 
-##  
-##  
-##                       Coef    S.E.   t      Pr(&gt;|t|)
-##  Intercept            -4.4570 0.2228 -20.00 &lt;0.0001 
-##  age                   0.0655 0.0095   6.90 &lt;0.0001 
-##  height                0.1042 0.0048  21.90 &lt;0.0001 
-##  sex=male              0.1571 0.0332   4.73 &lt;0.0001 
-##  smoke=current smoker -0.0872 0.0593  -1.47 0.1414  
-## </code></pre>
+## 
+## ols(formula = fev ~ age + height + sex + smoke, data = FEV)
+## 
+##                 Model Likelihood    Discrimination    
+##                       Ratio Test           Indexes    
+## Obs     654    LR chi2    976.59    R2       0.775    
+## sigma0.4122    d.f.            4    R2 adj   0.774    
+## d.f.    649    Pr(&gt; chi2) 0.0000    g        0.869    
+## 
+## Residuals
+## 
+##       Min        1Q    Median        3Q       Max 
+## -1.376562 -0.250333  0.008938  0.255879  1.920471 
+## 
+## 
+##                      Coef    S.E.   t      Pr(&gt;|t|)
+## Intercept            -4.4570 0.2228 -20.00 &lt;0.0001 
+## age                   0.0655 0.0095   6.90 &lt;0.0001 
+## height                0.1042 0.0048  21.90 &lt;0.0001 
+## sex=male              0.1571 0.0332   4.73 &lt;0.0001 
+## smoke=current smoker -0.0872 0.0593  -1.47 0.1414</code></pre>
 <pre class="r"><code>anova(fev.lin)</code></pre>
 <pre><code>##                 Analysis of Variance          Response: fev 
 ## 
@@ -643,8 +681,10 @@ fev.lin</code></pre>
 ##  REGRESSION   4  380.6402823 95.1600706 560.02 &lt;.0001
 ##  ERROR      649  110.2795540  0.1699223</code></pre>
 <ul>
-<li><code>age</code> and <code>height</code> are continuous variables, so we can use residual plots.</li>
-<li><code>sex</code> and <code>smoke</code> are categorical variables (in fact, they’re binary) so residual plots won’t be useful.</li>
+<li><code>age</code> and <code>height</code> are continuous variables,
+so we can use residual plots.</li>
+<li><code>sex</code> and <code>smoke</code> are categorical variables
+(in fact, they’re binary) so residual plots won’t be useful.</li>
 </ul>
 <pre class="r"><code>dx.fev &lt;- data.frame(FEV, e = resid(fev.lin), yhat = fitted(fev.lin))
 
@@ -653,40 +693,40 @@ xyplot(e ~ age, data = dx.fev, type = c(&quot;p&quot;, &quot;smooth&quot;))</cod
 <pre class="r"><code>xyplot(e ~ height, data = dx.fev, type = c(&quot;p&quot;, &quot;smooth&quot;))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
 <ul>
-<li>The residual plots show that non-linearity needs to be modelled for both variables.</li>
+<li>The residual plots show that non-linearity needs to be modelled for
+both variables.</li>
 <li>Once again, we shall use restricted cubic splines with 4 knots.</li>
 </ul>
 <pre class="r"><code>fev.full &lt;- ols(fev ~ rcs(age, 4) + rcs(height, 4) + sex + smoke, data = FEV)
 
 fev.full</code></pre>
 <pre><code>## Linear Regression Model
-##  
-##  ols(formula = fev ~ rcs(age, 4) + rcs(height, 4) + sex + smoke, 
-##      data = FEV)
-##  
-##                   Model Likelihood    Discrimination    
-##                         Ratio Test           Indexes    
-##  Obs     654    LR chi2    1039.74    R2       0.796    
-##  sigma0.3940    d.f.             8    R2 adj   0.794    
-##  d.f.    645    Pr(&gt; chi2)  0.0000    g        0.878    
-##  
-##  Residuals
-##  
-##        Min        1Q    Median        3Q       Max 
-##  -1.637487 -0.223633  0.008879  0.236143  1.776429 
-##  
-##  
-##                       Coef    S.E.   t     Pr(&gt;|t|)
-##  Intercept            -2.7618 0.6718 -4.11 &lt;0.0001 
-##  age                  -0.0109 0.0343 -0.32 0.7509  
-##  age&#39;                  0.1815 0.0733  2.48 0.0135  
-##  age&#39;&#39;                -0.7112 0.3094 -2.30 0.0218  
-##  height                0.0834 0.0151  5.51 &lt;0.0001 
-##  height&#39;               0.0114 0.0308  0.37 0.7114  
-##  height&#39;&#39;              0.1252 0.1349  0.93 0.3540  
-##  sex=male              0.0951 0.0335  2.83 0.0047  
-##  smoke=current smoker -0.1485 0.0576 -2.58 0.0102  
-## </code></pre>
+## 
+## ols(formula = fev ~ rcs(age, 4) + rcs(height, 4) + sex + smoke, 
+##     data = FEV)
+## 
+##                  Model Likelihood    Discrimination    
+##                        Ratio Test           Indexes    
+## Obs     654    LR chi2    1039.74    R2       0.796    
+## sigma0.3940    d.f.             8    R2 adj   0.794    
+## d.f.    645    Pr(&gt; chi2)  0.0000    g        0.878    
+## 
+## Residuals
+## 
+##       Min        1Q    Median        3Q       Max 
+## -1.637487 -0.223633  0.008879  0.236143  1.776429 
+## 
+## 
+##                      Coef    S.E.   t     Pr(&gt;|t|)
+## Intercept            -2.7618 0.6718 -4.11 &lt;0.0001 
+## age                  -0.0109 0.0343 -0.32 0.7509  
+## age&#39;                  0.1815 0.0733  2.48 0.0135  
+## age&#39;&#39;                -0.7112 0.3094 -2.30 0.0218  
+## height                0.0834 0.0151  5.51 &lt;0.0001 
+## height&#39;               0.0114 0.0308  0.37 0.7114  
+## height&#39;&#39;              0.1252 0.1349  0.93 0.3540  
+## sex=male              0.0951 0.0335  2.83 0.0047  
+## smoke=current smoker -0.1485 0.0576 -2.58 0.0102</code></pre>
 <pre class="r"><code>anova(fev.full)</code></pre>
 <pre><code>##                 Analysis of Variance          Response: fev 
 ## 
@@ -701,7 +741,8 @@ fev.full</code></pre>
 ##  REGRESSION        8  390.7898263 48.8487283 314.67 &lt;.0001
 ##  ERROR           645  100.1300100  0.1552403</code></pre>
 <ul>
-<li>The <code>anova()</code> output suggests that the non-linear components for age and height are statistically significant.</li>
+<li>The <code>anova()</code> output suggests that the non-linear
+components for age and height are statistically significant.</li>
 </ul>
 <pre class="r"><code>dx.full &lt;- data.frame(FEV, e = resid(fev.full), yhat = fitted(fev.full))
 
@@ -711,7 +752,8 @@ xyplot(e ~ age, data = dx.full, type = c(&quot;p&quot;, &quot;smooth&quot;))</co
 <pre class="r"><code>xyplot(e ~ height, data = dx.full, type = c(&quot;p&quot;, &quot;smooth&quot;))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
 <ul>
-<li>Running <code>summary()</code> is the best way to get the effects of the categorical variables.</li>
+<li>Running <code>summary()</code> is the best way to get the effects of
+the categorical variables.</li>
 <li>For continuous variables, it is better to plot.</li>
 </ul>
 <pre class="r"><code>summary(fev.full)</code></pre>
@@ -735,8 +777,10 @@ xyplot(e ~ age, data = dx.full, type = c(&quot;p&quot;, &quot;smooth&quot;))</co
 <div id="extra" class="section level2">
 <h2>Extra</h2>
 <ul>
-<li><code>%&gt;%</code>: pipe operator - very useful for performing multiple data wrangling steps</li>
-<li><code>ggplot2()</code>: plotting package, included in <code>rms()</code> and <code>tidyverse()</code></li>
+<li><code>%&gt;%</code>: pipe operator - very useful for performing
+multiple data wrangling steps</li>
+<li><code>ggplot2()</code>: plotting package, included in
+<code>rms()</code> and <code>tidyverse()</code></li>
 </ul>
 <pre class="r"><code># Boxplot
 FEV %&gt;%
@@ -751,9 +795,14 @@ FEV %&gt;%
 <h1>Tutorial 2</h1>
 <div id="question-1-1" class="section level2">
 <h2>Question 1</h2>
-<p>Use the hwy2.RData file available from the course page. After attaching the rms package and doing the usual <code>datadist()/options()</code> task, fit the following model:</p>
+<p>Use the hwy2.RData file available from the course page. After
+attaching the rms package and doing the usual
+<code>datadist()/options()</code> task, fit the following model:</p>
 <p><code>fit &lt;- ols(rate~rcs(trks,4)+rcs(sigs1,4)+type+hwy,data=hwy2,x=TRUE,y=TRUE)</code></p>
-<p>Run both the ordinary bootstrap validation and the .632 bootstrap validation on this model. Use the same number of iterations and seed for both validations (to compare the results). What are your conclusions?</p>
+<p>Run both the ordinary bootstrap validation and the .632 bootstrap
+validation on this model. Use the same number of iterations and seed for
+both validations (to compare the results). What are your
+conclusions?</p>
 <pre class="r"><code>library(rms)
 
 load(&quot;./CHL5202/hwy2.RData&quot;)
@@ -786,10 +835,18 @@ validate(fit, method = &quot;.632&quot;, B=100)</code></pre>
 ## Slope         1.0000   1.0000  0.5981   0.2540          0.7460 89</code></pre>
 <p>Conclusions:</p>
 <ul>
-<li><p>There is a discrepancy in standard bootstrap vs .632 method – the standard bootstrap may be overfitting so we use the .632 method to double check the validation results. The .632 bootstrap applies a correction factor to reduce the bias.</p></li>
-<li><p>Standard bootstrap may believe the model is less overfit than what it actually is, i.e. low optimism so <code>index.corrected</code> is closer to <code>index.orig</code>.</p></li>
-<li><p>The drop in R-square is very large from validation (went from positive to negative), indicating the original model was very overfit to the point where the relationship inverted.</p></li>
-<li><p>Slope change seems to imply an adjusted slope estimate should be around 0.75 of what the original model guessed.</p></li>
+<li><p>There is a discrepancy in standard bootstrap vs .632 method – the
+standard bootstrap may be overfitting so we use the .632 method to
+double check the validation results. The .632 bootstrap applies a
+correction factor to reduce the bias.</p></li>
+<li><p>Standard bootstrap may believe the model is less overfit than
+what it actually is, i.e. low optimism so <code>index.corrected</code>
+is closer to <code>index.orig</code>.</p></li>
+<li><p>The drop in R-square is very large from validation (went from
+positive to negative), indicating the original model was very overfit to
+the point where the relationship inverted.</p></li>
+<li><p>Slope change seems to imply an adjusted slope estimate should be
+around 0.75 of what the original model guessed.</p></li>
 </ul>
 </div>
 <div id="extra-1" class="section level2">
@@ -819,9 +876,14 @@ validate(fit2, method = &quot;.632&quot;, B=100)</code></pre>
 ## Intercept     0.0000   0.0000 0.5816  -0.3676          0.3676 89
 ## Slope         1.0000   1.0000 0.7459   0.1606          0.8394 89</code></pre>
 <ul>
-<li><p>For the .632 bootstrap, the magnitude of the optimism for all 5 values is smaller than in the saturated model which showed overfitting.</p></li>
-<li><p>Hard to say whether this model is still overfitting but it is certainly an improvement.</p></li>
-<li><p>The R-square term in particular shows a major improvement, as the test R-square is positive rather than negative like previously shown.</p></li>
+<li><p>For the .632 bootstrap, the magnitude of the optimism for all 5
+values is smaller than in the saturated model which showed
+overfitting.</p></li>
+<li><p>Hard to say whether this model is still overfitting but it is
+certainly an improvement.</p></li>
+<li><p>The R-square term in particular shows a major improvement, as the
+test R-square is positive rather than negative like previously
+shown.</p></li>
 </ul>
 </div>
 </div>
@@ -829,7 +891,12 @@ validate(fit2, method = &quot;.632&quot;, B=100)</code></pre>
 <h1>Tutorial 3</h1>
 <div id="question-1-2" class="section level2">
 <h2>Question 1</h2>
-<p>Load the data from <code>tutdata</code> from the file <code>tutdata.RData</code> posted on the course page. Fit an additive model where <code>y</code> is the outcome and the predictors are <code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and <code>cholesterol</code> but they should use a restricted cubic spline with four knots for cholesterol.</p>
+<p>Load the data from <code>tutdata</code> from the file
+<code>tutdata.RData</code> posted on the course page. Fit an additive
+model where <code>y</code> is the outcome and the predictors are
+<code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and
+<code>cholesterol</code> but they should use a restricted cubic spline
+with four knots for cholesterol.</p>
 <pre class="r"><code>library(rms)
 load(&quot;./CHL5202/tutdata.RData&quot;)
 
@@ -852,7 +919,9 @@ fit &lt;- lrm(y ~ blood.pressure + sex + age + rcs(cholesterol,4), data = tutdat
 ##   Nonlinear      0.78      2    0.6758
 ##  TOTAL          38.63      6    &lt;.0001</code></pre>
 <ul>
-<li>At the 5% significance level, <code>sex</code> and <code>age</code> are statistically significant with p-values of 0.0002 and &lt; 0.0001 respectively.</li>
+<li>At the 5% significance level, <code>sex</code> and <code>age</code>
+are statistically significant with p-values of 0.0002 and &lt; 0.0001
+respectively.</li>
 </ul>
 </div>
 <div id="question-3" class="section level2">
@@ -893,14 +962,23 @@ plot(Predict(fit,cholesterol,fun=exp), ylab=&quot;Odds&quot;)</code></pre>
 ##  0.73192   
 ##  2.07910</code></pre>
 <ul>
-<li>The odds of the outcome <code>y</code> for males is 1.61 times the odds for females (with 95% CI [1.25,2.08]) controlled for blood pressure, age and cholesterol.</li>
+<li>The odds of the outcome <code>y</code> for males is 1.61 times the
+odds for females (with 95% CI [1.25,2.08]) controlled for blood
+pressure, age and cholesterol.</li>
 </ul>
 </div>
 <div id="extra-2" class="section level2">
 <h2>Extra</h2>
 <ul>
-<li>Interpreting odds ratios for continuous variables: for every one unit increase in the continuous variable, the odds of the outcome multiply by <span class="math inline">\(\exp(\beta)\)</span>, where <span class="math inline">\(\beta\)</span> represents the log-odds ratio.</li>
-<li>E.g. referring to Question 4 output: for every one year increase in age, the odds of the outcome multiply by 1.55. Alternatively, it might be more intuitive to say that the odds of the outcome increases by 55%.</li>
+<li>Interpreting odds ratios for continuous variables: for every one
+unit increase in the continuous variable, the odds of the outcome
+multiply by <span class="math inline">\(\exp(\beta)\)</span>, where
+<span class="math inline">\(\beta\)</span> represents the log-odds
+ratio.</li>
+<li>E.g. referring to Question 4 output: for every one year increase in
+age, the odds of the outcome multiply by 1.55. Alternatively, it might
+be more intuitive to say that the odds of the outcome increases by
+55%.</li>
 </ul>
 </div>
 </div>
@@ -908,7 +986,12 @@ plot(Predict(fit,cholesterol,fun=exp), ylab=&quot;Odds&quot;)</code></pre>
 <h1>Tutorial 4</h1>
 <div id="question-1-3" class="section level2">
 <h2>Question 1</h2>
-<p>Use the data from last week (<code>tutdata.RData</code>) and re-fit the model from last week which was an additive model where <code>y</code> is the outcome and the predictors are <code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and <code>cholesterol</code> except this time use a restricted cubic spline with four knots for <code>cholesterol</code>. Re-run the anova also.</p>
+<p>Use the data from last week (<code>tutdata.RData</code>) and re-fit
+the model from last week which was an additive model where
+<code>y</code> is the outcome and the predictors are
+<code>blood.pressure</code>, <code>sex</code>, <code>age</code>, and
+<code>cholesterol</code> except this time use a restricted cubic spline
+with four knots for <code>cholesterol</code>. Re-run the anova also.</p>
 <pre class="r"><code>library(rms)
 load(&quot;./CHL5202/tutdata.RData&quot;)
 
@@ -929,7 +1012,9 @@ anova(fit1)</code></pre>
 </div>
 <div id="question-2-2" class="section level2">
 <h2>Question 2</h2>
-<p>Fit a model as above only this time, add interactions between sex and age as well as sex and the RCS for cholesterol and run <code>anova()</code> on this model.</p>
+<p>Fit a model as above only this time, add interactions between sex and
+age as well as sex and the RCS for cholesterol and run
+<code>anova()</code> on this model.</p>
 <pre class="r"><code>fit2 &lt;- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata)
 anova(fit2)</code></pre>
 <pre><code>##                 Wald Statistics          Response: y 
@@ -952,12 +1037,14 @@ anova(fit2)</code></pre>
 ##  TOTAL NONLINEAR + INTERACTION                    26.81       6   0.0002
 ##  TOTAL                                            62.26      10   &lt;.0001</code></pre>
 <ul>
-<li>All interactions with <code>sex</code> are statistically significant.</li>
+<li>All interactions with <code>sex</code> are statistically
+significant.</li>
 </ul>
 </div>
 <div id="question-3-1" class="section level2">
 <h2>Question 3</h2>
-<p>Compare the two models with a likelihood ratio test. What does it show?</p>
+<p>Compare the two models with a likelihood ratio test. What does it
+show?</p>
 <pre class="r"><code>lrtest(fit1,fit2)</code></pre>
 <pre><code>## 
 ## Model 1: y ~ blood.pressure + sex + age + rcs(cholesterol, 4)
@@ -966,23 +1053,39 @@ anova(fit2)</code></pre>
 ##   L.R. Chisq         d.f.            P 
 ## 2.831616e+01 4.000000e+00 1.076137e-05</code></pre>
 <ul>
-<li>We are testing the null hypothesis that all of the coefficients for the interaction terms are equal to 0.</li>
-<li>Degrees of freedom (df): 10 df (more complicated model) minus 6 df (simpler model) equals 4 df.</li>
-<li>With the extremely small p-value from the likelihood ratio test, we reject the null hypothesis and conclude that at least one of the coefficients is not equal to 0.</li>
-<li>This p-value is equivalent to the p-value for <code>TOTAL INTERACTION</code> in the <code>anova(fit2)</code> output as this is what we are testing.</li>
+<li>We are testing the null hypothesis that all of the coefficients for
+the interaction terms are equal to 0.</li>
+<li>Degrees of freedom (df): 10 df (more complicated model) minus 6 df
+(simpler model) equals 4 df.</li>
+<li>With the extremely small p-value from the likelihood ratio test, we
+reject the null hypothesis and conclude that at least one of the
+coefficients is not equal to 0.</li>
+<li>This p-value is equivalent to the p-value for
+<code>TOTAL INTERACTION</code> in the <code>anova(fit2)</code> output as
+this is what we are testing.</li>
 </ul>
 </div>
 <div id="question-4-1" class="section level2">
 <h2>Question 4</h2>
-<p>Describe the sex/age and sex/cholesterol relationships with outcome.</p>
+<p>Describe the sex/age and sex/cholesterol relationships with
+outcome.</p>
 <pre class="r"><code>plot(Predict(fit2,age,sex))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <pre class="r"><code>plot(Predict(fit2,cholesterol,sex))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-32-2.png" width="672" /></p>
 <ul>
-<li>We can use the non-overlapping confidence intervals to specify statistical significance. If this is too complicated we can also discuss the points where the lines cross. This is an open ended question.</li>
-<li>At ages below 50, the log odds of the outcome is statistically significantly higher for males compared to females. From ages 50 to 70, the log odds is still higher for males but the confidence intervals overlap so the difference is not as significant.</li>
-<li>For cholesterol levels below 150, the log odds of the outcome is statistically significantly higher for females compared to males. The opposite is true in cholesterol levels from 190 to 200, and above 220. There is a bit of overlap in confidence intervals between the 200-220 range.</li>
+<li>We can use the non-overlapping confidence intervals to specify
+statistical significance. If this is too complicated we can also discuss
+the points where the lines cross. This is an open ended question.</li>
+<li>At ages below 50, the log odds of the outcome is statistically
+significantly higher for males compared to females. From ages 50 to 70,
+the log odds is still higher for males but the confidence intervals
+overlap so the difference is not as significant.</li>
+<li>For cholesterol levels below 150, the log odds of the outcome is
+statistically significantly higher for females compared to males. The
+opposite is true in cholesterol levels from 190 to 200, and above 220.
+There is a bit of overlap in confidence intervals between the 200-220
+range.</li>
 </ul>
 <pre class="r"><code># Fancy way of combining the plots together but is harder to interpret
 bplot(Predict(fit2,cholesterol,age,sex,np=20),lfun=wireframe,drape=TRUE)</code></pre>
@@ -991,7 +1094,9 @@ bplot(Predict(fit2,cholesterol,age,sex,np=20),lfun=wireframe,drape=TRUE)</code><
 <div id="extra-3" class="section level2">
 <h2>Extra</h2>
 <ul>
-<li>Below we are fitting a third model with an interaction term between <code>sex</code> and the other 3 variables, including <code>blood pressure</code>.</li>
+<li>Below we are fitting a third model with an interaction term between
+<code>sex</code> and the other 3 variables, including
+<code>blood pressure</code>.</li>
 </ul>
 <pre class="r"><code>fit3 &lt;- lrm(y ~ sex * (blood.pressure + age + rcs(cholesterol,4)), data = tutdata)
 # Alternate way
@@ -1020,7 +1125,8 @@ anova(fit3)</code></pre>
 ##  TOTAL NONLINEAR + INTERACTION                       27.25       7   0.0003
 ##  TOTAL                                               62.64      11   &lt;.0001</code></pre>
 <ul>
-<li>The total interaction from the anova output is still statistically significant as it takes into account all interactions.</li>
+<li>The total interaction from the anova output is still statistically
+significant as it takes into account all interactions.</li>
 <li>We can also test for it below as follows:</li>
 </ul>
 <pre class="r"><code>lrtest(fit1,fit3)</code></pre>
@@ -1031,8 +1137,10 @@ anova(fit3)</code></pre>
 ##   L.R. Chisq         d.f.            P 
 ## 2.878410e+01 5.000000e+00 2.556193e-05</code></pre>
 <ul>
-<li>The sex and blood pressure interaction term from the anova output is not significant (p=0.494).</li>
-<li>This is equivalent to the p-value from the likelihood ratio test below:</li>
+<li>The sex and blood pressure interaction term from the anova output is
+not significant (p=0.494).</li>
+<li>This is equivalent to the p-value from the likelihood ratio test
+below:</li>
 </ul>
 <pre class="r"><code>lrtest(fit2,fit3)</code></pre>
 <pre><code>## 
@@ -1047,8 +1155,13 @@ anova(fit3)</code></pre>
 <pre class="r"><code>plot(Predict(fit3,blood.pressure,sex))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <ul>
-<li>At a first glance we do not see the lines meet like they do in the <code>sex:age</code> and <code>sex:cholesterol</code> interactions. The confidence intervals also overlap for the most part, except in the 115-130 range.</li>
-<li>Personally, I would avoid using this as a standalone method to check for a significant interaction, you should use either the anova function call or the likelihood ratio test.</li>
+<li>At a first glance we do not see the lines meet like they do in the
+<code>sex:age</code> and <code>sex:cholesterol</code> interactions. The
+confidence intervals also overlap for the most part, except in the
+115-130 range.</li>
+<li>Personally, I would avoid using this as a standalone method to check
+for a significant interaction, you should use either the anova function
+call or the likelihood ratio test.</li>
 </ul>
 </div>
 </div>
@@ -1056,7 +1169,8 @@ anova(fit3)</code></pre>
 <h1>Tutorial 5</h1>
 <div id="question-1-4" class="section level2">
 <h2>Question 1</h2>
-<p>Using the data from the last few tutorials, fit the following model.</p>
+<p>Using the data from the last few tutorials, fit the following
+model.</p>
 <p><code>fit &lt;- lrm(y ~ blood.pressure + sex * (age + rcs(cholesterol,4)), data = tutdata, x=TRUE, y=TRUE)</code></p>
 <pre class="r"><code>library(rms)
 load(&quot;./CHL5202/tutdata.RData&quot;)
@@ -1067,35 +1181,34 @@ options(datadist = &quot;dd&quot;)</code></pre>
            x = TRUE, y = TRUE)
 fit</code></pre>
 <pre><code>## Logistic Regression Model
-##  
-##  lrm(formula = y ~ blood.pressure + sex * (age + rcs(cholesterol, 
-##      4)), data = tutdata, x = TRUE, y = TRUE)
-##  
-##                         Model Likelihood    Discrimination    Rank Discrim.    
-##                               Ratio Test           Indexes          Indexes    
-##  Obs          1000    LR chi2      69.39    R2       0.090    C       0.642    
-##   0            460    d.f.            10    g        0.623    Dxy     0.283    
-##   1            540    Pr(&gt; chi2) &lt;0.0001    gr       1.865    gamma   0.283    
-##  max |deriv| 1e-08                          gp       0.146    tau-a   0.141    
-##                                             Brier    0.232                     
-##  
-##                           Coef    S.E.   Wald Z Pr(&gt;|Z|)
-##  Intercept                 3.2474 2.3426  1.39  0.1657  
-##  blood.pressure           -0.0022 0.0044 -0.51  0.6105  
-##  sex=male                 -9.3612 3.5422 -2.64  0.0082  
-##  age                       0.0474 0.0094  5.06  &lt;0.0001 
-##  cholesterol              -0.0308 0.0133 -2.31  0.0209  
-##  cholesterol&#39;              0.0738 0.0376  1.96  0.0499  
-##  cholesterol&#39;&#39;            -0.3072 0.1552 -1.98  0.0477  
-##  sex=male * age           -0.0263 0.0134 -1.96  0.0495  
-##  sex=male * cholesterol    0.0620 0.0203  3.06  0.0022  
-##  sex=male * cholesterol&#39;  -0.1241 0.0569 -2.18  0.0293  
-##  sex=male * cholesterol&#39;&#39;  0.5116 0.2362  2.17  0.0303  
-## </code></pre>
+## 
+## lrm(formula = y ~ blood.pressure + sex * (age + rcs(cholesterol, 
+##     4)), data = tutdata, x = TRUE, y = TRUE)
+## 
+##                        Model Likelihood       Discrimination    Rank Discrim.    
+##                              Ratio Test              Indexes          Indexes    
+## Obs          1000    LR chi2      69.39       R2       0.090    C       0.642    
+##  0            460    d.f.            10     R2(10,1000)0.058    Dxy     0.283    
+##  1            540    Pr(&gt; chi2) &lt;0.0001    R2(10,745.2)0.077    gamma   0.283    
+## max |deriv| 1e-08                             Brier    0.232    tau-a   0.141    
+## 
+##                          Coef    S.E.   Wald Z Pr(&gt;|Z|)
+## Intercept                 3.2474 2.3426  1.39  0.1657  
+## blood.pressure           -0.0022 0.0044 -0.51  0.6105  
+## sex=male                 -9.3612 3.5422 -2.64  0.0082  
+## age                       0.0474 0.0094  5.06  &lt;0.0001 
+## cholesterol              -0.0308 0.0133 -2.31  0.0209  
+## cholesterol&#39;              0.0738 0.0376  1.96  0.0499  
+## cholesterol&#39;&#39;            -0.3072 0.1552 -1.98  0.0477  
+## sex=male * age           -0.0263 0.0134 -1.96  0.0495  
+## sex=male * cholesterol    0.0620 0.0203  3.06  0.0022  
+## sex=male * cholesterol&#39;  -0.1241 0.0569 -2.18  0.0293  
+## sex=male * cholesterol&#39;&#39;  0.5116 0.2362  2.17  0.0303</code></pre>
 </div>
 <div id="question-2-3" class="section level2">
 <h2>Question 2</h2>
-<p>Validate the model using the bootstrap with 100 replications and comment on the overfitting.</p>
+<p>Validate the model using the bootstrap with 100 replications and
+comment on the overfitting.</p>
 <pre class="r"><code>set.seed(123)
 validate(fit, B = 100)</code></pre>
 <pre><code>##           index.orig training   test optimism index.corrected   n
@@ -1112,8 +1225,10 @@ validate(fit, B = 100)</code></pre>
 ## gp            0.1457   0.1541 0.1358   0.0183          0.1273 100</code></pre>
 <ul>
 <li>There is mild evidence of overfitting.</li>
-<li><span class="math inline">\(D_{xy}\)</span> and Brier score (<code>B</code>) do not change much at all.</li>
-<li>Slope parameter indicates a need to shrink by about 12% to calibrate</li>
+<li><span class="math inline">\(D_{xy}\)</span> and Brier score
+(<code>B</code>) do not change much at all.</li>
+<li>Slope parameter indicates a need to shrink by about 12% to
+calibrate</li>
 </ul>
 </div>
 <div id="question-3-2" class="section level2">
@@ -1123,8 +1238,11 @@ validate(fit, B = 100)</code></pre>
 plot(dff)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 <ul>
-<li>The DFFITS statistic indicate the effect that deleting each observation has on the predicted values of the model.</li>
-<li>Some use <span class="math inline">\(|\text{DFFITS}| &gt; 2\sqrt{\frac{p+1}{n-p-1}}\)</span> to indicate an influential observation.</li>
+<li>The DFFITS statistic indicate the effect that deleting each
+observation has on the predicted values of the model.</li>
+<li>Some use <span class="math inline">\(|\text{DFFITS}| &gt;
+2\sqrt{\frac{p+1}{n-p-1}}\)</span> to indicate an influential
+observation.</li>
 </ul>
 <pre class="r"><code>show.influence(which.influence(fit), data.frame(tutdata, dffits = dff), report = c(&quot;dffits&quot;))</code></pre>
 <pre><code>##     Count     sex cholesterol     dffits
@@ -1136,26 +1254,41 @@ plot(dff)</code></pre>
 ## 834     2  female   *146.6413 -0.4908278
 ## 840     2  female   *147.0025 -0.5604495</code></pre>
 <ul>
-<li>Using <code>which.influence()</code> gives the indices of influential observations, which are listed in the first column of the dataframe above.</li>
-<li>The variables with significant DFBETA are marked with an asterisk. Note that all of these observations have significant DFFITS.</li>
-<li>The DFBETAS are statistics that indicate the effect that deleting each observation has on the estimates for the regression coefficients.</li>
-<li>For DFBETAS one can use <span class="math inline">\(|\text{DFBETAS}| &gt; u\)</span> for a given cutoff, the default is 0.2.</li>
+<li>Using <code>which.influence()</code> gives the indices of
+influential observations, which are listed in the first column of the
+dataframe above.</li>
+<li>The variables with significant DFBETA are marked with an asterisk.
+Note that all of these observations have significant DFFITS.</li>
+<li>The DFBETAS are statistics that indicate the effect that deleting
+each observation has on the estimates for the regression
+coefficients.</li>
+<li>For DFBETAS one can use <span class="math inline">\(|\text{DFBETAS}|
+&gt; u\)</span> for a given cutoff, the default is 0.2.</li>
 </ul>
-<p>Below we investigate partial residual plots which can be used to verify the functional form of continuous covariates.</p>
+<p>Below we investigate partial residual plots which can be used to
+verify the functional form of continuous covariates.</p>
 <pre class="r"><code># Option below saves the following plots to a pdf file
 # pdf(&quot;resid_plots.pdf&quot;)
 
 resid(fit, &quot;partial&quot;, pl = &quot;loess&quot;)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-43-1.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-2.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-3.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-4.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-5.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-6.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-7.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-8.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-9.png" width="672" /><img src="CHL5202_files/figure-html/unnamed-chunk-43-10.png" width="672" /></p>
 <ul>
-<li>There is very little evidence of non-linearity in most of these plots, i.e. there is not much value in including a non-linear component for these variables.</li>
+<li>There is very little evidence of non-linearity in most of these
+plots, i.e. there is not much value in including a non-linear component
+for these variables.</li>
 </ul>
 </div>
 </div>
 <div id="tutorial-6" class="section level1">
 <h1>Tutorial 6</h1>
-<p>Over the next few weeks the tutorials will use the data frame <code>mgus2</code> which may be found in the survival package. Since the survival package is attached when <code>rms</code> is, nothing special is required to access it, other than loading the <code>rms</code> package.</p>
+<p>Over the next few weeks the tutorials will use the data frame
+<code>mgus2</code> which may be found in the survival package. Since the
+survival package is attached when <code>rms</code> is, nothing special
+is required to access it, other than loading the <code>rms</code>
+package. Update: it needs to be loaded from the <code>survival</code>
+package.</p>
 <pre class="r"><code>library(rms)
+library(survival)
 
 str(mgus2)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    1384 obs. of  11 variables:
@@ -1174,10 +1307,12 @@ str(mgus2)</code></pre>
 ##  $ pstat : num  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ futime: num  30 25 46 92 8 4 151 2 57 136 ...
 ##  $ death : num  1 1 1 1 1 1 1 1 0 1 ...</code></pre>
-<p>More information about the data can be found in the help file (e.g. <code>?mgus2</code>).</p>
+<p>More information about the data can be found in the help file
+(e.g. <code>?mgus2</code>).</p>
 <div id="question-1-5" class="section level2">
 <h2>Question 1</h2>
-<p>Estimate the Kaplan-Meier curves for survival for males and females and plot the result.</p>
+<p>Estimate the Kaplan-Meier curves for survival for males and females
+and plot the result.</p>
 <pre class="r"><code># The rms package has a function npsurv which is used in place of the usual survfit.
 fit &lt;- npsurv(Surv(futime, death) ~ sex, data = mgus2)
 
@@ -1189,7 +1324,9 @@ plot(fit, lty = c(1, 2)) # standard method</code></pre>
 </div>
 <div id="question-2-4" class="section level2">
 <h2>Question 2</h2>
-<p>Test <span class="math inline">\(H_0 : S_F(t) = S_M(t)\)</span> versus <span class="math inline">\(H_0 : S_F(t) \neq S_M(t).\)</span></p>
+<p>Test <span class="math inline">\(H_0 : S_F(t) = S_M(t)\)</span>
+versus <span class="math inline">\(H_0 : S_F(t) \neq
+S_M(t).\)</span></p>
 <pre class="r"><code># This requires the Mantel-Haenzel (log-rank) test.
 print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pre>
 <pre><code>## Call:
@@ -1201,7 +1338,9 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 ## 
 ##  Chisq= 9.7  on 1 degrees of freedom, p= 0.002</code></pre>
 <ul>
-<li>The Mantel-Haenzel test yields a p-value of 0.002, so we reject the null hypothesis as there is strong evidence that the survival function for females is not equal to the survival function for males.</li>
+<li>The Mantel-Haenzel test yields a p-value of 0.002, so we reject the
+null hypothesis as there is strong evidence that the survival function
+for females is not equal to the survival function for males.</li>
 </ul>
 </div>
 <div id="question-3-3" class="section level2">
@@ -1222,9 +1361,10 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 ## upper 95% CI 
 ##        0.877</code></pre>
 <ul>
-<li>The risk difference (assigning females as control and males as treatment) is:</li>
+<li>The risk difference (assigning females as control and males as
+treatment) is:</li>
 </ul>
-<p><span class="math display">\[ 
+<p><span class="math display">\[
 \begin{aligned}
 \widehat{RD} &amp;= \hat{F}_C(t_0)-\hat{F}_T(t_0) \\
 &amp;= (1-\hat{S}_C(t_0))(1-\hat{S}_T(t_0)) \\
@@ -1241,12 +1381,15 @@ print(fit.mh &lt;- survdiff(Surv(futime, death) ~ sex, data = mgus2))</code></pr
 <pre class="r"><code>fit$surv[length(fit$surv)-232+12] - fit$surv[12] # alternative</code></pre>
 <pre><code>## [1] -0.05194881</code></pre>
 <ul>
-<li><p>Interpretation: The observed risk of death in females at one year is 5.2% lower than in males.</p></li>
-<li><p>(Extra) A 95% confidence interval for the risk difference is:</p></li>
+<li><p>Interpretation: The observed risk of death in females at one year
+is 5.2% lower than in males.</p></li>
+<li><p>(Extra) A 95% confidence interval for the risk difference
+is:</p></li>
 </ul>
 <p><span class="math display">\[
 \begin{aligned}
-&amp;\widehat{RD} \pm 1.96\sqrt{\hat{V}[\hat{S}_C(t_0)] + \hat{V}[\hat{S}_T(t_0)]} \\
+&amp;\widehat{RD} \pm 1.96\sqrt{\hat{V}[\hat{S}_C(t_0)] +
+\hat{V}[\hat{S}_T(t_0)]} \\
 &amp;= -0.0522 \pm 1.96\sqrt{0.0118^2 + 0.013^2} \\
 &amp;= (-0.0866,-0.0178)
 \end{aligned}
@@ -1261,8 +1404,9 @@ c(rd-bound, rd+bound)</code></pre>
 </div>
 <div id="question-4-2" class="section level2">
 <h2>Question 4</h2>
-<p>Compute a hazard ratio using the output from <code>survdiff</code>.</p>
-<p><span class="math display">\[ 
+<p>Compute a hazard ratio using the output from
+<code>survdiff</code>.</p>
+<p><span class="math display">\[
 \widehat{HR} = \frac{O_T/E_T}{O_C/E_C} = \frac{540/492}{423/471} = 1.222
 \]</span></p>
 <ul>
@@ -1282,11 +1426,14 @@ hr &lt;- male/female # (540/492)/(423/471)
 hr</code></pre>
 <pre><code>## [1] 1.221743</code></pre>
 <ul>
-<li><p>The hazard ratio of 1.222 means that the rate of death for males is 1.222 times the rate of death for females.</p></li>
-<li><p>(Extra) Obtaining a 95% CI for the hazard ratio, we start with the standard error:</p></li>
+<li><p>The hazard ratio of 1.222 means that the rate of death for males
+is 1.222 times the rate of death for females.</p></li>
+<li><p>(Extra) Obtaining a 95% CI for the hazard ratio, we start with
+the standard error:</p></li>
 </ul>
 <p><span class="math display">\[
-SE[\log\widehat{HR}] = \sqrt{\frac{1}{E_T} + \frac{1}{E_C}} = \sqrt{\frac{1}{492} + \frac{1}{471}} = 0.06446
+SE[\log\widehat{HR}] = \sqrt{\frac{1}{E_T} + \frac{1}{E_C}} =
+\sqrt{\frac{1}{492} + \frac{1}{471}} = 0.06446
 \]</span></p>
 <ul>
 <li>Which gives a 95% CI of:</li>
@@ -1307,7 +1454,8 @@ c(1.222*exp(-1.96*se), 1.222*exp(+1.96*se))</code></pre>
 </div>
 <div id="tutorial-7" class="section level1">
 <h1>Tutorial 7</h1>
-<p>You will again use the data frame <code>mgus2</code> from the <code>rms</code> package.</p>
+<p>You will again use the data frame <code>mgus2</code> from the
+<code>rms</code> package.</p>
 <pre class="r"><code>library(rms)
 
 str(mgus2)</code></pre>
@@ -1331,7 +1479,8 @@ str(mgus2)</code></pre>
 options(datadist = &quot;dd&quot;)</code></pre>
 <div id="question-1-6" class="section level2">
 <h2>Question 1</h2>
-<p>Investigate if either the exponential or Weibull models would be appropriate to model the dependency of survival on sex.</p>
+<p>Investigate if either the exponential or Weibull models would be
+appropriate to model the dependency of survival on sex.</p>
 <pre class="r"><code>fit.km &lt;- npsurv(Surv(futime, death) ~ sex, data = mgus2)
 
 # Check exponential
@@ -1341,7 +1490,8 @@ plot(fit.km, fun = &quot;cumhaz&quot;)</code></pre>
 plot(fit.km, fun = &quot;cloglog&quot;)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-54-2.png" width="672" /></p>
 <ul>
-<li>The plots indicate that both models could be a good fit (as they are linear).</li>
+<li>The plots indicate that both models could be a good fit (as they are
+linear).</li>
 </ul>
 </div>
 <div id="question-2-5" class="section level2">
@@ -1349,29 +1499,30 @@ plot(fit.km, fun = &quot;cloglog&quot;)</code></pre>
 <p>Fit and interpret an exponential model and plot the result.</p>
 <pre class="r"><code>print(fit1 &lt;- psm(Surv(futime,death)~sex,data=mgus2,dist=&quot;exponential&quot;))</code></pre>
 <pre><code>## Parametric Survival Model: Exponential Distribution
-##  
-##  psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;exponential&quot;)
-##  
-##                 Model Likelihood    Discrimination    
-##                       Ratio Test           Indexes    
-##  Obs   1384    LR chi2      9.99    R2       0.007    
-##  Events 963    d.f.            1    Dxy      0.062    
-##  sigma    1    Pr(&gt; chi2) 0.0016    g        0.102    
-##                                     gr       1.107    
-##  
-##              Coef    S.E.   Wald Z Pr(&gt;|Z|)
-##  (Intercept)  5.0344 0.0486 103.54 &lt;0.0001 
-##  sex=M       -0.2045 0.0649  -3.15 0.0016  
-## </code></pre>
+## 
+## psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;exponential&quot;)
+## 
+##                  Model Likelihood     Discrimination    
+##                        Ratio Test            Indexes    
+## Obs     1384    LR chi2      9.99     R2       0.007    
+## Events   963    d.f.            1    R2(1,1384)0.006    
+## sigma 1.0000    Pr(&gt; chi2) 0.0016     R2(1,963)0.009    
+##                                       Dxy      0.062    
+## 
+##             Coef    S.E.   Wald Z Pr(&gt;|Z|)
+## (Intercept)  5.0344 0.0486 103.54 &lt;0.0001 
+## sex=M       -0.2045 0.0649  -3.15 0.0016</code></pre>
 <ul>
-<li>P-value of 0.0016 provides strong evidence that the rate of death is higher in males than females.</li>
+<li>P-value of 0.0016 provides strong evidence that the rate of death is
+higher in males than females.</li>
 </ul>
 <pre class="r"><code># HR for sex: M vs. F
 exp(-coef(fit1)[2])</code></pre>
 <pre><code>##    sex=M 
 ## 1.226934</code></pre>
 <ul>
-<li>The hazard ratio of 1.227 means that the rate of death for males is 1.227 times the rate of death for females.</li>
+<li>The hazard ratio of 1.227 means that the rate of death for males is
+1.227 times the rate of death for females.</li>
 </ul>
 <pre class="r"><code># Survival time ratio
 summary(fit1,sex=&quot;F&quot;)</code></pre>
@@ -1381,9 +1532,12 @@ summary(fit1,sex=&quot;F&quot;)</code></pre>
 ##  sex - M:F            1   2    NA    -0.20452 0.06493 -0.33189   -0.077146 
 ##   Survival Time Ratio 1   2    NA     0.81504      NA  0.71757    0.925750</code></pre>
 <ul>
-<li>The survival time ratio of 0.815 means that the median survival time for males is 0.815 times the median survival time for females.</li>
-<li>The results can be interpreted in terms of any percentile survival time, but median is most common.</li>
-<li>For the exponential model, the survival time ratio is the inverse of the hazard ratio. This is not the case for other models.</li>
+<li>The survival time ratio of 0.815 means that the median survival time
+for males is 0.815 times the median survival time for females.</li>
+<li>The results can be interpreted in terms of any percentile survival
+time, but median is most common.</li>
+<li>For the exponential model, the survival time ratio is the inverse of
+the hazard ratio. This is not the case for other models.</li>
 </ul>
 <pre class="r"><code>survplot(fit1,sex)
 survplot(fit.km,add=TRUE,label.curves=FALSE,conf=&quot;none&quot;,col=&quot;red&quot;)</code></pre>
@@ -1394,30 +1548,31 @@ survplot(fit.km,add=TRUE,label.curves=FALSE,conf=&quot;none&quot;,col=&quot;red&
 <p>Fit and interpret a Weibull model and plot the result.</p>
 <pre class="r"><code>print(fit2 &lt;- psm(Surv(futime,death)~sex,data=mgus2,dist=&quot;weibull&quot;))</code></pre>
 <pre><code>## Parametric Survival Model: Weibull Distribution
-##  
-##  psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;weibull&quot;)
-##  
-##                     Model Likelihood    Discrimination    
-##                           Ratio Test           Indexes    
-##  Obs       1384    LR chi2      9.18    R2       0.007    
-##  Events     963    d.f.            1    Dxy      0.062    
-##  sigma 1.101582    Pr(&gt; chi2) 0.0024    g        0.107    
-##                                         gr       1.113    
-##  
-##              Coef    S.E.   Wald Z Pr(&gt;|Z|)
-##  (Intercept)  5.0494 0.0538 93.87  &lt;0.0001 
-##  sex=M       -0.2162 0.0716 -3.02  0.0025  
-##  Log(scale)   0.0967 0.0278  3.48  0.0005  
-## </code></pre>
+## 
+## psm(formula = Surv(futime, death) ~ sex, data = mgus2, dist = &quot;weibull&quot;)
+## 
+##                  Model Likelihood     Discrimination    
+##                        Ratio Test            Indexes    
+## Obs     1384    LR chi2      9.18     R2       0.007    
+## Events   963    d.f.            1    R2(1,1384)0.006    
+## sigma 1.1016    Pr(&gt; chi2) 0.0024     R2(1,963)0.008    
+##                                       Dxy      0.062    
+## 
+##             Coef    S.E.   Wald Z Pr(&gt;|Z|)
+## (Intercept)  5.0494 0.0538 93.87  &lt;0.0001 
+## sex=M       -0.2162 0.0716 -3.02  0.0025  
+## Log(scale)   0.0967 0.0278  3.48  0.0005</code></pre>
 <ul>
-<li>P-value of 0.0025 provides strong evidence that the rate of death is higher in males than females.</li>
+<li>P-value of 0.0025 provides strong evidence that the rate of death is
+higher in males than females.</li>
 </ul>
 <pre class="r"><code># HR for sex: M vs. F
 exp(-coef(fit2)[2]/fit2$scale)</code></pre>
 <pre><code>##    sex=M 
 ## 1.216865</code></pre>
 <ul>
-<li>The rate of death for males is 1.217 times the rate of death for females.</li>
+<li>The rate of death for males is 1.217 times the rate of death for
+females.</li>
 </ul>
 <pre class="r"><code># Survival time ratio
 summary(fit2,sex=&quot;F&quot;)</code></pre>
@@ -1427,7 +1582,8 @@ summary(fit2,sex=&quot;F&quot;)</code></pre>
 ##  sex - M:F            1   2    NA    -0.21622 0.071609 -0.35669   -0.075742 
 ##   Survival Time Ratio 1   2    NA     0.80556       NA  0.69999    0.927060</code></pre>
 <ul>
-<li>The median survival time for males is 0.806 times the median survival time for females.</li>
+<li>The median survival time for males is 0.806 times the median
+survival time for females.</li>
 </ul>
 <pre class="r"><code>survplot(fit2,sex)
 survplot(fit.km,add=TRUE,label.curves=FALSE,conf=&quot;none&quot;,col=&quot;red&quot;)</code></pre>
@@ -1441,7 +1597,9 @@ survplot(fit1,sex,add=TRUE,label.curves=FALSE,col=&quot;red&quot;) # exponential
 survplot(fit2,sex,add=TRUE,label.curves=FALSE,col=&quot;blue&quot;) # weibull</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
 <ul>
-<li>There’s very little difference between the two models in this example. The AIC for the Weibull is slightly smaller, which may or may not mean anything.</li>
+<li>There’s very little difference between the two models in this
+example. The AIC for the Weibull is slightly smaller, which may or may
+not mean anything.</li>
 </ul>
 </div>
 <div id="question-5" class="section level2">
@@ -1449,20 +1607,19 @@ survplot(fit2,sex,add=TRUE,label.curves=FALSE,col=&quot;blue&quot;) # weibull</c
 <p>Fit a Cox model with sex as the covariate and interpret.</p>
 <pre class="r"><code>print(fit1.cox &lt;- cph(Surv(futime,death)~sex,data=mgus2))</code></pre>
 <pre><code>## Cox Proportional Hazards Model
-##  
-##  cph(formula = Surv(futime, death) ~ sex, data = mgus2)
-##  
-##                         Model Tests    Discrimination    
+## 
+## cph(formula = Surv(futime, death) ~ sex, data = mgus2)
+## 
+##                        Model Tests     Discrimination    
 ##                                               Indexes    
-##  Obs      1384    LR chi2      9.68    R2       0.007    
-##  Events    963    d.f.            1    Dxy      0.062    
-##  Center 0.1098    Pr(&gt; chi2) 0.0019    g        0.100    
-##                   Score chi2   9.65    gr       1.105    
-##                   Pr(&gt; chi2) 0.0019                      
-##  
-##        Coef   S.E.   Wald Z Pr(&gt;|Z|)
-##  sex=M 0.2017 0.0651 3.10   0.0019  
-## </code></pre>
+## Obs      1384    LR chi2      9.68     R2       0.007    
+## Events    963    d.f.            1    R2(1,1384)0.006    
+## Center 0.1098    Pr(&gt; chi2) 0.0019     R2(1,963)0.009    
+##                  Score chi2   9.65     Dxy      0.062    
+##                  Pr(&gt; chi2) 0.0019                       
+## 
+##       Coef   S.E.   Wald Z Pr(&gt;|Z|)
+## sex=M 0.2017 0.0651 3.10   0.0019</code></pre>
 <pre class="r"><code>summary(fit1.cox,sex=&quot;F&quot;)</code></pre>
 <pre><code>##              Effects              Response : Surv(futime, death) 
 ## 
@@ -1470,32 +1627,35 @@ survplot(fit2,sex,add=TRUE,label.curves=FALSE,col=&quot;blue&quot;) # weibull</c
 ##  sex - M:F     1   2    NA    0.20174 0.065062 0.074221   0.32926   
 ##   Hazard Ratio 1   2    NA    1.22350       NA 1.077000   1.38990</code></pre>
 <ul>
-<li>The rate of death for males is 1.224 times the rate of death for females.</li>
-<li>There is strong evidence that the rate of death is higher in males than females (HR=1.22350; 95% CI: (1.07700,1.38990); p-value: 0.0019)</li>
+<li>The rate of death for males is 1.224 times the rate of death for
+females.</li>
+<li>There is strong evidence that the rate of death is higher in males
+than females (HR=1.22350; 95% CI: (1.07700,1.38990); p-value:
+0.0019)</li>
 </ul>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<p>Add age using a restricted cubic spline with 4 knots. Test it with a LRT and display results.</p>
+<p>Add age using a restricted cubic spline with 4 knots. Test it with a
+LRT and display results.</p>
 <pre class="r"><code>print(fit2.cox &lt;- cph(Surv(futime,death)~sex+rcs(age,4),data=mgus2))</code></pre>
 <pre><code>## Cox Proportional Hazards Model
-##  
-##  cph(formula = Surv(futime, death) ~ sex + rcs(age, 4), data = mgus2)
-##  
-##                        Model Tests    Discrimination    
+## 
+## cph(formula = Surv(futime, death) ~ sex + rcs(age, 4), data = mgus2)
+## 
+##                       Model Tests     Discrimination    
 ##                                              Indexes    
-##  Obs     1384    LR chi2    396.10    R2       0.249    
-##  Events   963    d.f.            4    Dxy      0.334    
-##  Center 3.248    Pr(&gt; chi2) 0.0000    g        0.838    
-##                  Score chi2 408.99    gr       2.311    
-##                  Pr(&gt; chi2) 0.0000                      
-##  
-##        Coef    S.E.   Wald Z Pr(&gt;|Z|)
-##  sex=M  0.3605 0.0657  5.48  &lt;0.0001 
-##  age    0.0380 0.0108  3.52  0.0004  
-##  age&#39;   0.0473 0.0214  2.21  0.0272  
-##  age&#39;&#39; -0.2396 0.1233 -1.94  0.0520  
-## </code></pre>
+## Obs     1384    LR chi2    396.10     R2       0.249    
+## Events   963    d.f.            4    R2(4,1384)0.247    
+## Center 3.248    Pr(&gt; chi2) 0.0000     R2(4,963)0.334    
+##                 Score chi2 408.99     Dxy      0.334    
+##                 Pr(&gt; chi2) 0.0000                       
+## 
+##       Coef    S.E.   Wald Z Pr(&gt;|Z|)
+## sex=M  0.3605 0.0657  5.48  &lt;0.0001 
+## age    0.0380 0.0108  3.52  0.0004  
+## age&#39;   0.0473 0.0214  2.21  0.0272  
+## age&#39;&#39; -0.2396 0.1233 -1.94  0.0520</code></pre>
 <pre class="r"><code># LRT
 lrtest(fit1.cox,fit2.cox)</code></pre>
 <pre><code>## 
@@ -1505,8 +1665,12 @@ lrtest(fit1.cox,fit2.cox)</code></pre>
 ## L.R. Chisq       d.f.          P 
 ##     386.42       3.00       0.00</code></pre>
 <ul>
-<li>We are testing the null hypothesis that the coefficients for the age variable are equal to 0, against the alternative hypothesis that at least one coefficient is not equal to 0.</li>
-<li>Since the p-value is approximately 0.00, there is sufficient evidence to suggest that we should retain the age variable using a restricted cubic spline with 4 knots.</li>
+<li>We are testing the null hypothesis that the coefficients for the age
+variable are equal to 0, against the alternative hypothesis that at
+least one coefficient is not equal to 0.</li>
+<li>Since the p-value is approximately 0.00, there is sufficient
+evidence to suggest that we should retain the age variable using a
+restricted cubic spline with 4 knots.</li>
 </ul>
 <pre class="r"><code># Adjusted effect for sex
 summary(fit2.cox,sex=&quot;F&quot;)</code></pre>
@@ -1518,10 +1682,16 @@ summary(fit2.cox,sex=&quot;F&quot;)</code></pre>
 ##  sex - M:F      1   2   NA    0.36049 0.065742 0.23164    0.48935   
 ##   Hazard Ratio  1   2   NA    1.43400       NA 1.26070    1.63120</code></pre>
 <ul>
-<li>The rate of death for 79-year-olds is 3.109 times the rate of death for 63-year-olds when adjusted for <code>sex</code>.</li>
-<li>There is strong evidence that the rate of death is higher in 79-year-olds than 63-year-olds (HR=3.10870; 95% CI: (2.58060,3.74480), p-value: 0.0004)</li>
-<li>The rate of death for males is 1.434 times the rate of death for females when adjusted for <code>age</code>.</li>
-<li>There is strong evidence that the rate of death is higher in males than females (HR=1.43400; 95% CI: (1.26070,1.63120); p-value: &lt;0.0001)</li>
+<li>The rate of death for 79-year-olds is 3.109 times the rate of death
+for 63-year-olds when adjusted for <code>sex</code>.</li>
+<li>There is strong evidence that the rate of death is higher in
+79-year-olds than 63-year-olds (HR=3.10870; 95% CI: (2.58060,3.74480),
+p-value: 0.0004)</li>
+<li>The rate of death for males is 1.434 times the rate of death for
+females when adjusted for <code>age</code>.</li>
+<li>There is strong evidence that the rate of death is higher in males
+than females (HR=1.43400; 95% CI: (1.26070,1.63120); p-value:
+&lt;0.0001)</li>
 </ul>
 <pre class="r"><code># You can specify the specific age groups
 summary(fit2.cox,sex=&quot;F&quot;,age=c(40,80))</code></pre>
@@ -1533,21 +1703,26 @@ summary(fit2.cox,sex=&quot;F&quot;,age=c(40,80))</code></pre>
 ##  sex - M:F      1   2   NA    0.36049 0.065742 0.23164     0.48935  
 ##   Hazard Ratio  1   2   NA    1.43400       NA 1.26070     1.63120</code></pre>
 <ul>
-<li>The rate of death for 80-year-olds is 8.747 times the rate of death for 40-year-olds.</li>
-<li>Note that the hazard ratio for <code>sex</code> remains unchanged.</li>
+<li>The rate of death for 80-year-olds is 8.747 times the rate of death
+for 40-year-olds.</li>
+<li>Note that the hazard ratio for <code>sex</code> remains
+unchanged.</li>
 </ul>
 <pre class="r"><code># Plot of age effect
 plot(Predict(fit2.cox,age,sex))</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
 <ul>
-<li>The vertical distance between the two curves remain constant throughout as that represents the <code>sex</code> effect.</li>
-<li>The curves both fluctuate together depending on the <code>age</code>.</li>
+<li>The vertical distance between the two curves remain constant
+throughout as that represents the <code>sex</code> effect.</li>
+<li>The curves both fluctuate together depending on the
+<code>age</code>.</li>
 </ul>
 </div>
 </div>
 <div id="tutorial-8" class="section level1">
 <h1>Tutorial 8</h1>
-<p>You will again use the data frame <code>mgus2</code> from the <code>rms</code> package.</p>
+<p>You will again use the data frame <code>mgus2</code> from the
+<code>rms</code> package.</p>
 <pre class="r"><code>library(rms)
 
 str(mgus2)</code></pre>
@@ -1571,7 +1746,8 @@ str(mgus2)</code></pre>
 options(datadist = &quot;dd&quot;)</code></pre>
 <div id="question-1-7" class="section level2">
 <h2>Question 1</h2>
-<p>Fit a Cox model with <code>sex</code> as the only covariate and test the proportional hazards assumption.</p>
+<p>Fit a Cox model with <code>sex</code> as the only covariate and test
+the proportional hazards assumption.</p>
 <pre class="r"><code>fit1 &lt;- cph(Surv(futime, death) ~ sex, data = mgus2, x = TRUE, y = TRUE)
 print(fit1.zph &lt;- cox.zph(fit1))</code></pre>
 <pre><code>##        chisq df    p
@@ -1582,13 +1758,19 @@ plot(fit1.zph)
 abline(h=coef(fit1)[1], col=&quot;red&quot;, lwd=2, lty=3)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
 <ul>
-<li>If the proportional hazards assumption for <span class="math inline">\(x_j\)</span> is true, a plot of scaled Schoenfeld residuals versus time should be a horizontal line at <span class="math inline">\(\hat{\beta}\)</span>.</li>
-<li>In this case the (red) line is not perfectly horizontal however it falls within the 95% confidence interval, meaning that the proportional hazards assumption is satisfied.</li>
+<li>If the proportional hazards assumption for <span
+class="math inline">\(x_j\)</span> is true, a plot of scaled Schoenfeld
+residuals versus time should be a horizontal line at <span
+class="math inline">\(\hat{\beta}\)</span>.</li>
+<li>In this case the (red) line is not perfectly horizontal however it
+falls within the 95% confidence interval, meaning that the proportional
+hazards assumption is satisfied.</li>
 </ul>
 </div>
 <div id="question-2-6" class="section level2">
 <h2>Question 2</h2>
-<p>Estimate a suitable transformation of <code>hgb</code> after adjustment for <code>sex</code>.</p>
+<p>Estimate a suitable transformation of <code>hgb</code> after
+adjustment for <code>sex</code>.</p>
 <pre class="r"><code>res &lt;- resid(fit1)
 res.lo &lt;- loess(res ~ hgb, data = mgus2)
 # restricted cubic spline with 5 knots
@@ -1602,13 +1784,18 @@ plot(Predict(res.ols, hgb), addpanel = function(...) {
 }, ylim = 1.15 * range(res), ylab = &quot;Martingale Residual&quot;, xlab = &quot;Hgb&quot;)</code></pre>
 <p><img src="CHL5202_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
 <ul>
-<li>This plot of the Martingale Residuals suggests a restricted cubic spline with 5 knots is reasonable.</li>
-<li>The number of knots was decided by trial and error – the blue line did not align with the red line when using numbers other than 5.</li>
+<li>This plot of the Martingale Residuals suggests a restricted cubic
+spline with 5 knots is reasonable.</li>
+<li>The number of knots was decided by trial and error – the blue line
+did not align with the red line when using numbers other than 5.</li>
 </ul>
 </div>
 <div id="question-3-5" class="section level2">
 <h2>Question 3</h2>
-<p>Fit a Cox model that includes <code>sex</code>, <code>hgb</code>, <code>creat</code> and <code>age.</code> Model the continuous variables with 5 knot splines and include interactions between <code>sex</code> and the other variables. Validate the model for overfitting.</p>
+<p>Fit a Cox model that includes <code>sex</code>, <code>hgb</code>,
+<code>creat</code> and <code>age.</code> Model the continuous variables
+with 5 knot splines and include interactions between <code>sex</code>
+and the other variables. Validate the model for overfitting.</p>
 <pre class="r"><code>fit2 &lt;- cph(Surv(futime, death) ~ sex * (rcs(age, 5) + rcs(hgb, 5) + rcs(creat,5)), 
             data = mgus2, x = TRUE, y = TRUE)
 anova(fit2)</code></pre>
@@ -1656,8 +1843,12 @@ validate(fit2,B=100)</code></pre>
 ## Q         0.0408   0.0429 0.0352   0.0077          0.0331 100
 ## g         0.9390   0.9708 0.8629   0.1079          0.8312 100</code></pre>
 <ul>
-<li>The warning produced indicates that on at least one occasion there was a conversion problem. This means the model may lack some stability.</li>
-<li>The validation does not suggest a significant overfitting problem. The <code>index.corrected</code> values do not change much from <code>index.orig</code>.</li>
+<li>The warning produced indicates that on at least one occasion there
+was a conversion problem. This means the model may lack some
+stability.</li>
+<li>The validation does not suggest a significant overfitting problem.
+The <code>index.corrected</code> values do not change much from
+<code>index.orig</code>.</li>
 </ul>
 </div>
 </div>

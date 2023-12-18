@@ -8,11 +8,9 @@ knitr::include_graphics("files/profile_picture.jpg")
 ```
 
 ## Introduction
-My name is [Kevin Dang](https://www.linkedin.com/in/dang-kevin/) and I am a recent graduate of the Master of Science in Biostatistics program with an Emphasis in Artificial Intelligence and Data Science Option, from the University of Toronto - Dalla Lana School of Public Health. I also hold a Bachelor's degree from the University of Toronto in Applied Statistics and a minor in Mathematics, conferred in Spring 2020. 
+My name is Kevin Dang and I am a Computational Scientist at Bayer in the Oncology Data Analytics and Statistical Sciences division. I obtained my Master of Science from the University of Toronto in 2022, where I was a former Teaching Assistant for graduate and undergraduate courses in data science and statistics. My hobbies include calisthenics, table tennis, piano, building LEGO sets, video games.
 
-Currently, I am a Data Analyst at the College of Nurses of Ontario, and my position involves analyzing nursing data and building [reports](https://www.cno.org/en/what-is-cno/nursing-demographics/statistical-reports/).
-
-<br>
+<br><br><br>
 
 ## Teaching Assistantships 
 ### Summer 2022

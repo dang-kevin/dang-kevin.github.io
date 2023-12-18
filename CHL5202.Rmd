@@ -31,6 +31,8 @@ Fit a simple regression with y as the response and x as the predictor. Use diagn
 ```{r, message=F}
 # Load packages and data
 library(rms)
+library(lattice)
+library(tidyverse)
 
 load("./CHL5202/tut1.RData")
 
@@ -489,10 +491,11 @@ resid(fit, "partial", pl = "loess")
 
 # Tutorial 6
 
-Over the next few weeks the tutorials will use the data frame `mgus2` which may be found in the survival package. Since the survival package is attached when `rms` is, nothing special is required to access it, other than loading the `rms` package.
+Over the next few weeks the tutorials will use the data frame `mgus2` which may be found in the survival package. Since the survival package is attached when `rms` is, nothing special is required to access it, other than loading the `rms` package. Update: it needs to be loaded from the `survival` package.
 
 ```{r, message=F}
 library(rms)
+library(survival)
 
 str(mgus2)
 ```

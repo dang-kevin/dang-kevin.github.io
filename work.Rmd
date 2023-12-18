@@ -1,21 +1,20 @@
 ---
-title: "About Me"
+title: "Work History"
 ---
 
-
-# Introduction
-I am a recent MSc graduate from the University of Toronto, and former Teaching Assistant for graduate and undergraduate courses in data science and statistics. My hobbies include calisthenics, table tennis, piano, and video games. The sections below are a summary of my work history.    
+# College of Nurse of Ontario
+As a Data Analyst at the College of Nurses of Ontario, my role involved analyzing nursing data and building [HTML reports](https://www.cno.org/en/what-is-cno/nursing-demographics/statistical-reports/). Additionally, I took on multiple requests from internal stakeholders to outside researchers which involved ensuring their proposal is acceptable as well as identifying the data required for their projects. Tools used include R and SQL.
 
 # St. Michael's Hospital
-In the Applied Health Research Centre at St. Michael’s Hospital, I worked closely with [Dr. Charles Keown-Stoneman](http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/), an Investigator/Biostatistician within the [TARGetKids!](https://www.targetkids.ca/about) research group. I was classified as a Research Visitor but the title that best describes my role is Statistician. As part of the TARGetKids! COVID-19 Study, we studied COVID-19 public health measure adherence amongst parents and children in the Greater Toronto Area. Methods include linear mixed effects regression, piecewise linear regression, bootstrapping, cross-validation, LASSO regularization.
+In the Applied Health Research Centre at St. Michael’s Hospital, I worked closely with [Dr. Charles Keown-Stoneman](http://stmichaelshospitalresearch.ca/researchers/charles-keown-stoneman/), an Investigator/Biostatistician within the [TARGetKids!](https://www.targetkids.ca/about) research group. I was a practicum student taking on the responsibilities of a Statistician. As part of the TARGetKids! COVID-19 Study, we studied COVID-19 public health measure adherence amongst parents and children in the Greater Toronto Area. Methods include linear mixed effects regression, piecewise linear regression, bootstrapping, cross-validation, LASSO regularization.
 
 # Export Development Canada
 My responsibilities as a Business Intelligence Analyst at EDC included working in R (tidyverse, caret) to predict customer retention and conversion of EDC insurance products using logistic regression and random forest classifiers. Additionally, I created dashboards in PowerBI and Excel to provide succinct summaries of targets and results for key metrics such as retention rates for stakeholders. I also produced weekly reports which involve querying data and running SAS EG projects and process flows. 
 
 # GlobalData
-I worked at GlobalData Plc as a Medical Data Analyst in their Toronto office. Majority of my time was spent working on a pricing tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables, macros). In addition to my projects, I was also required to write press releases, which are linked below.
+I worked at GlobalData Plc as a Medical Data Analyst, where majority of my time was spent working on a pricing tool that shows insightful pricing information about medical device brands on a global scale. The markets that are addressed in this project include cardio (e.g. aortic stent grafts) and neurovascular (e.g. flow diverters). Software used for this project include Python (pandas) and Excel (pivot tables, macros). In addition to my projects, I was also required to write press releases, which are linked below.
 
-## GlobalData Press Releases
+## Press Releases
 * [Wearable technology is a key driver in the growth of mobile health, says GlobalData](https://www.globaldata.com/wearable-technology-key-driver-growth-mobile-health-says-globaldata/)
 * [ENT devices market to reach US$2.3bn in 2030, forecasts GlobalData](https://globaldata.com/ent-devices-market-reach-us2-3bn-2030-forecasts-globaldata/)
 * [Global cloud services in medical devices expected to generate revenues of $4.4bn in 2024, says GlobalData](https://globaldata.com/global-cloud-services-medical-devices-expected-generate-revenues-4-4bn-2024-says-globaldata/)

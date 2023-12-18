@@ -35,9 +35,9 @@ navbar:
         href: mice.html
 
   right:
-    - text: "About Me"
+    - text: "Work History"
       icon: fa-user
-      href: about.html
+      href: work.html
     - text: Resume
       icon: fa-file-pdf-o
       href: files/Resume_Kevin_Dang.pdf
